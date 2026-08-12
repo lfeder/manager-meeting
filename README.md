@@ -6,7 +6,7 @@ packhouse, 2025 against 2026.
 `index.html` is self-contained — no build, no dependencies, no network calls.
 Open it locally or serve it from GitHub Pages.
 
-`review.html` is the full H1 2026 manager review deck, which folds this page's
+`deck.html` is the full H1 2026 manager review deck, which folds this page's
 grow and packhouse charts into the wider review — sales, tech, corp, capital and
 expansion. See [Full review deck](#full-review-deck) below.
 
@@ -36,7 +36,7 @@ To refresh, re-run the queries and update the data arrays at the top of the
 
 ## Full review deck
 
-`review.html` is the H1 2026 manager review, rebuilt in HTML from
+`deck.html` is the H1 2026 manager review, rebuilt in HTML from
 `H1_2026_Manager_Final.pptx`. Same conventions as `index.html` — self-contained,
 no build, no network calls — but paginated as slides rather than scrolled.
 
@@ -64,6 +64,6 @@ days. The caveats travel with them — late 2026 cycles still picking, the
 JTL_05 03/26 lineage repair, no E in the 2025 cohort, and the fails/labour logging
 gaps in mid-2026, which break the lines rather than being drawn as zero.
 
-`queries.sql` documents the SQL behind every series in `review.html`, including a
+`queries.sql` documents the SQL behind every series in `deck.html`, including a
 re-query of this page's headline figure: 1,921,947 / 1,950,388 lb live against the
 1,922,039 / 1,950,566 snapshotted here — same definition, a few rows edited since.
