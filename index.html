@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manager Meeting — Grow & Packhouse</title>
+<style>
+  /* Light palette is the base set. Neutrals carry a slight green bias so they
+     sit with the leaf accent rather than reading as default grey. */
+  :root {
+    --ground:   #f3f6f1;
+    --surface:  #ffffff;
+    --line:     #dde3d9;
+    --ink:      #161a13;
+    --muted:    #6b7466;
+    --faint:    #9aa394;
+    --s25:      #bd6b34;   /* prior year — warm clay, recedes */
+    --s26:      #2f7d52;   /* current year — leaf */
+    --s25-soft: rgba(189,107,52,.16);
+    --s26-soft: rgba(47,125,82,.16);
+    --flag:     #b4453a;
+    --v3:       #5b6f96;   /* third series — slate blue, reads apart from clay and leaf */
+    --grid:     rgba(22,26,19,.07);
+    --shadow:   0 1px 2px rgba(22,26,19,.05), 0 8px 24px -12px rgba(22,26,19,.18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:   #10140e;
+      --surface:  #181d15;
+      --line:     #2a3226;
+      --ink:      #e9ede5;
+      --muted:    #99a292;
+      --faint:    #6d7768;
+      --s25:      #e08b4e;
+      --s26:      #57b483;
+      --s25-soft: rgba(224,139,78,.18);
+      --s26-soft: rgba(87,180,131,.18);
+      --flag:     #e0685c;
+      --v3:       #8fa8cf;
+      --grid:     rgba(233,237,229,.08);
+      --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:   #10140e;
+    --surface:  #181d15;
+    --line:     #2a3226;
+    --ink:      #e9ede5;
+    --muted:    #99a292;
+    --faint:    #6d7768;
+    --s25:      #e08b4e;
+    --s26:      #57b483;
+    --s25-soft: rgba(224,139,78,.18);
+    --s26-soft: rgba(87,180,131,.18);
+    --flag:     #e0685c;
+    --v3:       #8fa8cf;
+    --grid:     rgba(233,237,229,.08);
+    --shadow:   0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 36px 24px 56px; display: flex; flex-direction: column; gap: 18px; }
+
+  header { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow {
+    font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+  }
+  h1 { margin: 0; font-size: clamp(26px, 3.4vw, 38px); font-weight: 680; letter-spacing: -.022em; text-wrap: balance; }
+  .sub { color: var(--muted); max-width: 62ch; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  .charthead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; padding: 16px 18px 0; }
+  .chartttl { font-weight: 640; font-size: 15px; }
+  .legend { display: flex; gap: 16px; margin-left: auto; flex-wrap: wrap; }
+  .lg { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+  .sw { width: 20px; height: 3px; border-radius: 2px; display: inline-block; }
+  .sw.dot { width: 7px; height: 7px; border-radius: 50%; opacity: .55; }
+
+  .plot { position: relative; padding: 6px 8px 10px; }
+  svg { display: block; width: 100%; height: auto; }
+  .axis { font: 500 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--faint); }
+
+  #tip, #tip2, #tip3, #tip4, #tip5 {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 9px;
+    box-shadow: var(--shadow); padding: 9px 11px; min-width: 172px;
+    font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums; z-index: 5;
+  }
+  #tip6, #tip7, #tip8 {
+    position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 9px;
+    box-shadow: var(--shadow); padding: 9px 11px; min-width: 172px;
+    font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums; z-index: 5;
+  }
+  #tip6 .td, #tip7 .td, #tip8 .td { font-weight: 650; margin-bottom: 5px; letter-spacing: -.01em; }
+  #tip6 .r, #tip7 .r, #tip8 .r { display: flex; justify-content: space-between; gap: 14px; }
+  #tip6 .r span:first-child, #tip7 .r span:first-child, #tip8 .r span:first-child { color: var(--muted); }
+  #tip6 .r b, #tip7 .r b, #tip8 .r b { font-weight: 650; }
+  #tip .td, #tip2 .td, #tip3 .td, #tip4 .td, #tip5 .td { font-weight: 650; margin-bottom: 5px; letter-spacing: -.01em; }
+  #tip .r, #tip2 .r, #tip3 .r, #tip4 .r, #tip5 .r { display: flex; justify-content: space-between; gap: 14px; }
+  #tip .r span:first-child, #tip2 .r span:first-child, #tip3 .r span:first-child, #tip4 .r span:first-child, #tip5 .r span:first-child { color: var(--muted); }
+  #tip .r b, #tip2 .r b, #tip3 .r b, #tip4 .r b, #tip5 .r b { font-weight: 650; }
+
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .note h3 { margin: 0 0 6px; font-size: 13px; font-weight: 650; letter-spacing: -.01em; }
+  .note p { margin: 0 0 8px; font-size: 13.5px; color: var(--muted); }
+  .note code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); background: var(--ground); padding: 1px 5px; border-radius: 4px; }
+  strong.hl { color: var(--ink); font-weight: 620; }
+
+  /* Page switch — the two datasets are different crops, so they get separate
+     pages rather than one long scroll. */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-top: 4px; }
+  .tab {
+    appearance: none; background: none; border: 0; cursor: pointer;
+    padding: 9px 14px; margin-bottom: -1px; color: var(--muted);
+    font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .1em; text-transform: uppercase;
+    border-bottom: 2px solid transparent; border-radius: 6px 6px 0 0;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--s26); }
+  .tab:focus-visible { outline: 2px solid var(--s26); outline-offset: 2px; }
+  .page { display: flex; flex-direction: column; gap: 18px; }
+  .page[hidden] { display: none; }
+
+  /* Tiles are the Grow page's index: each one states a finding and opens its evidence. */
+  /* auto-fit at this min keeps four tiles on one row at full width, and folds
+     to two, then one, as the page narrows. */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  .tile {
+    display: flex; flex-direction: column; gap: 5px; text-align: left; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 14px 15px 15px; color: var(--ink);
+    font: inherit; border-left: 3px solid var(--line);
+  }
+  .tile:hover { border-left-color: var(--s26); }
+  .tile[aria-expanded="true"] { border-left-color: var(--s26); }
+  .tile:focus-visible { outline: 2px solid var(--s26); outline-offset: 2px; }
+  /* Two lines' worth of label whether the text needs one or two, so the big
+     number sits at the same height across a row of tiles. */
+  .tl { font: 600 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+        min-height: 2.6em; }
+  .tv { font-size: 34px; font-weight: 660; letter-spacing: -.03em;
+        font-variant-numeric: tabular-nums; line-height: 1.05; }
+  .tu { font-size: 14px; font-weight: 560; color: var(--muted); margin-left: 5px; }
+  .tv.up { color: var(--s26); } .tv.down { color: var(--flag); }
+  .tc { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .tn { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .chip { font: 600 11.5px ui-monospace, SFMono-Regular, Menlo, monospace;
+          padding: 2px 7px; border-radius: 999px; }
+  .chip.up   { color: var(--s26); background: var(--s26-soft); }
+  .chip.down { color: var(--flag); background: var(--s25-soft); }
+  .chip.flat { color: var(--muted); background: var(--grid); }
+
+  .det[hidden] { display: none; }
+  .tblwrap { overflow-x: auto; padding: 12px 18px 4px; }
+  table.grid { border-collapse: collapse; width: 100%; min-width: 420px;
+    font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  table.grid th, table.grid td { padding: 5px 14px; text-align: right; white-space: nowrap; }
+  table.grid th:first-child, table.grid td:first-child { text-align: left; }
+  table.grid th { color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); }
+  table.grid td { border-bottom: 1px solid var(--grid); }
+  table.grid tr.tot td { border-top: 1px solid var(--line); border-bottom: 0;
+    font-weight: 650; padding-top: 8px; }
+  td.pos { color: var(--s26); } td.neg { color: var(--flag); } td.nil { color: var(--faint); }
+  .notes.inset { padding: 8px 18px 18px; }
+
+  .bar { cursor: default; }
+  .bar:hover rect { filter: brightness(1.08); }
+  .ghlab { font: 500 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: var(--faint); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1 id="ttl">Cucumber Growing Review</h1>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-grow" aria-controls="page-grow" aria-selected="true">Grow</button>
+    <button class="tab" role="tab" id="tab-pack" aria-controls="page-pack" aria-selected="false">Packhouse</button>
+  </div>
+
+  <div class="page" id="page-pack" role="tabpanel" aria-labelledby="tab-pack" hidden>
+
+  <div class="tiles">
+    <button class="tile" id="tile-lb" aria-expanded="true" aria-controls="det-lb">
+      <span class="tl">Underlying growth, ex Iwilei</span>
+      <span class="tv up">+8<span class="tu">%</span></span>
+    </button>
+    <button class="tile" id="tile-rate" aria-expanded="false" aria-controls="det-rate">
+      <span class="tl">TPM drops sharply in May</span>
+      <span class="tv down">−22<span class="tu">%</span></span>
+    </button>
+    <button class="tile" id="tile-hours" aria-expanded="false" aria-controls="det-hours">
+      <span class="tl">Hours spike in May</span>
+      <span class="tv down">+19<span class="tu">%</span></span>
+    </button>
+    <button class="tile" id="tile-fails" aria-expanded="false" aria-controls="det-fails">
+      <span class="tl">Fails generally stable, but exception Aug</span>
+      <span class="tv down">73<span class="tu">on 5 Aug</span></span>
+    </button>
+  </div>
+
+  <div class="card det" id="det-lb" role="region" aria-labelledby="tile-lb">
+    <div class="charthead">
+      <span class="chartttl">Pounds packed per day</span>
+      <span class="legend">
+        <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025</span>
+        <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026</span>
+        <span class="lg"><i class="sw dot" style="background:var(--muted)"></i>single day</span>
+      </span>
+    </div>
+    <div class="plot" id="plot2">
+      <svg id="chart2" viewBox="0 0 1060 400" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Line chart of pounds packed per day, 2025 versus 2026"></svg>
+      <div id="tip2"></div>
+    </div>
+    <div class="notes inset">
+      <div class="note">
+        <h3>What it shows</h3>
+        <p id="lbstory"></p>
+      </div>
+      <div class="note">
+        <h3>Costco Iwilei is most of the gain</h3>
+        <p id="iwilei"></p>
+      </div>
+      <div class="note">
+        <h3>How it's measured</h3>
+        <p>The chart counts pounds the packhouse logged as packed. The Iwilei split comes
+          from ordered pounds on <code>sales_lettuce_ph_v</code>, bucketed by expected pack
+          date — 191,731 lb in 2025 and 241,841 in 2026, a slightly different basis from the
+          chart's 180,813 / 240,584, so read the split as shares rather than as the same
+          numbers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card det" id="det-rate" role="region" aria-labelledby="tile-rate" hidden>
+    <div class="charthead">
+      <span class="chartttl">Trays per packer per minute</span>
+      <span class="legend">
+        <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025</span>
+        <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026</span>
+      </span>
+    </div>
+    <div class="plot" id="plot">
+      <svg id="chart" viewBox="0 0 1060 340" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Line chart of trays per packer-minute by day, 2025 versus 2026"></svg>
+      <div id="tip"></div>
+    </div>
+    <div class="notes inset">
+      <div class="note">
+        <h3>What it shows</h3>
+        <p id="story"></p>
+      </div>
+      <div class="note">
+        <h3>How it's measured</h3>
+        <p>Rate = trays ÷ (packer-hours × 60). Trays come from
+          <code>cases_packed × pack_per_case</code>; packer-hours are the sum of
+          <code>packers</code> across each day's hourly labour rows.</p>
+        <p>An hour with 4 packers logged counts as 4 packer-hours whether or not they
+          worked the full 60 minutes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card det" id="det-hours" role="region" aria-labelledby="tile-hours" hidden>
+    <div class="charthead">
+      <span class="chartttl">Packer-hours per day</span>
+      <span class="legend">
+        <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025</span>
+        <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026</span>
+      </span>
+    </div>
+    <div class="plot" id="plot3">
+      <svg id="chart3" role="img" aria-label="Packer-hours per day, 2025 versus 2026"></svg>
+      <div id="tip3"></div>
+    </div>
+    <div class="notes inset">
+      <div class="note">
+        <h3>What it shows</h3>
+        <p id="hoursstory"></p>
+      </div>
+      <div class="note">
+        <h3>Read with care</h3>
+        <p id="gap"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card det" id="det-fails" role="region" aria-labelledby="tile-fails" hidden>
+    <div class="charthead">
+      <span class="chartttl">Fails per day</span>
+      <span class="legend">
+        <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025</span>
+        <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026</span>
+      </span>
+    </div>
+    <div class="plot" id="plot4">
+      <svg id="chart4" role="img" aria-label="Fails per day, 2025 versus 2026"></svg>
+      <div id="tip4"></div>
+    </div>
+    <div class="notes inset">
+      <div class="note">
+        <h3>What it shows</h3>
+        <p id="failstory"></p>
+      </div>
+      <div class="note">
+        <h3>Read with care</h3>
+        <p><strong class="hl">No fails were logged at all from 24 May to 29 Jun</strong>
+          (22 pack days), and none again through early July. Those days are omitted from
+          the chart rather than drawn as zero, so the line is a record of what was
+          written down, not proof of a clean run.</p>
+      </div>
+    </div>
+  </div>
+  </div><!-- /page-pack -->
+
+  <div class="page" id="page-grow" role="tabpanel" aria-labelledby="tab-grow">
+    <div class="tiles">
+      <button class="tile" id="tile-yield" aria-expanded="true" aria-controls="det-yield">
+        <span class="tl">Total harvested, 1 Jan – 11 Aug</span>
+        <span class="tv flat">+1.5<span class="tu">%</span></span>
+        <span class="tc">1,950,566 lb vs 1,922,039 in 2025</span>
+      </button>
+      <button class="tile" id="tile-weeks" aria-expanded="false" aria-controls="det-weeks">
+        <span class="tl">Weeks grown</span>
+        <span class="tv up">+1.4<span class="tu">wk longer (+15%)</span></span>
+        <span class="tc">10.8 wk vs 9.4 in 2025, same pounds but 15% more time</span>
+      </button>
+      <button class="tile" id="tile-variety" aria-expanded="false" aria-controls="det-variety">
+        <span class="tl">Stopping English harvest early</span>
+        <span class="tv down">−1.2<span class="tu">wk shorter</span></span>
+        <span class="tc">E 9.6 wk vs J 10.8 · K 10.6</span>
+      </button>
+    </div>
+
+    <!-- Pounds per cycle -->
+    <div class="card det" id="det-yield" role="region" aria-labelledby="tile-yield">
+      <div class="charthead">
+        <span class="chartttl">Pounds harvested per day</span>
+        <span class="legend">
+          <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025</span>
+          <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026</span>
+          <span class="lg"><i class="sw dot" style="background:var(--muted)"></i>single day</span>
+        </span>
+      </div>
+      <div class="plot" id="plot6">
+        <svg id="chart6" role="img"
+             aria-label="Line chart of pounds of cucumbers harvested per day, 2025 versus 2026"></svg>
+        <div id="tip6"></div>
+      </div>
+      <div class="notes inset">
+        <div class="note">
+          <h3>What it shows</h3>
+          <p id="yieldstory"></p>
+        </div>
+        <div class="note">
+          <h3>How it's measured</h3>
+          <p>All grade-1 greenhouse net weight by harvest date, every house and every
+            crop — not just the Feb–Apr cohort. The line is the calendar-week mean; the
+            faint dots are single days.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weeks harvested -->
+    <div class="card det" id="det-weeks" role="region" aria-labelledby="tile-weeks" hidden>
+      <div class="charthead">
+        <span class="chartttl">How long each cycle kept picking</span>
+        <span class="legend">
+          <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025 cohort</span>
+          <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026 cohort</span>
+        </span>
+      </div>
+      <div class="plot" id="plot5">
+        <svg id="chart5" role="img"
+             aria-label="Column chart of the last harvest week reached by each cucumber cycle, 2025 and 2026 cohorts"></svg>
+        <div id="tip5"></div>
+      </div>
+      <div class="charthead" style="padding-top:20px">
+        <span class="chartttl">Share of the season's pounds, by week from transplant</span>
+        <span class="legend">
+          <span class="lg"><i class="sw" style="background:var(--s25)"></i>2025 cohort</span>
+          <span class="lg"><i class="sw" style="background:var(--s26)"></i>2026 cohort</span>
+        </span>
+      </div>
+      <div class="plot" id="plot7">
+        <svg id="chart7" role="img"
+             aria-label="Line chart of each week's share of the season's total pounds, 2025 versus 2026"></svg>
+        <div id="tip7"></div>
+      </div>
+      <div class="notes inset">
+        <div class="note">
+          <h3>What it shows</h3>
+          <p id="growstory"></p>
+        </div>
+        <div class="note">
+          <h3>Read with care</h3>
+          <p>The late 2026 cycles are <strong class="hl">still picking</strong> — anything
+            seeded into April hasn't finished, so those columns can only grow. The 2025
+            cohort is closed out.</p>
+          <p><code>JTL_05 03/26</code> is the cycle whose seed-batch lineage was repaired
+            on 8 Aug; check it before reading 13.0 as a record.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- By variety -->
+    <div class="card det" id="det-variety" role="region" aria-labelledby="tile-variety" hidden>
+      <div class="charthead">
+        <span class="chartttl">2026 share of the variety's pounds, by week from transplant</span>
+        <span class="legend">
+          <span class="lg"><i class="sw" style="background:var(--s26)"></i>K Delta Star Minis</span>
+          <span class="lg"><i class="sw" style="background:var(--s25)"></i>J F1 TSX-CU235JP</span>
+          <span class="lg"><i class="sw" style="background:var(--v3)"></i>E Cumlaude RZ</span>
+        </span>
+      </div>
+      <div class="plot" id="plot8">
+        <svg id="chart8" role="img"
+             aria-label="Line chart of each week's share of the variety's own total pounds, K, J and E, 2026"></svg>
+        <div id="tip8"></div>
+      </div>
+      <div class="notes inset">
+        <div class="note">
+          <h3>What it shows</h3>
+          <p id="varstory"></p>
+        </div>
+        <div class="note">
+          <h3>Read with care</h3>
+          <p><strong class="hl">The 2025 cohort has no E at all</strong> — Cumlaude first
+            appears in the 2026 crops, so this is a within-2026 comparison, not a
+            year-over-year one.</p>
+          <p>E is also a much smaller planting: 4,026 lb per cycle against K's 41,536,
+            so its shorter run is a small share of total pounds.</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-grow -->
+</div>
+
+<script>
+const D = {2025:[[5,1.2248,2866,39,"Sun"],[6,1.2983,779,10,"Mon"],[8,1.0452,2383,38,"Wed"],[9,0.7548,317,7,"Thu"],[12,1.2205,3149,43,"Sun"],[13,1.4979,719,8,"Mon"],[15,1.2147,2478,34,"Wed"],[16,0.679,937,23,"Thu"],[19,1.1178,3018,45,"Sun"],[20,0.8029,819,17,"Mon"],[22,1.125,2160,32,"Wed"],[23,0.6914,1286,31,"Thu"],[26,1.3525,2678,33,"Sun"],[27,1.3154,1026,13,"Mon"],[29,1.1439,2265,33,"Wed"],[30,1.5005,2971,33,"Thu"],[33,1.2577,3094,41,"Sun"],[34,0.6911,1244,30,"Mon"],[36,0.8632,2020,39,"Wed"],[37,1.2659,1671,22,"Thu"],[40,1.0435,2567,41,"Sun"],[41,1.3438,2177,27,"Mon"],[43,1.1196,2284,34,"Wed"],[44,0.8715,2144,41,"Thu"],[47,1.2028,2598,36,"Sun"],[48,1.1436,892,13,"Mon"],[50,1.4006,2269,27,"Wed"],[51,1.0125,1944,32,"Thu"],[54,1.2054,3544,49,"Sun"],[55,1.0625,765,12,"Mon"],[57,0.9275,2560,46,"Wed"],[58,1.1091,1464,22,"Thu"],[61,1.3255,2545,32,"Sun"],[62,1.5,1350,15,"Mon"],[64,0.981,2060,35,"Wed"],[65,1.5,1800,20,"Thu"],[68,1.0694,2374,37,"Sun"],[69,0.875,840,16,"Mon"],[71,1.4589,2801,32,"Wed"],[72,1.6009,1729,18,"Thu"],[75,1.8845,3279,29,"Sun"],[78,1.5401,2957,32,"Wed"],[79,0.45,108,4,"Thu"],[82,1.5132,2633,29,"Sun"],[83,2.8,504,3,"Mon"],[85,1.4654,3341,38,"Wed"],[86,2.475,297,2,"Thu"],[89,1.3905,2336,28,"Sun"],[90,1.2645,2352,31,"Mon"],[92,1.278,1917,25,"Wed"],[93,1.092,1507,23,"Thu"],[96,1.205,2169,30,"Sun"],[97,1.4656,1319,15,"Mon"],[99,1.1067,1992,30,"Wed"],[100,1.0776,2263,35,"Thu"],[103,1.1786,1980,28,"Sun"],[104,1.0737,1675,26,"Mon"],[106,1.3667,1476,18,"Wed"],[107,1.1741,2043,29,"Thu"],[110,0.8194,1524,31,"Sun"],[111,1.3609,2123,26,"Mon"],[113,0.95,1710,30,"Wed"],[114,1.2093,3265,45,"Thu"],[117,1.0631,2105,33,"Sun"],[118,1.2397,2901,39,"Mon"],[120,1.5349,2855,31,"Wed"],[121,1.2352,667,9,"Thu"],[124,1.3722,2964,36,"Sun"],[125,2.8967,869,5,"Mon"],[127,1.1304,2713,40,"Wed"],[128,1.0813,1622,25,"Thu"],[131,1.2573,2942,39,"Sun"],[132,0.8268,1637,33,"Mon"],[134,1.2645,2883,38,"Wed"],[135,1.9667,1062,9,"Thu"],[138,1.3256,3420,43,"Sun"],[139,4.15,249,1,"Mon"],[141,1.3065,3606,46,"Wed"],[142,1.5455,1020,11,"Thu"],[145,1.6138,3970,41,"Sun"],[146,1.0313,990,16,"Mon"],[148,1.3411,3782,47,"Wed"],[149,0.9534,1945,34,"Thu"],[152,1.2745,3747,49,"Sun"],[153,1.6105,1836,19,"Mon"],[155,1.847,3657,33,"Wed"],[156,2.1333,1920,15,"Thu"],[159,2.0179,3390,28,"Sun"],[160,1.3714,1152,14,"Mon"],[162,1.6956,3459,34,"Wed"],[163,1.3333,480,6,"Thu"],[166,1.7639,3175,30,"Sun"],[167,1.87,1122,10,"Mon"],[169,1.6656,3198,32,"Wed"],[170,1.7255,1760,17,"Thu"],[173,1.5833,2565,27,"Sun"],[174,1.6724,2609,26,"Mon"],[176,2.738,4107,25,"Wed"],[177,1.6468,2075,21,"Thu"],[180,1.5758,2931,31,"Sun"],[181,2.0606,1360,11,"Mon"],[183,1.6833,2929,29,"Wed"],[184,1.4444,1820,21,"Thu"],[187,1.9,3078,27,"Sun"],[188,1.4639,1581,18,"Mon"],[190,1.7485,3567,34,"Wed"],[191,1.9722,1065,9,"Thu"],[194,1.5227,3289,36,"Sun"],[195,2.4,720,5,"Mon"],[197,1.6629,3093,31,"Wed"],[198,1.6471,1680,17,"Thu"],[201,1.438,2761,32,"Sun"],[202,1.8933,1704,15,"Mon"],[204,1.7907,3653,34,"Wed"],[205,2.4167,1015,7,"Thu"],[208,2.015,2418,20,"Sun"],[209,1.6364,2160,22,"Mon"],[211,3.93,1179,5,"Wed"],[212,2.3864,1575,11,"Thu"],[215,1.9292,2778,24,"Sun"],[216,1.2462,1645,22,"Mon"],[218,1.8333,2970,27,"Wed"],[219,1.3333,1200,15,"Thu"],[222,1.4464,2777,32,"Sun"],[223,1.4093,2114,25,"Mon"]],2026:[[4,1.6212,3599,37,"Sun"],[5,1.4127,1780,21,"Mon"],[7,1.1996,3167,44,"Wed"],[8,0.8958,1720,32,"Thu"],[11,1.3611,3920,48,"Sun"],[12,1.0921,2359,36,"Mon"],[14,1.6634,3094,31,"Wed"],[15,1.675,2010,20,"Thu"],[18,1.4683,3612,41,"Sun"],[19,1.1858,2917,41,"Mon"],[21,1.7138,2982,29,"Wed"],[22,1.5556,1680,18,"Thu"],[25,1.6693,3205,32,"Sun"],[26,1.6268,2245,23,"Mon"],[28,1.6282,2833,29,"Wed"],[29,1.4815,2400,27,"Thu"],[32,1.9402,3958,34,"Sun"],[33,1.5625,2625,28,"Mon"],[35,1.5058,3614,40,"Wed"],[36,1.4391,2245,26,"Thu"],[39,2.0583,3211,26,"Sun"],[40,1.6862,2934,29,"Mon"],[42,1.4509,3221,37,"Wed"],[43,1.1667,1680,24,"Thu"],[46,1.6072,3568,37,"Sun"],[47,1.0901,2093,32,"Mon"],[49,1.5753,2930,31,"Wed"],[50,1.4,2016,24,"Thu"],[53,1.9324,4058,35,"Sun"],[54,2,2520,21,"Mon"],[56,1.8167,3270,30,"Wed"],[57,3.0729,1475,8,"Thu"],[60,1.8898,3515,31,"Sun"],[61,1.8462,1440,13,"Mon"],[63,1.8095,3040,28,"Wed"],[64,1.6923,2640,26,"Thu"],[67,2.2789,4102,30,"Sun"],[68,2.4615,1920,13,"Mon"],[70,1.752,3574,34,"Wed"],[71,2.2857,1920,14,"Thu"],[74,2.0967,1887,15,"Sun"],[75,1.567,4889,52,"Mon"],[77,1.8635,2907,26,"Wed"],[78,1.8444,1992,18,"Thu"],[81,1.4591,3677,42,"Sun"],[82,1.5846,1236,13,"Mon"],[83,1.6783,3021,30,"Tue"],[85,1.3986,1930,23,"Thu"],[88,1.8197,3603,33,"Sun"],[89,0.998,2036,34,"Mon"],[91,1.4991,3328,37,"Wed"],[92,1.6364,2160,22,"Thu"],[95,2.021,4244,35,"Sun"],[96,1.5345,2670,29,"Mon"],[98,1.7532,3787,36,"Wed"],[99,1.8182,2400,22,"Thu"],[102,2.0301,4385,36,"Sun"],[103,1.6317,2937,30,"Mon"],[105,1.577,3501,37,"Wed"],[106,1.3601,2285,28,"Thu"],[109,1.9542,4221,36,"Sun"],[110,1.4263,2225,26,"Mon"],[112,1.5797,3033,32,"Wed"],[113,2.8571,1200,7,"Thu"],[116,2.0269,3770,31,"Sun"],[117,1.1607,1950,28,"Mon"],[119,1.7108,3182,31,"Wed"],[120,2.0667,2232,18,"Thu"],[123,1.8891,3627,32,"Sun"],[124,1.9167,2645,23,"Mon"],[126,1.8586,3457,31,"Wed"],[127,2.1119,2661,21,"Thu"],[130,2.628,3942,25,"Sun"],[131,1.9022,2625,23,"Mon"],[133,1.9747,3199,27,"Wed"],[134,1.9356,2555,22,"Thu"],[137,2.4192,3774,26,"Sun"],[138,2.057,2345,19,"Mon"],[140,1.874,2811,25,"Wed"],[141,0.8235,1334,27,"Thu"],[144,1.2014,2523,35,"Sun"],[145,0.7862,1368,29,"Mon"],[147,1.3113,2439,31,"Wed"],[148,1.1131,1870,28,"Thu"],[151,1.1486,2481,36,"Sun"],[152,1.0202,2020,33,"Mon"],[153,1.3245,2861,36,"Tue"],[155,0.831,1795,36,"Thu"],[158,1.1989,3165,44,"Sun"],[159,0.9118,1860,34,"Mon"],[161,1.2321,3105,42,"Wed"],[162,1.5385,1200,13,"Thu"],[165,1.25,2700,36,"Sun"],[166,0.7103,1790,42,"Mon"],[168,1.1717,2109,30,"Wed"],[169,0.849,2598,51,"Thu"],[172,1.1382,2800,41,"Sun"],[173,1.2308,1920,26,"Mon"],[175,1.2585,3096,41,"Wed"],[176,1.2611,2270,30,"Thu"],[179,1.3103,3066,39,"Sun"],[180,1.0417,2375,38,"Mon"],[193,1.2833,2002,26,"Sun"],[194,1.046,1820,29,"Mon"],[196,1.225,3675,50,"Wed"],[197,1.0556,2280,36,"Thu"],[200,1.2115,3780,52,"Sun"],[201,1.1471,2340,34,"Mon"],[203,1.184,3623,51,"Wed"],[204,1.1528,2075,30,"Thu"],[207,1.3439,3951,49,"Sun"],[208,0.825,1980,40,"Mon"],[210,1.0935,3543,54,"Wed"],[211,1.2901,2090,27,"Thu"],[214,1.4162,3229,38,"Sun"],[215,1.0286,1975,32,"Mon"],[217,1.2727,3360,44,"Wed"],[218,1.0025,2045,34,"Thu"],[221,1.0527,3474,55,"Sun"],[222,1.0661,1855,29,"Mon"]]};
+const LB = {2025:[[5,2339],[6,676],[8,2136],[9,193],[12,2446],[13,556],[15,2045],[16,668],[19,2360],[20,655],[22,1890],[23,1013],[26,2265],[27,414],[29,2100],[30,1919],[33,2449],[34,909],[36,1880],[37,849],[40,2151],[41,842],[43,1841],[44,1122],[47,2183],[48,241],[50,1924],[51,801],[54,2392],[55,349],[57,2060],[58,629],[61,2188],[62,416],[64,1960],[65,529],[68,2044],[69,263],[71,2243],[72,529],[75,2402],[78,1907],[79,27],[82,1770],[83,126],[85,2558],[86,74],[89,2202],[90,674],[92,1402],[93,762],[96,1679],[97,496],[99,1743],[100,850],[103,1733],[104,751],[106,1292],[107,590],[110,1334],[111,828],[113,1530],[114,1760],[117,1983],[118,1307],[120,1998],[121,184],[124,1907],[125,226],[127,1772],[128,1172],[131,1978],[132,1033],[134,1966],[135,266],[138,1980],[139,404],[141,2154],[142,960],[145,2135],[146,900],[148,2241],[149,1730],[152,2047],[153,1314],[155,2463],[156,1680],[159,2010],[160,1008],[162,2031],[163,420],[166,1760],[167,881],[169,1775],[170,1630],[173,1541],[174,2176],[176,2609],[177,1990],[180,1558],[181,1370],[183,1702],[184,1750],[187,2030],[188,1479],[190,2148],[191,1050],[194,2040],[195,630],[197,1812],[198,1470],[201,1882],[202,1176],[204,2347],[205,950],[208,1531],[209,1890],[211,295],[212,1530],[215,1857],[216,1670],[218,1598],[219,1050],[222,1682],[223,1726]],2026:[[4,2255],[5,1670],[7,2102],[8,1550],[11,2058],[12,2194],[14,1965],[15,1703],[18,2272],[19,2423],[21,1878],[22,1470],[25,2101],[26,1981],[28,1787],[29,2100],[32,2158],[33,2314],[35,2274],[36,1981],[39,1735],[40,2286],[42,1935],[43,1470],[46,2425],[47,1500],[49,1878],[50,1607],[53,2235],[54,2340],[56,2265],[57,1330],[60,1889],[61,1260],[63,2019],[64,2310],[67,2532],[68,1680],[70,2317],[71,1680],[74,667],[75,3710],[77,1616],[78,1743],[81,2042],[82,1082],[83,1884],[85,1700],[88,2168],[89,2074],[91,2282],[92,1890],[95,2555],[96,2640],[98,2622],[99,2100],[102,2594],[103,2756],[105,2484],[106,2140],[109,2484],[110,2020],[112,2075],[113,1050],[116,2253],[117,2010],[119,2177],[120,1953],[123,2223],[124,2590],[126,2311],[127,2165],[130,2313],[131,2550],[133,1972],[134,2410],[137,2009],[138,2260],[140,1925],[141,1426],[144,1426],[145,1602],[147,1375],[148,1850],[151,1535],[152,2150],[153,1643],[155,1700],[158,2123],[159,1830],[161,2081],[162,1050],[165,1575],[166,1960],[168,1097],[169,2150],[172,1708],[173,1950],[175,1944],[176,2110],[179,2098],[180,2320],[193,953],[194,2020],[196,2389],[197,2130],[200,2441],[201,2250],[203,2265],[204,1990],[207,2360],[208,2070],[210,2251],[211,2020],[214,2212],[215,2060],[217,2096],[218,1930],[221,2196],[222,1820]]};
+// [dayOfYear, packerHours, fails] — fails null where none were logged
+const PF = {2025:[[5,39,121],[6,10,50],[8,38,24],[9,7,20],[12,43,169],[13,8,20],[15,34,40],[16,23,89],[19,45,57],[20,17,69],[22,32,47],[23,31,38],[26,33,23],[27,13,35],[29,33,23],[30,33,108],[33,41,143],[34,30,27],[36,39,26],[37,22,90],[40,41,74],[41,27,63],[43,34,32],[44,41,36],[47,36,92],[48,13,73],[50,27,68],[51,32,118],[54,49,161],[55,12,34],[57,46,34],[58,22,74],[61,32,51],[62,15,43],[64,35,27],[65,20,54],[68,37,43],[69,16,44],[71,32,36],[72,18,41],[75,29,52],[78,32,27],[79,4,7],[82,29,27],[83,3,27],[85,38,36],[86,2,7],[89,28,31],[90,31,65],[92,25,50],[93,23,96],[96,30,36],[97,15,58],[99,30,77],[100,35,89],[103,28,56],[104,26,32],[106,18,44],[107,29,78],[110,31,67],[111,26,53],[113,30,67],[114,45,40],[117,33,35],[118,39,70],[120,31,56],[121,9,11],[124,36,74],[125,5,32],[127,40,153],[128,25,48],[131,39,53],[132,33,16],[134,38,68],[135,9,18],[138,43,65],[139,1,null],[141,46,40],[142,11,4],[145,41,15],[146,16,27],[148,47,42],[149,34,28],[152,49,40],[153,19,24],[155,33,37],[156,15,22],[159,28,49],[160,14,11],[162,34,57],[163,6,17],[166,30,18],[167,10,5],[169,32,37],[170,17,26],[173,27,39],[174,26,40],[176,25,76],[177,21,13],[180,31,35],[181,11,7],[183,29,64],[184,21,9],[187,27,51],[188,18,27],[190,34,53],[191,9,15],[194,36,41],[195,5,16],[197,31,23],[198,17,30],[201,32,43],[202,15,22],[204,34,58],[205,7,13],[208,20,27],[209,22,36],[211,5,12],[212,11,16],[215,24,69],[216,22,22],[218,27,69],[219,15,53],[222,32,24],[223,25,54]],2026:[[4,37,68],[5,21,49],[7,44,176],[8,32,58],[11,48,119],[12,36,53],[14,31,99],[15,20,45],[18,41,70],[19,41,37],[21,29,80],[22,18,32],[25,32,55],[26,23,24],[28,29,75],[29,27,15],[32,34,62],[33,28,39],[35,40,43],[36,26,24],[39,26,55],[40,29,61],[42,37,29],[43,24,48],[46,37,51],[47,32,35],[49,31,31],[50,24,17],[53,35,32],[54,21,49],[56,30,51],[57,8,8],[60,31,32],[61,13,7],[63,28,27],[64,26,63],[67,30,45],[68,13,21],[70,34,39],[71,14,16],[74,15,26],[75,52,73],[77,26,55],[78,18,17],[81,42,47],[82,13,12],[83,30,35],[85,23,43],[88,33,82],[89,34,41],[91,37,51],[92,22,86],[95,35,64],[96,29,42],[98,36,66],[99,22,75],[102,36,106],[103,30,62],[105,37,106],[106,28,75],[109,36,117],[110,26,106],[112,32,103],[113,7,34],[116,31,116],[117,28,72],[119,31,102],[120,18,66],[123,32,101],[124,23,70],[126,31,77],[127,21,46],[130,25,60],[131,23,30],[133,27,44],[134,22,15],[137,26,56],[138,19,26],[140,25,72],[141,27,21],[144,35,null],[145,29,null],[147,31,null],[148,28,null],[151,36,null],[152,33,null],[153,36,null],[155,36,null],[158,44,null],[159,34,null],[161,42,null],[162,13,null],[165,36,null],[166,42,null],[168,30,null],[169,51,null],[172,41,null],[173,26,null],[175,41,null],[176,30,null],[179,39,null],[180,38,null],[193,26,26],[194,29,21],[196,50,62],[197,36,28],[200,52,43],[201,34,25],[203,51,49],[204,30,19],[207,49,30],[208,40,18],[210,54,60],[211,27,18],[214,38,51],[215,32,26],[217,44,73],[218,34,38],[221,55,62],[222,29,31]]};
+
+const YEARS = [2025, 2026];
+const NS = 'http://www.w3.org/2000/svg';
+const MONTHS = [[1,'Jan'],[32,'Feb'],[60,'Mar'],[91,'Apr'],[121,'May'],[152,'Jun'],[182,'Jul'],[213,'Aug'],[224,'']];
+const el = (t, a={}) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
+const dayLabel = doy => { const d = new Date(Date.UTC(2026,0,1)); d.setUTCDate(doy);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}); };
+
+// Weighted: total trays over total packer-minutes, so a 249-tray Monday can't
+// shout as loudly as a full day would.
+const wmean = r => { const t=r.reduce((a,x)=>a+x[2],0), p=r.reduce((a,x)=>a+x[3],0)*60; return p?t/p:null; };
+// One point per calendar week, plotted at the week's midpoint. Calendar weeks
+// are honest buckets: a trailing mean drags a bad day forward for three more
+// points, which made the line look like a slide rather than a single day.
+const weekly = (rows, val) => {
+  const b = new Map();
+  for (const r of rows) {
+    const wk = Math.floor((r[0]-1)/7);
+    (b.get(wk) || b.set(wk, []).get(wk)).push(r);
+  }
+  return [...b.entries()].sort((a,z) => a[0]-z[0])
+    .map(([wk, rs]) => [wk*7 + 4, val(rs), rs.length]);
+};
+
+function draw(svgId, tipId, series, opts) {
+  const svg = document.getElementById(svgId), tip = document.getElementById(tipId);
+  const W=1060, H=opts.h, M={t:18,r:16,b:34,l:opts.padL};
+  const X0=M.l, X1=W-M.r, Y0=M.t, Y1=H-M.b, DMIN=1, DMAX=224;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  const x = d => X0 + (d-DMIN)/(DMAX-DMIN)*(X1-X0);
+  const y = v => Y1 - Math.min(v,opts.yMax)/opts.yMax*(Y1-Y0);
+
+  for (const [doy,label] of MONTHS) {
+    svg.appendChild(el('line',{x1:x(doy),x2:x(doy),y1:Y0,y2:Y1,stroke:'var(--grid)'}));
+    if(!label) continue;
+    const t=el('text',{x:x(doy)+6,y:Y1+20,class:'axis'}); t.textContent=label; svg.appendChild(t);
+  }
+  for (let v=0; v<=opts.yMax+1e-9; v+=opts.step) {
+    svg.appendChild(el('line',{x1:X0,x2:X1,y1:y(v),y2:y(v),stroke:'var(--grid)'}));
+    const t=el('text',{x:X0-9,y:y(v)+4,class:'axis','text-anchor':'end'});
+    t.textContent=opts.fmtAxis(v); svg.appendChild(t);
+  }
+
+  YEARS.forEach(yr => {
+    const col = yr===2025?'var(--s25)':'var(--s26)', rows = series[yr];
+    if (opts.dots) rows.forEach(r => svg.appendChild(el('circle',
+      {cx:x(r[0]),cy:y(opts.raw(r)),r:2.1,fill:col,opacity:.3})));
+    let d='', prev=null;
+    weekly(rows, opts.agg).forEach(pt => {
+      const doy=pt[0], v=pt[1];
+      if (v==null) return;
+      // Break rather than bridge when a week has no pack days at all.
+      d += (prev==null || doy-prev>10 ? 'M':'L') + x(doy).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
+      prev = doy;
+    });
+    svg.appendChild(el('path',{d,fill:'none',stroke:col,'stroke-width':2.4,
+      'stroke-linejoin':'round','stroke-linecap':'round'}));
+  });
+
+  const guide = el('line',{y1:Y0,y2:Y1,stroke:'var(--muted)','stroke-width':1,opacity:0});
+  svg.appendChild(guide);
+  const dots = YEARS.map(yr => { const c = el('circle',{r:4.5,
+    fill:yr===2025?'var(--s25)':'var(--s26)',stroke:'var(--surface)','stroke-width':2,opacity:0});
+    svg.appendChild(c); return c; });
+  const near = (rows,doy) => rows.reduce((b,r)=>Math.abs(r[0]-doy)<Math.abs(b[0]-doy)?r:b, rows[0]);
+
+  svg.addEventListener('pointermove', e => {
+    const box = svg.getBoundingClientRect();
+    const px = (e.clientX-box.left)/box.width*W;
+    if (px<X0 || px>X1) return;
+    const doy = Math.round(DMIN + (px-X0)/(X1-X0)*(DMAX-DMIN));
+    guide.setAttribute('x1',x(doy)); guide.setAttribute('x2',x(doy)); guide.setAttribute('opacity',.35);
+    let html = '<div class="td">'+dayLabel(doy)+'</div>';
+    YEARS.forEach((yr,i) => {
+      const r = near(series[yr],doy), hit = Math.abs(r[0]-doy)<=3;
+      dots[i].setAttribute('opacity', hit?1:0);
+      if (hit) { dots[i].setAttribute('cx',x(r[0])); dots[i].setAttribute('cy',y(opts.raw(r))); }
+      html += '<div class="r"><span>'+yr+'</span><b>'+(hit?opts.fmtTip(r):'—')+'</b></div>';
+    });
+    tip.innerHTML = html; tip.style.opacity = 1;
+    tip.style.left = Math.min(Math.max(box.width*(x(doy)/W)-86,4), box.width-180)+'px';
+    tip.style.top = '14px';
+  });
+  svg.addEventListener('pointerleave', () => {
+    tip.style.opacity=0; guide.setAttribute('opacity',0);
+    dots.forEach(d=>d.setAttribute('opacity',0));
+  });
+}
+
+draw('chart','tip',D,{ h:340, padL:46, yMax:3.2, step:0.5, dots:true,
+  raw: r => r[1], agg: wmean,
+  fmtAxis: v => v.toFixed(1),
+  fmtTip: r => r[1].toFixed(2)+'  <span style="color:var(--faint)">'+r[4]+'</span>' });
+
+const lbRows = {}; YEARS.forEach(y => lbRows[y] = LB[y].map(r => [r[0], r[1], r[1], 0]));
+draw('chart2','tip2',lbRows,{ h:400, padL:52, yMax:4000, step:1000, dots:true,
+  raw: r => r[1], agg: w => w.reduce((a,x)=>a+x[1],0)/w.length,
+  fmtAxis: v => (v/1000).toFixed(0)+'k',
+  fmtTip: r => r[1].toLocaleString()+' lb' });
+
+const pkRows={}, flRows={};
+YEARS.forEach(y => {
+  pkRows[y] = PF[y].map(r => [r[0], r[1], r[1], 0]);
+  flRows[y] = PF[y].filter(r => r[2] !== null).map(r => [r[0], r[2], r[2], 0]);
+});
+const mean = w => w.reduce((a,x)=>a+x[1],0)/w.length;
+
+draw('chart3','tip3',pkRows,{ h:280, padL:46, yMax:60, step:15, dots:true,
+  raw: r => r[1], agg: mean, fmtAxis: v => v.toFixed(0),
+  fmtTip: r => r[1].toFixed(0)+' hrs' });
+
+draw('chart4','tip4',flRows,{ h:280, padL:46, yMax:180, step:45, dots:true,
+  raw: r => r[1], agg: mean, fmtAxis: v => v.toFixed(0),
+  fmtTip: r => r[1].toFixed(0)+' fails' });
+
+const rng=(r,a,b)=>r.filter(x=>x[0]>=a&&x[0]<=b);
+const lbMean=r=>r.reduce((a,x)=>a+x[1],0)/r.length;
+const pct=(a,b)=>(b/a-1)*100, fp=v=>(v>=0?'+':'')+v.toFixed(0)+'%';
+const r25=wmean(D[2025]), r26=wmean(D[2026]);
+const e25=wmean(rng(D[2025],1,140)), e26=wmean(rng(D[2026],1,140));
+const l25=wmean(rng(D[2025],141,224)), l26=wmean(rng(D[2026],141,224));
+const p25=lbMean(LB[2025]), p26=lbMean(LB[2026]);
+
+
+const tot = r => r.reduce((a, x) => a + x[1], 0);
+const phMean = (y, a, b) => { const r = rng(PF[y], a, b); return r.reduce((s, x) => s + x[1], 0) / r.length; };
+
+document.getElementById('lbstory').innerHTML =
+  '<strong class="hl">' + tot(LB[2026]).toLocaleString() + ' lb</strong> packed against '
+  + tot(LB[2025]).toLocaleString() + ' — <strong class="hl">' + fp(pct(tot(LB[2025]), tot(LB[2026])))
+  + '</strong>, and on five <em>fewer</em> pack days, so the daily average moves from '
+  + Math.round(p25).toLocaleString() + ' to ' + Math.round(p26).toLocaleString() + ' lb. '
+  + '2026 leads in every month; the gap widens rather than closing. Nearly all of it is one '
+  + 'account — see the Iwilei note.';
+
+document.getElementById('iwilei').innerHTML =
+  '<strong class="hl">Costco Iwilei (687) did not exist as a customer until 22 May 2025.</strong> '
+  + 'It packed 18,480 lb across 22 days in the back half of the 2025 window, against '
+  + '<strong class="hl">55,398 lb across 64 days</strong> in 2026 — present from 4 Jan. '
+  + 'That single account is <strong class="hl">+36,918 lb, or 74% of the whole +50,110 lb '
+  + 'increase</strong>. Strip it out and the rest of the book is up 173,251 → 186,443 lb, '
+  + '<strong class="hl">+7.6%</strong>, not +26% — that is the underlying growth rate. '
+  + 'And Iwilei has not finished landing: 2026 is its first full year, so the account still '
+  + 'has the 1 Jan – 21 May stretch of 2025 to lap. Expect the headline gap to widen further '
+  + 'before it normalises.';
+
+document.getElementById('story').innerHTML =
+  'The rate held above 2025 all through Jan–Apr, averaging <strong class="hl">1.63 trays per '
+  + 'packer-minute</strong>, then dropped to <strong class="hl">1.27 from May on</strong> — a 22% '
+  + 'fall that also puts 2026 ' + fp(pct(l25, l26)) + ' behind 2025 over the same stretch. '
+  + 'The work did not fall with it. Trays per day slipped only 8% (2,820 → 2,605) while '
+  + '<strong class="hl">packer-hours went from 28.9 to 34.3 a day</strong>, up 19%. '
+  + 'The denominator moved, not the packing — see the packer-hours tile.';
+
+document.getElementById('hoursstory').innerHTML =
+  'Packer-hours sat near <strong class="hl">28.9 a day through April</strong>, then stepped up '
+  + 'to <strong class="hl">34.3 from May</strong> and have stayed there, running 40–55 on the '
+  + 'heaviest days in August — levels 2025 never reached. Trays did not follow: daily output '
+  + 'slipped from 2,820 to 2,605. That is <strong class="hl">19% more labour for 8% fewer '
+  + 'trays</strong>, and it is the whole of the rate drop.';
+
+document.getElementById('gap').innerHTML =
+  'Some of those added hours may be recording, not labour: 2026 logs '
+  + '<strong class="hl">7.5 hourly rows per pack day</strong> against 2025\'s 5.0, including '
+  + '97 hours with zero packers. An hour logged with staff who did not pack for the full 60 '
+  + 'minutes still counts as a full packer-hour, so a more granular record lowers the rate on '
+  + 'its own. Worth checking the May roster change against the sheet before reading this as '
+  + 'lost productivity.';
+
+document.getElementById('failstory').innerHTML =
+  'Fails run low and flat since logging resumed on 12 Jul — <strong class="hl">38 a day on '
+  + 'average</strong>, well under the 52/day 2026 mean and the 100+ days of March and April. '
+  + 'The exception is <strong class="hl">73 on 5 Aug</strong>, nearly double the recent '
+  + 'average and the highest since logging resumed, with 62 on 15 Jul and 9 Aug the only '
+  + 'others near it. '
+  + 'One bad day rather than a trend, but it is the one to ask about.';
+
+/* ---------- Grow page: cucumber cohort run length ---------- */
+// [greenhouse, seeding date, last grade-1 harvest as weeks from transplant]
+const CYC = {
+  2025: [['BIP_HI','02/04',10.9],['JTL_05','02/11',10.0],['JTL_08','02/18',9.9],
+         ['BIP_KO','02/27',9.4],['JTL_03','03/06',8.9],['JTL_01','03/11',9.7],
+         ['BIP_HK','03/20',8.9],['JTL_07','03/27',8.7],['BIP_WA','04/03',9.4],
+         ['JTL_04','04/10',9.4],['JTL_02','04/17',8.7],['JTL_06','04/24',9.1]],
+  2026: [['JTL_03','02/03',10.7],['JTL_01','02/10',11.4],['BIP_HK','02/17',11.0],
+         ['JTL_07','02/24',11.3],['BIP_WA','03/03',10.7],['JTL_04','03/10',9.7],
+         ['JTL_02','03/19',9.9],['JTL_05','03/26',13.0],['BIP_HI','03/30',10.4],
+         ['JTL_06','04/10',10.4],['JTL_08','04/16',10.9],['BIP_KO','04/22',10.6],
+         ['JTL_03','04/30',10.6]]
+};
+const avg = a => a.reduce((s,x) => s + x[2], 0) / a.length;
+
+function drawCycles() {
+  const svg = document.getElementById('chart5'), tip = document.getElementById('tip5');
+  const W = 1060, H = 430, M = {t:18, r:16, b:78, l:46};
+  const X0 = M.l, X1 = W - M.r, Y0 = M.t, Y1 = H - M.b, YMAX = 14;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  const y = v => Y1 - v / YMAX * (Y1 - Y0);
+
+  const bars = [];
+  YEARS.forEach(yr => CYC[yr].forEach(c => bars.push([yr, c])));
+  const N25 = CYC[2025].length, GAP = 24;   // a break between the two cohorts
+  const pitch = (X1 - X0 - GAP) / bars.length, bw = pitch * 0.7;
+  const xAt = i => X0 + (i < N25 ? 0 : GAP) + i * pitch + (pitch - bw) / 2;
+
+  for (let v = 0; v <= YMAX; v += 2) {
+    svg.appendChild(el('line', {x1:X0, x2:X1, y1:y(v), y2:y(v), stroke:'var(--grid)'}));
+    const t = el('text', {x:X0-9, y:y(v)+4, class:'axis', 'text-anchor':'end'});
+    t.textContent = v; svg.appendChild(t);
+  }
+
+  bars.forEach(([yr, c], i) => {
+    const col = yr === 2025 ? 'var(--s25)' : 'var(--s26)', bx = xAt(i);
+    const g = el('g', {class:'bar'});
+    g.appendChild(el('rect', {x:bx, y:y(c[2]), width:bw, height:Y1-y(c[2]), fill:col, rx:3}));
+    const lab = el('text', {x:bx+bw/2, y:Y1+15, class:'ghlab', 'text-anchor':'end',
+      transform:'rotate(-45 ' + (bx+bw/2) + ' ' + (Y1+15) + ')'});
+    lab.textContent = c[0] + ' ' + c[1];
+    g.appendChild(lab);
+    g.addEventListener('pointerenter', () => {
+      const d = c[2] - avg(CYC[yr]);
+      tip.innerHTML = '<div class="td">' + c[0] + ' · ' + c[1] + '/' + String(yr).slice(2) + '</div>'
+        + '<div class="r"><span>last week</span><b>' + c[2].toFixed(1) + '</b></div>'
+        + '<div class="r"><span>vs cohort avg</span><b>' + (d >= 0 ? '+' : '') + d.toFixed(1) + '</b></div>';
+      tip.style.opacity = 1;
+      tip.style.left = Math.min(Math.max(bx / W * 100, 1), 80) + '%';
+      tip.style.top = '14px';
+    });
+    svg.appendChild(g);
+  });
+
+  // Cohort means, each drawn only across its own bars.
+  YEARS.forEach(yr => {
+    const m = avg(CYC[yr]), col = yr === 2025 ? 'var(--s25)' : 'var(--s26)';
+    const a = yr === 2025 ? X0 : X0 + GAP + N25 * pitch;
+    const b = yr === 2025 ? X0 + N25 * pitch : X1;
+    svg.appendChild(el('line', {x1:a, x2:b, y1:y(m), y2:y(m), stroke:col,
+      'stroke-width':1.5, 'stroke-dasharray':'5 4', opacity:.9}));
+    const t = el('text', {x:b-4, y:y(m)-7, class:'axis', 'text-anchor':'end', fill:col});
+    t.textContent = yr + ' avg ' + m.toFixed(1); svg.appendChild(t);
+  });
+
+  svg.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+
+  document.getElementById('growstory').innerHTML =
+    '2026 cycles run <strong class="hl">' + (avg(CYC[2026]) - avg(CYC[2025])).toFixed(1)
+    + ' weeks longer</strong> on average — ' + avg(CYC[2025]).toFixed(1)
+    + ' weeks across the 2025 cohort against ' + avg(CYC[2026]).toFixed(1)
+    + ' in 2026, roughly ten extra days of picking per crop — a <strong class="hl">15% '
+    + 'longer run</strong>. Every 2026 cycle except JTL_04 03/10 finishes past the 2025 '
+    + 'average, and <strong class="hl">JTL_05 03/26 '
+    + 'reaches week 13.0</strong> — more than two weeks past anything the 2025 cohort managed. '
+    + 'As a share of the crop it flattens the curve: the peak week fell from '
+    + '<strong class="hl">25.4% to 22.0%</strong> of the season, while weeks 10–13 went from '
+    + '<strong class="hl">4.5% to 13.7%</strong>.';
+}
+drawCycles();
+
+/* ---------- Grow tables ---------- */
+// [week, lb/cycle 2025, lb/cycle 2026] — null where the cohort had no harvest that week
+const WK = [[4,1910,1863],[5,8226,6691],[6,12247,11122],[7,16225,14207],[8,13375,12424],
+            [9,8957,9514],[10,2743,5998],[11,112,2152],[12,null,474],[13,null,275]];
+// [week, K, J, E] lb per cycle, 2026 cohort (13 cycles)
+const VAR = [[4,1674,189,null],[5,4774,1676,240],[6,6946,3460,716],[7,8866,4172,1169],
+             [8,8167,3297,959],[9,6176,2760,579],[10,3435,2278,286],[11,1083,1011,58],
+             [12,267,188,19],[13,148,127,null]];
+const num = v => v == null ? '<td class="nil">—</td>' : '<td>' + v.toLocaleString() + '</td>';
+const sum = (rows, i) => rows.reduce((a, r) => a + (r[i] || 0), 0);
+
+/* Daily grade-1 pounds, day-of-year 2 through 223 — contiguous, so only the
+   values are stored and the day index is derived. */
+const DAY0 = 2;
+const DAY = {
+  2025: [12151,5933,6415,5994,6692,6778,5320,7153,6997,5838,6218,6294,6413,6919,7154,5978,
+    5531,6196,6818,6976,6424,6745,5863,9099,7375,8330,6906,6384,7341,10328,6228,6756,7066,
+    6173,6185,6029,7015,5770,6803,7549,7794,8244,9009,8514,7414,8627,8373,7051,6929,7023,
+    5702,5934,7090,6032,5420,5656,6533,5501,6372,6655,7033,5898,6420,6791,6684,6017,6467,
+    7423,6151,6536,7299,7136,6330,7623,8353,9190,8212,6893,7879,8632,8032,8600,9476,7739,
+    7160,8520,9219,9084,9297,9793,9790,8125,9319,7882,11639,9897,10516,10562,10622,11156,
+    9562,11374,9041,9913,9644,10387,8423,8131,10101,11005,9952,11507,9939,10319,8754,12647,
+    12633,10693,9420,9654,8491,8856,11231,8260,7612,9939,11930,9525,9736,11526,11215,10302,
+    10106,11065,8235,8824,9349,10806,10171,9300,8639,8452,8995,9754,12791,10589,10789,9793,
+    10383,9494,14212,9691,10237,10579,8390,6991,8699,9429,9988,10823,10210,11220,8069,8749,
+    7836,8443,8288,9111,9831,9766,10108,10681,10465,9468,10478,9475,8035,9746,9945,9304,
+    9717,10271,10307,7029,8426,7955,9978,8171,8599,10928,9300,9444,10318,10494,8423,8942,
+    10352,10056,11396,10660,8048,7796,8121,9400,7458,8779,10942,7755,10383,10589,9841,9620,
+    8222,8557,8331,8146,10977,10622,10475,8944,8522,8816],
+  2026: [12164,6157,6318,5853,4951,4568,5005,5563,5780,4896,6099,5684,5275,6713,4892,4596,
+    4925,5375,5055,5915,6255,6110,6405,5699,6561,7514,7829,6833,5899,7390,6636,7405,6381,
+    6715,6196,5001,6914,6121,4820,4999,7114,6382,5531,7205,6515,6825,4999,5476,5481,5318,
+    7825,7131,7032,7413,8854,7473,6305,8210,8814,9351,7595,10376,9640,10320,8244,8973,8575,
+    8755,8396,8302,7078,6932,5740,8592,7733,6433,7537,6355,6838,7217,7683,7219,8668,10759,
+    9131,10552,8440,8534,6044,8670,10556,9827,9098,10295,10139,11117,10753,10058,8186,7807,
+    8982,8146,7105,8102,7614,7070,7280,7962,9577,9314,11974,9949,11705,8956,9205,8333,10053,
+    10425,10992,10459,9223,12176,11160,9828,10390,10049,10866,10327,10356,10006,9462,9979,
+    10016,9950,9881,11957,12066,10194,10070,8241,8669,7862,8268,9066,10417,10579,11944,10015,
+    11340,14921,10190,9959,8933,7249,8763,7830,8637,9421,9079,10816,11038,9676,9782,12902,
+    10706,10701,10554,8822,12095,10306,13446,9741,9856,8675,8328,8574,9228,10793,10835,12132,
+    12326,11172,8731,9859,10498,9432,9794,9042,10371,11871,10451,10562,9724,9260,7908,9286,
+    9757,9651,10868,10132,11228,9735,10275,9424,10407,10182,10691,11648,11675,12113,11237,
+    8761,8884,9234,9445,9647,11614,11910,10896,11752,11026,10651]
+};
+
+const dayRows = {};
+YEARS.forEach(y => dayRows[y] = DAY[y].map((lb, i) => [DAY0 + i, lb, lb, 0]));
+draw('chart6', 'tip6', dayRows, { h:360, padL:52, yMax:16000, step:4000, dots:true,
+  raw: r => r[1], agg: w => w.reduce((a, x) => a + x[1], 0) / w.length,
+  fmtAxis: v => (v / 1000).toFixed(0) + 'k',
+  fmtTip: r => r[1].toLocaleString() + ' lb' });
+
+/* Share of the season's pounds by week — the same weekly numbers as a
+   distribution, so the two cohorts compare despite different totals. */
+function drawShare(svgId, tipId, rows, series, opts) {
+  const svg = document.getElementById(svgId), tip = document.getElementById(tipId);
+  const W = 1060, H = 320, M = {t:18, r:16, b:36, l:46};
+  const X0 = M.l, X1 = W - M.r, Y0 = M.t, Y1 = H - M.b;
+  const YMAX = opts.yMax, STEP = opts.step, W0 = 4, W1 = 13;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  const x = w => X0 + (w - W0) / (W1 - W0) * (X1 - X0);
+  const y = p => Y1 - p / YMAX * (Y1 - Y0);
+  // Each series is a share of its OWN total, so lines with very different
+  // volumes still compare as shapes.
+  const tot = series.map(s => sum(rows, s.i));
+  const pctOf = (r, k) => r[series[k].i] == null ? null : r[series[k].i] / tot[k] * 100;
+
+  for (let w = W0; w <= W1; w++) {
+    svg.appendChild(el('line', {x1:x(w), x2:x(w), y1:Y0, y2:Y1, stroke:'var(--grid)'}));
+    const t = el('text', {x:x(w), y:Y1 + 20, class:'axis', 'text-anchor':'middle'});
+    t.textContent = w; svg.appendChild(t);
+  }
+  for (let p = 0; p <= YMAX; p += STEP) {
+    svg.appendChild(el('line', {x1:X0, x2:X1, y1:y(p), y2:y(p), stroke:'var(--grid)'}));
+    const t = el('text', {x:X0 - 9, y:y(p) + 4, class:'axis', 'text-anchor':'end'});
+    t.textContent = p + '%'; svg.appendChild(t);
+  }
+
+  const dots = [];
+  series.forEach((s, k) => {
+    let d = '';
+    rows.forEach(r => {
+      const p = pctOf(r, k);
+      if (p == null) return;
+      d += (d ? 'L' : 'M') + x(r[0]).toFixed(1) + ' ' + y(p).toFixed(1) + ' ';
+      svg.appendChild(el('circle', {cx:x(r[0]), cy:y(p), r:2.6, fill:s.col}));
+    });
+    svg.appendChild(el('path', {d, fill:'none', stroke:s.col, 'stroke-width':2.4,
+      'stroke-linejoin':'round', 'stroke-linecap':'round'}));
+    const c = el('circle', {r:4.5, fill:s.col, stroke:'var(--surface)', 'stroke-width':2, opacity:0});
+    svg.appendChild(c); dots.push(c);
+  });
+
+  const guide = el('line', {y1:Y0, y2:Y1, stroke:'var(--muted)', 'stroke-width':1, opacity:0});
+  svg.appendChild(guide);
+  svg.addEventListener('pointermove', e => {
+    const box = svg.getBoundingClientRect();
+    const px = (e.clientX - box.left) / box.width * W;
+    const w = Math.min(W1, Math.max(W0, Math.round(W0 + (px - X0) / (X1 - X0) * (W1 - W0))));
+    const row = rows.find(r => r[0] === w);
+    guide.setAttribute('x1', x(w)); guide.setAttribute('x2', x(w)); guide.setAttribute('opacity', .35);
+    let html = '<div class="td">Week ' + w + '</div>';
+    series.forEach((s, k) => {
+      const p = row ? pctOf(row, k) : null;
+      dots[k].setAttribute('opacity', p == null ? 0 : 1);
+      if (p != null) { dots[k].setAttribute('cx', x(w)); dots[k].setAttribute('cy', y(p)); }
+      html += '<div class="r"><span>' + s.name + '</span><b>'
+        + (p == null ? '—' : p.toFixed(1) + '%') + '</b></div>';
+    });
+    tip.innerHTML = html; tip.style.opacity = 1;
+    tip.style.left = Math.min(Math.max(box.width * (x(w) / W) - 86, 4), box.width - 180) + 'px';
+    tip.style.top = '14px';
+  });
+  svg.addEventListener('pointerleave', () => {
+    tip.style.opacity = 0; guide.setAttribute('opacity', 0);
+    dots.forEach(d => d.setAttribute('opacity', 0));
+  });
+}
+
+drawShare('chart7', 'tip7', WK, [
+  {name:'2025', i:1, col:'var(--s25)'},
+  {name:'2026', i:2, col:'var(--s26)'}
+], {yMax:28, step:7});
+
+drawShare('chart8', 'tip8', VAR, [
+  {name:'K', i:1, col:'var(--s26)'},
+  {name:'J', i:2, col:'var(--s25)'},
+  {name:'E', i:3, col:'var(--v3)'}
+], {yMax:30, step:6});
+
+document.getElementById('yieldstory').innerHTML =
+  '<strong class="hl">1,950,566 lb</strong> harvested to 11 Aug against 1,922,039 last year — '
+  + '<strong class="hl">+1.5%</strong>, on the same 222 harvest days. The years cross over in '
+  + 'March: 2026 ran below 2025 through January and February, then pulled ahead and has '
+  + 'stayed ahead since, finishing July and early August around 10–12k lb a day against '
+  + '2025\'s 8–10k.';
+
+document.getElementById('varstory').innerHTML =
+  'Each line is that variety\'s own pounds, so shape is comparable across very different '
+  + 'volumes. <strong class="hl">E is the sharpest curve</strong> — it puts 29% of its crop '
+  + 'in week 7 alone and is spent by week 10, with only 1.9% left in weeks 11–12. J is the '
+  + 'flattest: it still has <strong class="hl">18.8% of its pounds in weeks 10–13</strong> '
+  + 'against E\'s 9.0%. K sits between them. E also ends earliest in absolute terms — average '
+  + 'last harvest week 9.6, against J\'s 10.8 and K\'s 10.6.';
+
+/* ---------- tiles ---------- */
+// One open panel per group; a tile owns its panel through aria-controls.
+const tileGroup = ids => ids.forEach(id =>
+  document.getElementById(id).addEventListener('click', () => {
+    ids.forEach(t => {
+      const on = t === id, btn = document.getElementById(t);
+      btn.setAttribute('aria-expanded', on);
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = !on;
+    });
+  }));
+tileGroup(['tile-yield', 'tile-weeks', 'tile-variety']);
+tileGroup(['tile-lb', 'tile-rate', 'tile-hours', 'tile-fails']);
+
+/* ---------- page switch ---------- */
+const PAGES = {
+  'tab-pack': ['page-pack', 'Lettuce packhouse, day by day'],
+  'tab-grow': ['page-grow', 'Cucumber Growing Review']
+};
+document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', () => {
+  Object.entries(PAGES).forEach(([id, [page, ttl]]) => {
+    const on = id === btn.id;
+    document.getElementById(id).setAttribute('aria-selected', on);
+    document.getElementById(page).hidden = !on;
+    if (on) document.getElementById('ttl').textContent = ttl;
+  });
+}));
+</script>
+
+</body>
+</html>
