@@ -3,7 +3,7 @@
 :root{
   --ink:#12241E; --body:#3E5049; --muted:#86958E; --line:#DFE6E2;
   --canvas:#F7F9F8; --card:#FFFFFF; --wash:#FAFCFB; --dark:#112A22;
-  --green:#2E8B57; --grn-lt:#A8D5BA; --grey-lt:#C7D2CC; --blue:#2F6FB5;
+  --green:#2E8B57; --grn-lt:#A8D5BA; --grey-lt:#C7D2CC;
   --red:#C0392B; --amber:#C98A1B; --plum:#7B5EA7; --slate:#5B7C99;
   --stage-bg:#E7EDE9;
   --font:"Helvetica Neue","Helvetica","Inter",-apple-system,BlinkMacSystemFont,Arial,sans-serif;
@@ -233,61 +233,6 @@ const DAY={
 [207,2360,49,1.344,30],[208,2070,40,0.825,18],[210,2251,54,1.094,60],[211,2020,27,1.290,18],
 [214,2212,38,1.416,51],[215,2060,32,1.029,26],[217,2096,44,1.273,73],[218,1930,34,1.002,38],
 [221,2196,55,1.053,62],[222,1820,29,1.066,31]]};
-
-/* ---- Cucumber grow, merged in from lfeder/manager-meeting -----------
-   Grade-1 greenhouse net weight, every house and crop. Both years ran
-   222 harvest days over 1 Jan – 11 Aug, so index n is the nth day.     */
-const GLB={
-2025:[12151,5933,6415,5994,6692,6778,5320,7153,6997,5838,6218,6294,6413,6919,7154,5978,
-5531,6196,6818,6976,6424,6745,5863,9099,7375,8330,6906,6384,7341,10328,6228,6756,7066,
-6173,6185,6029,7015,5770,6803,7549,7794,8244,9009,8514,7414,8627,8373,7051,6929,7023,
-5702,5934,7090,6032,5420,5656,6533,5501,6372,6655,7033,5898,6420,6791,6684,6017,6467,
-7423,6151,6536,7299,7136,6330,7623,8353,9190,8212,6893,7879,8632,8032,8600,9476,7739,
-7160,8520,9219,9084,9297,9793,9790,8125,9319,7882,11639,9897,10516,10562,10622,11156,
-9562,11374,9041,9913,9644,10387,8423,8131,10101,11005,9952,11507,9939,10319,8754,12647,
-12633,10693,9420,9654,8491,8856,11231,8260,7612,9939,11930,9525,9736,11526,11215,10302,
-10106,11065,8235,8824,9349,10806,10171,9300,8639,8452,8995,9754,12791,10589,10789,9793,
-10383,9494,14212,9691,10237,10579,8390,6991,8699,9429,9988,10823,10210,11220,8069,8749,
-7836,8443,8288,9111,9831,9766,10108,10681,10465,9468,10478,9475,8035,9746,9945,9304,
-9717,10271,10307,7029,8426,7955,9978,8171,8599,10928,9300,9444,10318,10494,8423,8942,
-10352,10056,11396,10660,8048,7796,8121,9400,7458,8779,10942,7755,10383,10589,9841,9620,
-8222,8557,8331,8146,10977,10622,10475,8944,8522,8816],
-2026:[12164,6157,6318,5853,4951,4568,5005,5563,5780,4896,6099,5684,5275,6713,4892,4596,
-4925,5375,5055,5915,6255,6110,6405,5699,6561,7514,7829,6833,5899,7390,6636,7405,6381,
-6715,6196,5001,6914,6121,4820,4999,7114,6382,5531,7205,6515,6825,4999,5476,5481,5318,
-7825,7131,7032,7413,8854,7473,6305,8210,8814,9351,7595,10376,9640,10320,8244,8973,8575,
-8755,8396,8302,7078,6932,5740,8592,7733,6433,7537,6355,6838,7217,7683,7219,8668,10759,
-9131,10552,8440,8534,6044,8670,10556,9827,9098,10295,10139,11117,10753,10058,8186,7807,
-8982,8146,7105,8102,7614,7070,7280,7962,9577,9314,11974,9949,11705,8956,9205,8333,10053,
-10425,10992,10459,9223,12176,11160,9828,10390,10049,10866,10327,10356,10006,9462,9979,
-10016,9950,9881,11957,12066,10194,10070,8241,8669,7862,8268,9066,10417,10579,11944,10015,
-11340,14921,10190,9959,8933,7249,8763,7830,8637,9421,9079,10816,11038,9676,9782,12902,
-10706,10701,10554,8822,12095,10306,13446,9741,9856,8675,8328,8574,9228,10793,10835,12132,
-12326,11172,8731,9859,10498,9432,9794,9042,10371,11871,10451,10562,9724,9260,7908,9286,
-9757,9651,10868,10132,11228,9735,10275,9424,10407,10182,10691,11648,11675,12113,11237,
-8761,8884,9234,9445,9647,11614,11910,10896,11752,11026,10651]};
-const GDAY={2025:GLB[2025].map((v,i)=>[i+1,v]),2026:GLB[2026].map((v,i)=>[i+1,v])};
-
-/* last harvest week reached, per cycle: [greenhouse, transplant, weeks] */
-const CYC={
- 2025:[["BIP_HI","02/04",10.9],["JTL_05","02/11",10.0],["JTL_08","02/18",9.9],
-       ["BIP_KO","02/27",9.4],["JTL_03","03/06",8.9],["JTL_01","03/11",9.7],
-       ["BIP_HK","03/20",8.9],["JTL_07","03/27",8.7],["BIP_WA","04/03",9.4],
-       ["JTL_04","04/10",9.4],["JTL_02","04/17",8.7],["JTL_06","04/24",9.1]],
- 2026:[["JTL_03","02/03",10.7],["JTL_01","02/10",11.4],["BIP_HK","02/17",11.0],
-       ["JTL_07","02/24",11.3],["BIP_WA","03/03",10.7],["JTL_04","03/10",9.7],
-       ["JTL_02","03/19",9.9],["JTL_05","03/26",13.0],["BIP_HI","03/30",10.4],
-       ["JTL_06","04/10",10.4],["JTL_08","04/16",10.9],["BIP_KO","04/22",10.6],
-       ["JTL_03","04/30",10.6]]};
-const CYC_MEAN={2025:9.4,2026:10.8};
-
-/* pounds by week from transplant — [week, 2025, 2026] and, for 2026 only,
-   [week, K Delta Star Minis, J F1 TSX-CU235JP, E Cumlaude RZ] */
-const WK=[[4,1910,1863],[5,8226,6691],[6,12247,11122],[7,16225,14207],[8,13375,12424],
-          [9,8957,9514],[10,2743,5998],[11,112,2152],[12,null,474],[13,null,275]];
-const VAR=[[4,1674,189,null],[5,4774,1676,240],[6,6946,3460,716],[7,8866,4172,1169],
-           [8,8167,3297,959],[9,6176,2760,579],[10,3435,2278,286],[11,1083,1011,58],
-           [12,267,188,19],[13,148,127,null]];
 
 const MSTART=[1,32,60,91,121,152,182,213];                     // Jan..Aug, non-leap
 const MNAME=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"];
@@ -713,7 +658,7 @@ function chartFs(host,W_in,H_in){
 /* ---- Lettuce packhouse, day by day: 2025 vs 2026 on one axis --------
    Weekly mean as the line, every pack day as a dot behind it. A week with
    no recorded data breaks the line rather than interpolating across it.  */
-function dayChart(DAY,col,{yMax,ticks,fmt,unit,dec=0}){
+function dayChart(col,{yMax,ticks,fmt,unit,dec=0}){
   return function(host,W_in,H_in){
     const W=1000,H=W*H_in/W_in, L=54,R=16,T=14,B=34;
     const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,preserveAspectRatio:"none"});
@@ -810,173 +755,29 @@ function dayChart(DAY,col,{yMax,ticks,fmt,unit,dec=0}){
   };
 }
 
-/* ---- how long each cycle kept picking ------------------------------- */
-function chartCycles(host,W_in,H_in){
-  const W=1000,H=W*H_in/W_in, L=42,R=10,T=16,B=116;
-  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,preserveAspectRatio:"none"});
-  const iw=W-L-R, ih=H-T-B;
-  const yMax=14, y=v=>T+ih-(v/yMax)*ih;
-  const g=el("g");
-  const gg=el("g",{class:"grid"});
-  [0,3.5,7,10.5,14].forEach(v=>{
-    gg.appendChild(el("line",{x1:L,x2:W-R,y1:y(v),y2:y(v)}));
-    const t=el("text",{x:L-9,y:y(v)+5,"text-anchor":"end",class:"ax","font-size":"14"});
-    t.textContent=v.toFixed(1); gg.appendChild(t);
-  });
-  g.appendChild(gg);
-
-  const YR=[[2025,C("--amber")],[2026,C("--green")]];
-  const GAP=1.4, n25=CYC[2025].length, n26=CYC[2026].length;
-  const slots=n25+n26+GAP, step=iw/slots;
-  const at=(yr,i)=>L+step*((yr===2025?i:n25+GAP+i)+0.5);
-  const divX=L+step*(n25+GAP/2);
-  g.appendChild(el("rect",{x:divX,y:T-4,width:W-R-divX,height:ih+8,fill:C("--ink"),opacity:.028,rx:3}));
-  g.appendChild(el("line",{x1:divX,x2:divX,y1:T-4,y2:T+ih+78,stroke:C("--line"),"stroke-width":1.4}));
-
-  const bw=Math.min(22,step*0.66);
-  YR.forEach(([yr,c])=>{
-    CYC[yr].forEach((r,i)=>{
-      const cx=at(yr,i);
-      const bar=el("rect",{x:cx-bw/2,y:y(r[2]),width:bw,height:T+ih-y(r[2]),rx:2,fill:c,
-        class:"mk gy",style:`--d:${i*30}ms;--oy:${T+ih}px`});
-      g.appendChild(bar);
-      const lb=el("text",{x:cx,y:T+ih+14,class:"ax","font-size":"11","text-anchor":"end",
-        transform:`rotate(-45 ${cx} ${T+ih+14})`});
-      lb.textContent=`${r[0]} ${r[1]}`; g.appendChild(lb);
-      const hit=el("rect",{x:cx-step/2,y:T,width:step,height:ih,class:"hit"});
-      hoverable(hit,`${r[0]} · transplanted ${r[1]}`,()=>[
-        {c,k:String(yr)+" cohort",v:r[2].toFixed(1)+" weeks picking"},
-        {c:C("--muted"),k:"Cohort mean",v:CYC_MEAN[yr].toFixed(1)+" weeks"}]);
-      g.appendChild(hit);
-    });
-    // cohort mean
-    const x0=at(yr,0)-step*0.5, x1=at(yr,CYC[yr].length-1)+step*0.5;
-    g.appendChild(el("line",{x1:x0,x2:x1,y1:y(CYC_MEAN[yr]),y2:y(CYC_MEAN[yr]),
-      stroke:c,"stroke-width":2,"stroke-dasharray":"5 5",class:"fi",style:"--d:.7s"}));
-    const lab=el("text",{x:(x0+x1)/2,y:T+ih+100,"text-anchor":"middle",class:"ax",
-      "font-size":"14","font-weight":"700",fill:c});
-    lab.textContent=`${yr} cohort · mean ${CYC_MEAN[yr].toFixed(1)} wk`;
-    g.appendChild(lab);
-  });
-  svg.appendChild(g); host.appendChild(svg);
-  return {table:dataTable(["Cohort","Greenhouse","Transplant","Weeks picking"],
-    [2025,2026].flatMap(yr=>CYC[yr].map(r=>[String(yr),r[0],r[1],r[2].toFixed(1)])))};
-}
-
-/* ---- share of pounds by week from transplant ------------------------ */
-function shareChart(rows,series,{yMax,ticks}){
-  return function(host,W_in,H_in){
-    const W=1000,H=W*H_in/W_in, L=52,R=52,T=16,B=44;
-    const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,preserveAspectRatio:"none"});
-    const iw=W-L-R, ih=H-T-B;
-    const wks=rows.map(r=>r[0]);
-    const x=w=>L+((w-wks[0])/(wks[wks.length-1]-wks[0]))*iw;
-    const y=v=>T+ih-(v/yMax)*ih;
-    const g=el("g");
-    const gg=el("g",{class:"grid"});
-    ticks.forEach(v=>{
-      gg.appendChild(el("line",{x1:L,x2:W-R,y1:y(v),y2:y(v)}));
-      const t=el("text",{x:L-10,y:y(v)+5,"text-anchor":"end",class:"ax","font-size":"14"});
-      t.textContent=v+"%"; gg.appendChild(t);
-    });
-    g.appendChild(gg);
-    wks.forEach(w=>{
-      const t=el("text",{x:x(w),y:T+ih+24,"text-anchor":"middle",class:"ax","font-size":"14"});
-      t.textContent=w; g.appendChild(t);
-    });
-    const cap=el("text",{x:L+iw/2,y:T+ih+42,"text-anchor":"middle",class:"ax","font-size":"13"});
-    cap.textContent="week from transplant"; g.appendChild(cap);
-
-    const tot=series.map(s=>rows.reduce((a,r)=>a+(r[s.col]||0),0));
-    const pts=series.map((s,si)=>rows.map(r=>r[s.col]==null?null:
-      ({w:r[0],v:r[s.col]/tot[si]*100})).filter(Boolean));
-    series.forEach((s,si)=>{
-      const d=pts[si].map((p,i)=>`${i?"L":"M"}${x(p.w)},${y(p.v)}`).join("");
-      g.appendChild(el("path",{d,fill:"none",stroke:C(s.c),"stroke-width":3.2,
-        "stroke-linejoin":"round","stroke-linecap":"round",class:"drawl",
-        style:`--len:2600;--d:${si*.12}s`}));
-      pts[si].forEach(p=>g.appendChild(el("circle",{cx:x(p.w),cy:y(p.v),r:4,fill:C(s.c),
-        stroke:C("--card"),"stroke-width":2,class:"fi",style:`--d:${.55+si*.08}s`})));
-      const last=pts[si][pts[si].length-1];
-      const lab=el("text",{x:x(last.w)+11,y:y(last.v)+4,fill:C(s.c),"font-size":"13",
-        "font-weight":"700","font-family":"var(--font)",class:"fi",style:`--d:${.65+si*.08}s`});
-      lab.textContent=s.short; g.appendChild(lab);
-      s._lab=lab; s._ly=y(last.v)+4;
-    });
-    // keep 14px of air between the direct end-labels
-    const ord=series.slice().sort((a,b)=>a._ly-b._ly);
-    for(let i=1;i<ord.length;i++){
-      const need=14-(ord[i]._ly-ord[i-1]._ly);
-      if(need>0) ord[i]._ly+=need;
-    }
-    const over=ord[ord.length-1]._ly-(T+ih+4);
-    if(over>0) ord.forEach(s=>s._ly-=over);
-    series.forEach(s=>s._lab.setAttribute("y",s._ly));
-
-    const cross=el("line",{y1:T,y2:T+ih,stroke:C("--muted"),"stroke-width":1.2,opacity:0});
-    g.appendChild(cross);
-    rows.forEach(r=>{
-      const hit=el("rect",{x:x(r[0])-iw/(rows.length-1)/2,y:T,
-        width:iw/(rows.length-1),height:ih,class:"hit"});
-      hoverable(hit,`Week ${r[0]} from transplant`,()=>series.map((s,si)=>({
-        c:C(s.c),k:s.name,
-        v:r[s.col]==null?"—":(r[s.col]/tot[si]*100).toFixed(1)+"%  ·  "+nf(r[s.col])+" lb"})));
-      hit.addEventListener("pointerenter",()=>{
-        cross.setAttribute("x1",x(r[0]));cross.setAttribute("x2",x(r[0]));
-        cross.setAttribute("opacity",.45);});
-      hit.addEventListener("pointerleave",()=>cross.setAttribute("opacity",0));
-      g.appendChild(hit);
-    });
-    svg.appendChild(g); host.appendChild(svg);
-    return {table:dataTable(["Week",...series.map(s=>s.name)],
-      rows.map(r=>[r[0],...series.map((s,si)=>
-        r[s.col]==null?"—":(r[s.col]/tot[si]*100).toFixed(1)+"%")]))};
-  };
-}
-
-/* one grow/packhouse slide: eyebrow, title, full-bleed card, legend, chart */
-function storySlide(navName,{eyebrow,heading,cardHead,legend,chart,stats,note}){
+/* one packhouse slide: eyebrow, title, full-bleed card, legend, chart */
+function packSlide(navName,cardHead,chart,{dot=true}={}){
   const s=slide(navName);
-  txt(s,0.620,0.400,12.093,0.150,eyebrow,{size:8.5,bold:true,color:"var(--muted)"});
-  title(s,heading,{y:0.640});
-
-  let cy=1.340, chh=5.720;
-  if(stats){
-    const w=(12.093-2*0.230)/stats.length;
-    stats.forEach(([l,v,n,tone],i)=>{
-      const x=0.620+i*(w+0.230);
-      cardBox(s,x,1.300,w,1.080);
-      txt(s,x+0.200,1.450,w-0.400,0.150,l.toUpperCase(),
-        {size:8.5,bold:true,color:"var(--muted)"});
-      txt(s,x+0.200,1.680,w-0.400,0.330,v,{size:21,bold:true,color:tone||"var(--ink)"});
-      txt(s,x+0.200,2.075,w-0.400,0.250,n,{size:9.5,ls:1.12});
-    });
-    cy=2.560; chh=4.500;
-  }
-  if(note) chh-=0.520;
-
-  cardBox(s,0.620,cy,12.093,chh);
-  txt(s,0.900,cy+0.240,6.400,0.220,cardHead,{size:12,bold:true,color:"var(--ink)"});
+  txt(s,0.620,0.400,12.093,0.150,"LETTUCE PACKHOUSE  ·  1 JAN — 11 AUG",
+    {size:8.5,bold:true,color:"var(--muted)"});
+  title(s,"Lettuce packhouse, day by day",{y:0.640});
+  cardBox(s,0.620,1.340,12.093,5.720);
+  txt(s,0.900,1.580,6.000,0.220,cardHead,{size:12,bold:true,color:"var(--ink)"});
   const item="display:inline-flex;align-items:center;gap:7px;flex:none;white-space:nowrap;";
   s.appendChild(h("div",{style:
-    `position:absolute;right:${px(0.900)}px;top:${px(cy+0.220)}px;display:flex;`+
-    `align-items:center;gap:22px;font-size:11px;line-height:1`},
-    legend.map(([k,c,kind])=>h("span",{style:item+
-      (kind==="dot"?"color:var(--muted)":"color:var(--body)")},[
-      h("span",{style:kind==="dot"
-        ? `width:7px;height:7px;border-radius:50%;background:${C(c)};opacity:.55;flex:none`
-        : `width:18px;height:3px;border-radius:2px;background:${C(c)};flex:none`}),
-      h("span",{text:k})]))));
-  mount(s,0.860,cy+0.620,11.613,chh-0.820,chart);
-
-  if(note) txt(s,0.620,cy+chh+0.180,12.093,0.400,note,{size:9.5,ls:1.2,color:"var(--muted)"});
+    `position:absolute;right:${px(0.900)}px;top:${px(1.560)}px;display:flex;align-items:center;`+
+    `gap:22px;font-size:11px;line-height:1`},[
+    ...[["2025","--amber"],["2026","--green"]].map(([k,c])=>
+      h("span",{style:item+"color:var(--body)"},[
+        h("span",{style:`width:18px;height:3px;border-radius:2px;background:${C(c)};flex:none`}),
+        h("span",{text:k})])),
+    dot?h("span",{style:item+"color:var(--muted)"},[
+      h("span",{style:`width:7px;height:7px;border-radius:50%;background:${C("--muted")};opacity:.55;flex:none`}),
+      h("span",{text:"single day"})]):null
+  ]));
+  mount(s,0.860,1.960,11.613,4.900,chart);
   return s;
 }
-const YRLEG=[["2025","--amber"],["2026","--green"],["single day","--muted","dot"]];
-const packSlide=(navName,cardHead,chart)=>storySlide(navName,{
-  eyebrow:"LETTUCE PACKHOUSE  ·  1 JAN — 11 AUG",
-  heading:"Lettuce packhouse, day by day",
-  cardHead,legend:YRLEG,chart});
 
 /* =====================================================================
    SLIDES — geometry read straight out of H1_2026_Manager_Final.pptx
@@ -1039,66 +840,21 @@ function slide(name){
   mount(s,0.700,3.086,11.853,4.160,ghTable);
 }
 
-/* ------------------------------------------- 4-7 · Cucumber grow review
-   Merged from lfeder/manager-meeting. Grade 1 only; the cohort charts are
-   cycles seeded 1 Feb – 30 Apr, 12 in 2025 and 13 in 2026.              */
-const GROW_EYEBROW="CUCUMBER GROW  ·  1 JAN — 11 AUG";
-storySlide("Pounds harvested per day",{
-  eyebrow:GROW_EYEBROW, heading:"Cucumber Growing Review",
-  cardHead:"Pounds harvested per day", legend:YRLEG,
-  stats:[
-    ["Total harvested, 1 Jan – 11 Aug","+1.5%","1,950,566 lb vs 1,922,039 in 2025","var(--green)"],
-    ["Weeks grown","+1.4 wk longer","10.8 wk vs 9.4 in 2025, same pounds but 15% more time","var(--amber)"],
-    ["Stopping English harvest early","−1.2 wk shorter","E 9.6 wk vs J 10.8 · K 10.6","var(--red)"]],
-  chart:dayChart(GDAY,1,{yMax:16000,ticks:[0,4000,8000,12000,16000],
-    fmt:v=>`${v/1000}k`,unit:"lb",dec:0})});
-
-storySlide("How long each cycle kept picking",{
-  eyebrow:GROW_EYEBROW, heading:"How long each cycle kept picking",
-  cardHead:"Last harvest week reached, by cycle",
-  legend:[["2025 cohort","--amber"],["2026 cohort","--green"]],
-  chart:chartCycles,
-  note:"The late 2026 cycles are still picking — anything seeded into April hasn't finished, "+
-       "so those columns can only grow. The 2025 cohort is closed out. JTL_05 03/26 is the "+
-       "cycle whose seed-batch lineage was repaired on 8 Aug; check it before reading 13.0 as a record."});
-
-storySlide("Share of the season's pounds",{
-  eyebrow:GROW_EYEBROW, heading:"Share of the season's pounds, by week from transplant",
-  cardHead:"Each week's share of the cohort's total pounds",
-  legend:[["2025 cohort","--amber"],["2026 cohort","--green"]],
-  chart:shareChart(WK,[{col:1,c:"--amber",name:"2025 cohort",short:"2025"},
-                       {col:2,c:"--green",name:"2026 cohort",short:"2026"}],
-    {yMax:30,ticks:[0,5,10,15,20,25,30]}),
-  note:"The peak week fell from 25.4% to 22.0% of the season, while weeks 10–13 went from "+
-       "4.5% to 13.7% — the same pounds spread over a longer run."});
-
-storySlide("2026 share by variety",{
-  eyebrow:GROW_EYEBROW, heading:"2026 share of the variety's pounds, by week from transplant",
-  cardHead:"Each week's share of that variety's own total pounds",
-  legend:[["K Delta Star Minis","--green"],["J F1 TSX-CU235JP","--blue"],["E Cumlaude RZ","--plum"]],
-  chart:shareChart(VAR,[{col:1,c:"--green",name:"K Delta Star Minis",short:"K"},
-                        {col:2,c:"--blue", name:"J F1 TSX-CU235JP", short:"J"},
-                        {col:3,c:"--plum", name:"E Cumlaude RZ",     short:"E"}],
-    {yMax:32,ticks:[0,8,16,24,32]}),
-  note:"The 2025 cohort has no E at all — Cumlaude first appears in the 2026 crops, so this is a "+
-       "within-2026 comparison, not a year-over-year one. E is also a much smaller planting: "+
-       "4,026 lb per cycle against K's 41,536, so its shorter run is a small share of total pounds."});
-
-/* -------------------------------------------- 8-11 · Pack, day by day */
+/* --------------------------------------------- 4-7 · Pack, day by day */
 packSlide("Pounds packed per day","Pounds packed per day",
-  dayChart(DAY,1,{yMax:4000,ticks:[0,1000,2000,3000,4000],
+  dayChart(1,{yMax:4000,ticks:[0,1000,2000,3000,4000],
     fmt:v=>`${v/1000}k`,unit:"lb",dec:0}));
 
 packSlide("Trays per packer per minute","Trays per packer per minute",
-  dayChart(DAY,3,{yMax:3.2,ticks:[0,0.5,1.0,1.5,2.0,2.5,3.0],
+  dayChart(3,{yMax:3.2,ticks:[0,0.5,1.0,1.5,2.0,2.5,3.0],
     fmt:v=>v.toFixed(1),unit:"",dec:2}));
 
 packSlide("Packer-hours per day","Packer-hours per day",
-  dayChart(DAY,2,{yMax:60,ticks:[0,15,30,45,60],
+  dayChart(2,{yMax:60,ticks:[0,15,30,45,60],
     fmt:v=>String(v),unit:"hrs",dec:0}));
 
 packSlide("Fails per day","Fails per day",
-  dayChart(DAY,4,{yMax:180,ticks:[0,45,90,135,180],
+  dayChart(4,{yMax:180,ticks:[0,45,90,135,180],
     fmt:v=>String(v),unit:"fails",dec:0}));
 
 /* ----------------------------------------------------------- 5 · Tech */

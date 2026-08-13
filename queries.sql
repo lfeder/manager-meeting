@@ -111,31 +111,7 @@ order by 1;
 
 
 -- ---------------------------------------------------------------------
--- SLIDES 4-7 · "Cucumber Growing Review"
--- Merged in from github.com/lfeder/manager-meeting (index.html), whose
--- arrays are a 12 Aug 2026 Supabase snapshot. Verified on re-query:
--- their totals 1,922,039 / 1,950,566 lb against 1,921,947 / 1,950,388
--- live today — a handful of rows edited since, same definition.
---
--- Headline series (grade 1 only, every house and crop, by harvest date):
--- ---------------------------------------------------------------------
-select extract(year from harvest_date)::int   as yr,
-       round(sum(net_weight))::int            as lb,
-       count(distinct harvest_date)           as harvest_days
-from grow_harvest_weight
-where org_id = 'hawaii_farming' and not is_deleted and farm_id = 'Cuke'
-  and grow_grade_id = '1'
-  and ((harvest_date >= '2025-01-01' and harvest_date <= '2025-08-11')
-    or (harvest_date >= '2026-01-01' and harvest_date <= '2026-08-11'))
-group by 1 order by 1;
-
--- The cohort charts (weeks picked per cycle, share of pounds by week
--- from transplant, and the 2026 K/J/E variety split) come from that same
--- snapshot: cycles seeded 1 Feb - 30 Apr, 12 in 2025 and 13 in 2026.
-
-
--- ---------------------------------------------------------------------
--- SLIDES 8-11 · "Lettuce packhouse, day by day"
+-- SLIDES 4-7 · "Lettuce packhouse, day by day"
 -- One row per pack day, 1 Jan - 11 Aug, for 2025 and 2026. Both years
 -- are plotted on a shared day-of-year axis; neither year is a leap year,
 -- so day 60 is 1 March in both and the two align exactly.
