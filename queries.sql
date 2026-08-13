@@ -15,7 +15,7 @@
 
 
 -- ---------------------------------------------------------------------
--- SLIDE 1 · "% Short"
+-- SLIDE 2 · "% Short"
 -- Ordered vs shipped per cucumber product, by invoice month.
 -- The chart plots (shipped - ordered) / ordered. "Shipped" is the sum of
 -- fulfilment records against the order lines, not invoice_quantity,
@@ -44,7 +44,7 @@ order by b.pid, b.m;
 
 
 -- ---------------------------------------------------------------------
--- SLIDE 3 · the two stat cards — K (Keiki) and J (Japanese) net lb, H1
+-- SLIDES 6-8 · the two stat cards — K (Keiki) and J (Japanese) net lb, H1
 -- Variety comes off the seed item on the batch.
 --   K: 1,248,059 -> 1,122,039  (-10%)
 --   J:   441,472 ->   444,667  (+1%)
@@ -66,7 +66,7 @@ from b group by 1 order by 3 desc nulls last;
 
 
 -- ---------------------------------------------------------------------
--- SLIDE 3 · the table — days in the house vs lb per greenhouse-day
+-- SLIDES 6-8 · the table — days in the house vs lb per greenhouse-day
 -- A cycle is (site, transplant_date). A cycle counts toward a half-year
 -- if its LAST harvest lands in that Jan-Jun window. Days = transplant to
 -- last harvest. Lb per GH-day is total lb over total days across the
@@ -111,7 +111,7 @@ order by 1;
 
 
 -- ---------------------------------------------------------------------
--- SLIDES 4-7 · "Lettuce packhouse, day by day"
+-- SLIDES 9-11 · "Lettuce packhouse, day by day"
 -- One row per pack day, 1 Jan - 11 Aug, for 2025 and 2026. Both years
 -- are plotted on a shared day-of-year axis; neither year is a leap year,
 -- so day 60 is 1 March in both and the two align exactly.
@@ -176,7 +176,7 @@ order by yr, doy;
 
 
 -- ---------------------------------------------------------------------
--- SLIDE 6 · "FOOD SAFETY SPEND"
+-- SLIDE 13 · "FOOD SAFETY SPEND"
 -- 2026 is the H1 actual doubled to a full-year run-rate.
 -- ---------------------------------------------------------------------
 select
@@ -189,3 +189,69 @@ select
 from fin_expense
 where org_id = 'hawaii_farming' and not is_deleted
   and account_name = '6. Office:Food Safety';
+
+
+-- ---------------------------------------------------------------------
+-- SLIDE 4 · "Costco Japanese: ordered against shipped"
+-- The click-through from the Costco card on slide 3. Cut to the Costco
+-- customer GROUP, not to product JW as a whole: Costco is nearly all of
+-- JW but not all of it, so the two series differ by a few dozen cases a
+-- month. Jan-Jul both years, the same window the % Short YTD pills use.
+--   ordered  19,383 -> 23,183   (+20%)
+--   shipped  17,244 -> 16,285   (-6%)
+--   short       -11% -> -30%
+-- ---------------------------------------------------------------------
+with base as (
+  select to_char(p.invoice_date,'YYYY-MM') as m, l.id as line_id,
+         l.order_quantity as oq
+  from sales_po p
+  join sales_po_line l on l.sales_po_id = p.id and not l.is_deleted
+  where p.org_id = 'hawaii_farming' and not p.is_deleted
+    and p.sales_customer_group_id = 'Costco'
+    and l.sales_product_id = 'JW'
+    and p.invoice_date >= '2025-01-01' and p.invoice_date < '2026-08-01'
+), ff as (
+  select b.m, sum(f.fulfilled_quantity) as fq
+  from base b
+  join sales_po_fulfillment f on f.sales_po_line_id = b.line_id and not f.is_deleted
+  group by 1
+)
+select b.m, sum(b.oq)::int as ordered,
+       (select fq::int from ff where ff.m = b.m) as shipped
+from base b group by b.m order by b.m;
+
+
+-- ---------------------------------------------------------------------
+-- SLIDE 5 · "Lettuce: where the cases went"
+-- The click-through from the lettuce card on slide 3. Cases shipped per
+-- customer, 1 Jan - 11 Aug, the same window as the packhouse charts.
+-- Costco is split so Iwilei (687) stands on its own — it is the account
+-- that opened 22 May 2025, and most of the year-on-year gain.
+-- A null 2025 is a customer that is new in 2026.
+--   all customers  27,235 -> 33,030  (+21%)
+--   ex Iwilei      25,635 -> 28,090  (+10%)
+-- The deck folds KTA Waimea, donations and Cal Kona into "Other".
+-- ---------------------------------------------------------------------
+with base as (
+  select p.sales_customer_group_id as grp, p.sales_customer_id as cust,
+         l.id as line_id, extract(year from p.invoice_date)::int as yr
+  from sales_po p
+  join sales_po_line l on l.sales_po_id = p.id and not l.is_deleted
+  join sales_product sp
+    on sp.id = l.sales_product_id and sp.org_id = p.org_id and not sp.is_deleted
+  where p.org_id = 'hawaii_farming' and not p.is_deleted
+    and sp.farm_id = 'Lettuce'
+    and ((p.invoice_date >= '2025-01-01' and p.invoice_date <= '2025-08-11')
+      or (p.invoice_date >= '2026-01-01' and p.invoice_date <= '2026-08-11'))
+), f as (
+  select b.grp, b.cust, b.yr, sum(ff.fulfilled_quantity) as cases
+  from base b
+  join sales_po_fulfillment ff on ff.sales_po_line_id = b.line_id and not ff.is_deleted
+  group by 1,2,3
+)
+select case when grp = 'Costco' and cust = '687 Iwilei' then 'Costco Iwilei'
+            when grp = 'Costco' then 'Costco, ex Iwilei'
+            else coalesce(grp,cust) end as customer,
+  sum(cases) filter (where yr = 2025)::int as cases_25,
+  sum(cases) filter (where yr = 2026)::int as cases_26
+from f group by 1 order by 3 desc nulls last;

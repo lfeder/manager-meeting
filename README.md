@@ -43,9 +43,15 @@ Arrow keys or space to move, `O` for a slide overview, number keys to jump. Ever
 chart has a hover tooltip and a **Data** button (revealed on hover) that swaps the
 chart for the table behind it.
 
-11 slides: % Short, Sales, Grow, four Lettuce packhouse day-by-day charts
-(pounds packed, trays per packer-minute, packer-hours, fails), Tech, Corp,
+15 slides: an Opportunities cover, % Short, Sales Opportunities and its two
+click-throughs (Costco Japanese ordered vs shipped, lettuce cases by customer),
+three Grow slides, three Lettuce packhouse day-by-day slides (pounds packed,
+then trays per packer-minute beside packer-hours, then fails), Tech, Corp,
 Capital and Expansion.
+
+The packhouse slides carry the four KPI tiles from `index.html` across all
+three; a tile is lit on the slide it opens, and clicking one jumps there. The
+two Sales cards with a **See the chart →** cue open their own slide.
 
 The packhouse charts share this repo's conventions — amber 2025, green 2026,
 weekly-mean line over a faint scatter of single days — and keep the mid-2026
