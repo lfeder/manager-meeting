@@ -170,8 +170,10 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 .imgcard img{max-width:100%;max-height:100%;object-fit:contain;display:block}
 
 /* ─────────────────────────────────────────────── chart chrome */
-.ax{font-family:var(--font);font-size:10.5px;font-variant-numeric:tabular-nums;fill:var(--muted)}
-.axb{font-family:var(--font);font-size:11px;font-weight:700;fill:var(--body)}
+/* axis labels sit on --body, not --muted: --muted is a 2.9:1 grey that
+   disappears on a projector, and these are the numbers people read */
+.ax{font-family:var(--font);font-size:10.5px;font-variant-numeric:tabular-nums;fill:var(--body)}
+.axb{font-family:var(--font);font-size:11px;font-weight:700;fill:var(--ink)}
 .grid line{stroke:var(--hair);stroke-width:1;shape-rendering:crispEdges}
 .zero{stroke:var(--faint);stroke-width:1.2;shape-rendering:crispEdges}
 .hit{fill:transparent;cursor:crosshair}
@@ -728,8 +730,88 @@ function lettuceChart(host){
                 pct((LETT_T.c26-LETT_T.c25)/LETT_T.c25*100)]]))};
 }
 
+/* ---- rate against hours, 2026 only, two scales on one plot ----------
+   the rate fell because the denominator moved, so the pair only means
+   anything read together — side by side they were two separate stories */
+function rateHoursChart(host){
+  const f=frame(host,{l:44,r:52,t:12,b:28}), {svg,X0,X1,Y0,Y1}=f;
+  const XS=X0+8, XE=X1-10;
+  const x=d=>XS+((d-1)/(DOY_END-1))*(XE-XS);
+  const SER=[
+    {row:3, col:C("--green"), min:0.8, max:2.4, ticks:[0.8,1.2,1.6,2.0,2.4],
+     fmt:v=>v.toFixed(1), name:"Trays per packer-minute", dec:2, side:"left"},
+    {row:2, col:C("--vK"),   min:0,   max:60,  ticks:[0,20,40,60],
+     fmt:v=>String(v), name:"Packer-hours per day", dec:0, side:"right"}];
+  SER.forEach(s=>{ s.y=v=>Y1-((Math.max(s.min,Math.min(v,s.max))-s.min)/(s.max-s.min))*(Y1-Y0); });
+
+  const g=el("g",{class:"grid"});
+  MSTART.forEach((d,i)=>{ if(i) g.appendChild(el("line",{x1:x(d),x2:x(d),y1:Y0,y2:Y1})); });
+  svg.appendChild(g);
+  yAxis(svg,f,SER[0].ticks,SER[0].y,SER[0].fmt);
+  /* the right-hand axis is drawn in the hours colour, so it is obvious which
+     line it belongs to — two scales on one plot is only safe if labelled */
+  SER[1].ticks.forEach(v=>{
+    const t=el("text",{x:X1+9,y:SER[1].y(v)+3.6,"text-anchor":"start",class:"ax",
+      "font-size":10.5,fill:SER[1].col});
+    t.textContent=SER[1].fmt(v); svg.appendChild(t);
+  });
+  MSTART.forEach((d,i)=>{
+    const t=el("text",{x:x(d)+6,y:Y1+18,class:"ax","font-size":10.5});
+    t.textContent=MNAME[i]; svg.appendChild(t);
+  });
+
+  const rowsFor=i=>packRows(i)[2026];
+  SER.forEach((s,k)=>{
+    const bins=new Map();
+    rowsFor(s.row).forEach(r=>{ if(r[1]==null) return;
+      const w=Math.floor((r[0]-1)/7);
+      if(!bins.has(w)) bins.set(w,[]);
+      bins.get(w).push(r[1]);
+    });
+    const pts=[...bins.keys()].sort((a,b)=>a-b)
+      .map(w=>({w,x:x(w*7+4),v:sum(bins.get(w))/bins.get(w).length}));
+    let d="",prev=null;
+    pts.forEach(p=>{ d+=(prev!==null&&p.w===prev+1?"L":"M")+p.x.toFixed(1)+","+s.y(p.v).toFixed(1); prev=p.w; });
+    drawPath(svg,d,s.col,2.6,k*.12);
+  });
+
+  const cross=el("line",{y1:Y0,y2:Y1,stroke:C("--faint"),"stroke-width":1.2,opacity:0});
+  svg.appendChild(cross);
+  const marks=SER.map(s=>{
+    const o=el("circle",{r:5,fill:s.col,stroke:"#fff","stroke-width":2,opacity:0});
+    svg.appendChild(o); return o;
+  });
+  const byDoy=SER.map(s=>{const m={}; rowsFor(s.row).forEach(r=>m[r[0]]=r); return m;});
+  const hit=el("rect",{x:X0,y:Y0,width:X1-X0,height:Y1-Y0,class:"hit"});
+  hit.addEventListener("pointermove",ev=>{
+    const bb=svg.getBoundingClientRect();
+    const rel=(ev.clientX-bb.left)/bb.width*f.W;
+    const d=Math.max(1,Math.min(DOY_END,Math.round((rel-X0)/(X1-X0)*(DOY_END-1)+1)));
+    cross.setAttribute("x1",x(d)); cross.setAttribute("x2",x(d)); cross.setAttribute("opacity",.4);
+    const out=[];
+    SER.forEach((s,i)=>{
+      const r=byDoy[i][d];
+      if(r&&r[1]!=null){
+        marks[i].setAttribute("cx",x(d)); marks[i].setAttribute("cy",s.y(r[1]));
+        marks[i].setAttribute("opacity",1);
+        out.push({c:s.col,k:s.name,v:r[1].toFixed(s.dec)});
+      } else { marks[i].setAttribute("opacity",0); out.push({c:s.col,k:s.name,v:"no pack day"}); }
+    });
+    showTip(ev,doyLabel(d),out);
+  });
+  hit.addEventListener("pointerleave",()=>{
+    cross.setAttribute("opacity",0); marks.forEach(o=>o.setAttribute("opacity",0)); hideTip();
+  });
+  svg.appendChild(hit);
+  const R3=packRows(3)[2026], R2=packRows(2)[2026];
+  const byd={}; R2.forEach(r=>byd[r[0]]=r[1]);
+  return {table:dataTable(["Day","Trays per packer-minute","Packer-hours"],
+    R3.filter(r=>r[1]!=null).map(r=>[doyLabel(r[0]),r[1].toFixed(2),
+      byd[r[0]]!=null?String(byd[r[0]]):"—"]))};
+}
+
 /* ---- day-of-year series: faint single days, weekly mean on top ------ */
-function daySeries({rows,yMin=0,yMax,ticks,fmt,unit,dec=0,tickSize}){
+function daySeries({rows,yMin=0,yMax,ticks,fmt,unit,dec=0,tickSize,showDots=true}){
   return function(host){
     const f=frame(host,{l:44,r:14,t:12,b:28}), {svg,X0,X1,Y0,Y1}=f;
     const clamp=v=>Math.max(yMin,Math.min(v,yMax));
@@ -747,7 +829,9 @@ function daySeries({rows,yMin=0,yMax,ticks,fmt,unit,dec=0,tickSize}){
       t.textContent=MNAME[i]; svg.appendChild(t);
     });
 
-    YR.forEach(([yr,c])=>{
+    /* the single-day scatter is optional: on a chart whose point is the
+       trend, the cloud of pale dots is texture rather than information */
+    if(showDots) YR.forEach(([yr,c])=>{
       rows[yr].forEach(r=>{ if(r[1]==null) return;
         /* fill-opacity, not opacity: the .fi rule sets opacity:1 outright */
         svg.appendChild(el("circle",{cx:x(r[0]),cy:y(r[1]),r:2.4,fill:c,"fill-opacity":.34,
@@ -814,24 +898,27 @@ const packRows=col=>({
 const cycAvg=a=>a.reduce((s,x)=>s+x[2],0)/a.length;
 function cyclesChart(host){
   /* the left margin carries the first bar's rotated label, not just the axis */
-  const f=frame(host,{l:48,r:14,t:14,b:74}), {svg,X0,X1,Y0,Y1}=f;
-  const YMAX=14, y=v=>Y1-v/YMAX*(Y1-Y0);
+  const f=frame(host,{l:48,r:14,t:14,b:46}), {svg,X0,X1,Y0,Y1}=f;
+  /* the axis starts at 4, not 0: every cycle runs 8.7-13 weeks, and a zero
+     baseline spent two thirds of the panel on empty bar. Bar LENGTH is no
+     longer proportional to weeks — read the values off the axis */
+  const YMIN=4, YMAX=14, y=v=>Y1-(v-YMIN)/(YMAX-YMIN)*(Y1-Y0);
   const bars=[]; [2025,2026].forEach(yr=>CYC[yr].forEach(c=>bars.push([yr,c])));
   const N25=CYC[2025].length, GAP=22;
   const pitch=(X1-X0-GAP)/bars.length, bw=pitch*0.66;
   const xAt=i=>X0+(i<N25?0:GAP)+i*pitch+(pitch-bw)/2;
 
-  yAxis(svg,f,[0,2,4,6,8,10,12,14],y,v=>String(v));
+  yAxis(svg,f,[4,6,8,10,12,14],y,v=>String(v));
   bars.forEach(([yr,c],i)=>{
     const col=yr===2025?C("--s25"):C("--s26"), bx=xAt(i);
     const g=el("g");
-    g.appendChild(el("rect",{x:bx,y:y(c[2]),width:bw,height:Y1-y(c[2]),fill:col,rx:2.5,
+    g.appendChild(el("rect",{x:bx,y:y(c[2]),width:bw,height:Math.max(1,Y1-y(c[2])),fill:col,rx:2.5,
       class:"gy",style:`--d:${i*18}ms;--oy:${Y1}px`}));
     const lx=bx+bw/2, ly=Y1+13;
     const lab=el("text",{x:lx,y:ly,class:"ax","font-size":10.5,fill:C("--body"),
       "text-anchor":"end","font-family":"var(--mono)",
       transform:`rotate(-45 ${lx} ${ly})`});
-    lab.textContent=c[0]+" "+c[1]; g.appendChild(lab);
+    lab.textContent=c[1]; g.appendChild(lab);   // mm/dd; the cycle id is in the tooltip
     const hitr=el("rect",{x:bx-(pitch-bw)/2,y:Y0,width:pitch,height:Y1-Y0,class:"hit"});
     hoverable(hitr,`${c[0]} · ${c[1]}/${String(yr).slice(2)}`,()=>{
       const dv=c[2]-cycAvg(CYC[yr]);
@@ -855,7 +942,7 @@ function cyclesChart(host){
 }
 
 /* ---- Grow: share of a total, by week from transplant ---------------- */
-function shareChart(rows,series,{yMax,step,b=28}){
+function shareChart(rows,series,{yMax,step,b=28,tailAt=null}){
   return function(host){
     const f=frame(host,{l:44,r:14,t:12,b}), {svg,X0,X1,Y0,Y1}=f;
     const W0=4,W1=13,PAD=0.4;          // a slot of air, so week 4 and week 13
@@ -874,6 +961,21 @@ function shareChart(rows,series,{yMax,step,b=28}){
       t.textContent=w; svg.appendChild(t);
     }
     const dots=[];
+    /* a wash under each curve: three lines crossing twice are hard to hold in
+       the head, and the filled shape is what shows one variety giving out
+       earlier than the others. Kept at .13 so the overlaps stay readable */
+    series.forEach((s,k)=>{
+      let d="",first=null,last=null;
+      rows.forEach(r=>{
+        const p=pctOf(r,k); if(p==null) return;
+        if(first===null) first=x(r[0]);
+        last=x(r[0]);
+        d+=(d?"L":"M")+x(r[0]).toFixed(1)+","+y(p).toFixed(1);
+      });
+      if(d) svg.appendChild(el("path",{d:d+`L${last.toFixed(1)},${y(0).toFixed(1)}`+
+        `L${first.toFixed(1)},${y(0).toFixed(1)}Z`,fill:s.col,"fill-opacity":.13,
+        class:"fi",style:`--d:${(.35+k*.1).toFixed(2)}s`}));
+    });
     series.forEach((s,k)=>{
       let d="";
       rows.forEach(r=>{
@@ -885,6 +987,22 @@ function shareChart(rows,series,{yMax,step,b=28}){
       const c=el("circle",{r:5,fill:s.col,stroke:"#fff","stroke-width":2,opacity:0});
       svg.appendChild(c); dots.push(c);
     });
+    /* the point of the slide is that one variety is spent before the others,
+       so the share still to come after a given week is stated outright rather
+       than left to be eyeballed off three overlapping tails */
+    if(tailAt!==null){
+      const xc=(x(tailAt)+x(tailAt+1))/2;
+      svg.appendChild(el("line",{x1:xc,x2:xc,y1:Y0,y2:Y1,stroke:C("--faint"),
+        "stroke-width":1.2,"stroke-dasharray":"4 4"}));
+      const lab=el("text",{x:xc+6,y:Y0+11,class:"ax","font-size":9.5,fill:C("--muted")});
+      lab.textContent="pounds still to come →"; svg.appendChild(lab);
+      series.forEach((s,k)=>{
+        const tail=rows.filter(r=>r[0]>tailAt).reduce((a,r)=>a+(r[s.i]||0),0)/tot[k]*100;
+        const t=el("text",{x:X1-2,y:Y0+26+k*15,"text-anchor":"end",class:"vlab fi",
+          fill:s.col,"font-size":11,style:`--d:${(.6+k*.08).toFixed(2)}s`});
+        t.textContent=`${s.name} ${tail.toFixed(0)}%`; svg.appendChild(t);
+      });
+    }
     const guide=el("line",{y1:Y0,y2:Y1,stroke:C("--faint"),"stroke-width":1,opacity:0});
     svg.appendChild(guide);
     const hit=el("rect",{x:X0,y:Y0,width:X1-X0,height:Y1-Y0,class:"hit"});
@@ -954,7 +1072,7 @@ function fsChart(host){
 /* ------------------------------------------------------- 1 · % Short */
 {
   const {body}=slide("% Short",
-    {title:"Winter Shorting is Now Year-round Shorting"});
+    {title:"Winter Shorting is now Year-round Shorting"});
   const grid=h("div",{class:"g2x2"});
   body.appendChild(grid);
   ["KR","KW","JR","JW"].forEach(k=>{
@@ -1033,12 +1151,8 @@ growSlide("Grow · Pounds harvested per day",
 growSlide("Grow · How long each cycle kept picking",
   legend([["2025 cohort",C("--s25")],["2026 cohort",C("--s26")]]),
   body=>{
-    const cols=h("div",{class:"cols"});
-    body.appendChild(cols);
-    chartCard(cols,{title:"How long each cycle kept picking",flex:"1.75",fn:cyclesChart});
-    chartCard(cols,{title:"Share of the season's pounds, by week from transplant",flex:"1",
-      fn:shareChart(WK,[{name:"2025",i:1,col:C("--s25")},{name:"2026",i:2,col:C("--s26")}],
-        {yMax:28,step:7,b:74})});
+    /* the cycle-length chart now has the slide to itself */
+    chartCard(body,{title:"How long each cycle kept picking",flex:"1",fn:cyclesChart});
   });
 
 growSlide("Grow · Variety share by week",
@@ -1047,7 +1161,7 @@ growSlide("Grow · Variety share by week",
   body=>chartCard(body,{
     title:"2026 share of the variety's pounds, by week from transplant",flex:"1",
     fn:shareChart(VAR,[{name:"K",i:1,col:C("--vK")},{name:"J",i:2,col:C("--vJ")},
-      {name:"E",i:3,col:C("--vE")}],{yMax:30,step:6})}));
+      {name:"E",i:3,col:C("--vE")}],{yMax:30,step:6,tailAt:9})}));
 
 /* --------------------------------------------- 6-8 · Pack, day by day */
 /* the four packhouse reads from index.html, carried on every pack slide.
@@ -1055,19 +1169,18 @@ growSlide("Grow · Variety share by week",
 const PACK_TILES=[
   ["Underlying growth, ex Iwilei","+8","%","up",0,
    "240,584 lb packed vs 180,813 in 2025 · +33% before stripping Iwilei"],
-  ["TPM drops sharply in May","−22","%","down",1,
-   "1.63 trays per packer-minute through April, 1.27 from May on"],
-  ["Hours spike in May","+19","%","down",1,
-   "28.9 packer-hours a day through April, 34.3 from May on"],
+  /* one tile, because it is one movement: the rate fell as the hours rose */
+  ["Rate fell as hours rose in May","−22","% trays per packer-minute","down",1,
+   "1.63 → 1.27 trays per packer-minute as hours went 28.9 → 34.3 a day"],
   ["Fails generally stable, but exception Aug","73","on 5 Aug","down",2,
    "None logged at all from 24 May to 29 Jun — the line is the record, not the run"]];
 const PACK_AT=SLIDES.length;
-function packSlide(navName,build,{dot=true}={}){
+function packSlide(navName,build,{dot=true,keys=null}={}){
   const {body}=slide(navName,{title:"Packhouse",
-    right:[legend([["2025",C("--s25")],["2026",C("--s26")],
+    right:[legend(keys||[["2025",C("--s25")],["2026",C("--s26")],
       ...(dot?[["single day",[C("--s25"),C("--s26")],"dot"]]:[])])]});
   const open=SLIDES.length-1-PACK_AT;
-  const row=h("div",{class:"tilerow four"});
+  const row=h("div",{class:"tilerow"});
   PACK_TILES.forEach(([l,v,u,tone,at,c])=>{
     row.appendChild(h("button",{class:"card kpi","aria-expanded":String(at===open),
       onclick:()=>go(PACK_AT+at)},[
@@ -1082,24 +1195,16 @@ function packSlide(navName,build,{dot=true}={}){
 packSlide("Pack · Pounds packed per day",
   body=>chartCard(body,{title:"Pounds packed per day",flex:"1",
     fn:daySeries({rows:packRows(1),yMax:4000,ticks:[0,1000,2000,3000,4000],
-      fmt:v=>v?`${v/1000}k`:"0",unit:"lb",dec:0})}));
+      fmt:v=>v?`${v/1000}k`:"0",unit:"lb",dec:0,showDots:false})}));
 packSlide("Pack · Rate and hours",
-  /* the rate fell because the denominator moved, so the two charts have to be
-     read against each other — they share a page */
   body=>{
-    const cols=h("div",{class:"cols"});
-    body.appendChild(cols);
-    chartCard(cols,{title:"Trays per packer per minute",flex:"1",
-      fn:daySeries({rows:packRows(3),yMax:3.2,ticks:[0,0.8,1.6,2.4,3.2],
-        fmt:v=>v.toFixed(1),unit:"",dec:2})});
-    chartCard(cols,{title:"Packer-hours per day",flex:"1",
-      fn:daySeries({rows:packRows(2),yMax:60,ticks:[0,20,40,60],
-        fmt:v=>String(v),unit:"hrs",dec:0})});
-  });
+    chartCard(body,{title:"Trays per packer-minute against packer-hours, 2026",flex:"1",
+      fn:rateHoursChart});
+  },{keys:[["Trays per packer-minute",C("--green")],["Packer-hours per day",C("--vK")]]});
 packSlide("Pack · Fails per day",
   body=>chartCard(body,{title:"Fails per day",flex:"1",
     fn:daySeries({rows:packRows(4),yMax:180,ticks:[0,60,120,180],
-      fmt:v=>String(v),unit:"fails",dec:0})}));
+      fmt:v=>String(v),unit:"fails",dec:0,showDots:false})}));
 
 /* ----------------------------------------------------------- 10 · Tech */
 /* the ladder, told in the artefacts themselves: each rung is what the work
@@ -1135,31 +1240,62 @@ packSlide("Pack · Fails per day",
   };
 
   /* the agent transcript is still drawn — there is nothing to screenshot yet */
-  const agentic=()=>h("div",{style:"width:100%;height:100%;display:flex;flex-direction:column;gap:8px;"+
-    "background:var(--dark);border-radius:4px;padding:12px 12px 13px;overflow:hidden"},[
-    h("div",{style:"display:flex;align-items:center;gap:6px"},[
-      h("span",{style:"width:9px;height:9px;border-radius:2px;border:1.5px solid "+C("--grn-lt")}),
-      h("span",{style:"font-family:var(--mono);font-size:8.5px;font-weight:700;"+
-        "letter-spacing:.12em;color:"+C("--grn-lt"),text:"ALOHA AGENT"})]),
-    h("div",{style:"font-size:10px;line-height:1.5;color:#8FB3A2;font-family:var(--mono)",
-      text:"> short the Costco JW order?"}),
-    h("div",{style:"display:flex;flex-direction:column;gap:5px"},
-      [100,86,64].map(w=>h("div",{style:`height:4px;width:${w}%;border-radius:2px;`+
-        "background:rgba(168,213,186,.35)"}))),
-    h("div",{style:"height:1px;background:rgba(168,213,186,.15);margin:2px 0"}),
-    h("div",{style:"font-size:10px;line-height:1.5;color:#8FB3A2;font-family:var(--mono)",
-      text:"> who covers the Iwilei run?"}),
-    h("div",{style:"display:flex;flex-direction:column;gap:5px"},
-      [92,100,74,58].map(w=>h("div",{style:`height:4px;width:${w}%;border-radius:2px;`+
-        "background:rgba(168,213,186,.35)"}))),
-    h("div",{style:"margin-top:auto;display:flex;align-items:center;gap:6px"},[
-      h("span",{style:"width:5px;height:5px;border-radius:50%;flex:none;background:"+C("--green")}),
-      h("span",{style:"font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:#6E9583",
-        text:"reordering the pack line"})])]);
+  /* the destination rung, in the deck's own light palette: a hairline control
+     loop rather than a dark terminal. Futuristic here means precision — thin
+     strokes, mono micro-labels, one live accent — not a black box, which would
+     be the only dark panel in thirteen slides */
+  const agentic=()=>{
+    const wrap=h("div",{style:"width:100%;height:100%;position:relative;overflow:hidden;"+
+      "background:"+C("--card")+";"+
+      "background-image:radial-gradient(circle at 1px 1px,rgba(46,139,87,.16) 1px,transparent 0);"+
+      "background-size:14px 14px"});
+    /* a soft field of green behind the loop: depth without going dark */
+    wrap.appendChild(h("div",{style:"position:absolute;inset:0;background:"+
+      "radial-gradient(120% 70% at 50% 42%,rgba(46,139,87,.13) 0%,rgba(252,253,252,.96) 62%)"}));
 
-  /* four stages on the left in a 2x2, the destination given its own full-height
-     column on the right — the ladder reads as "where we have been" against
-     "where we are going" rather than as five equal steps */
+    const col=h("div",{style:"position:absolute;inset:0;display:flex;flex-direction:column;"+
+      "padding:14px 14px 12px"});
+    col.appendChild(h("div",{style:"flex:none;display:flex;align-items:center;gap:7px;"+
+      "padding-bottom:12px"},[
+      h("span",{style:"width:6px;height:6px;border-radius:50%;flex:none;background:"+C("--green")+
+        ";box-shadow:0 0 0 3px rgba(46,139,87,.18)"}),
+      h("span",{style:"font-family:var(--mono);font-size:8.5px;font-weight:700;"+
+        "letter-spacing:.16em;color:"+C("--green-d"),text:"ALOHA AGENT"}),
+      h("span",{style:"margin-left:auto;font-family:var(--mono);font-size:8px;"+
+        "letter-spacing:.12em;color:"+C("--faint"),text:"LIVE"})]));
+
+    const flow=h("div",{style:"flex:1;min-height:0;display:flex;flex-direction:column;"+
+      "justify-content:space-around;position:relative"});
+    /* the spine the three nodes hang from */
+    flow.appendChild(h("div",{style:"position:absolute;left:13px;top:16px;bottom:16px;width:1px;"+
+      "background:linear-gradient(180deg,rgba(46,139,87,.5),rgba(46,139,87,.16))"}));
+    [["01","SENSES","Orders, pack rate, crop stage — every shift"],
+     ["02","DECIDES","\u201cCostco JW is 30% short — pull forward?\u201d"],
+     ["03","ACTS","Reorders the pack line and tells the crew"]
+    ].forEach(([n,t,d],i)=>{
+      flow.appendChild(h("div",{class:"fi",
+        style:`position:relative;display:flex;gap:11px;--d:${(.2+i*.12).toFixed(2)}s`},[
+        h("div",{style:"flex:none;width:27px;display:flex;justify-content:center;padding-top:3px"},
+          h("span",{style:"width:9px;height:9px;border-radius:50%;background:"+C("--card")+
+            ";border:2px solid "+C("--green")+
+            (i===2?";box-shadow:0 0 0 4px rgba(46,139,87,.16)":"")})),
+        h("div",{style:"min-width:0;display:flex;flex-direction:column;gap:3px"},[
+          h("div",{style:"display:flex;align-items:baseline;gap:7px"},[
+            h("span",{style:"font-family:var(--mono);font-size:8px;font-weight:700;"+
+              "letter-spacing:.14em;color:"+C("--grn-lt"),text:n}),
+            h("span",{style:"font-family:var(--mono);font-size:10px;font-weight:700;"+
+              "letter-spacing:.13em;color:"+C("--ink"),text:t})]),
+          h("div",{style:"font-size:11px;line-height:1.45;color:"+C("--body"),text:d})])]));
+    });
+    col.appendChild(flow);
+
+    col.appendChild(h("div",{style:"flex:none;margin-top:10px;padding-top:10px;"+
+      "border-top:1px solid "+C("--hair")+";display:flex;align-items:center;gap:7px"},[
+      h("span",{style:"font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;"+
+        "color:"+C("--muted"),text:"THE SYSTEM RUNS THE SHIFT"})]));
+    wrap.appendChild(col);
+    return wrap;
+  };
   const panel=(n,t,acc,art)=>h("div",{class:"fi",
     style:"min-width:0;min-height:0;display:flex;flex-direction:column;"+
       "background:var(--card);border:1px solid var(--line);border-radius:12px;"+
@@ -1274,9 +1410,7 @@ packSlide("Pack · Fails per day",
 
 /* ------------------------------------------------------ 13 · Expansion */
 {
-  const {body}=slide("Expansion",{title:"Expansion",
-    right:[h("span",{class:"pill note",
-      text:"FIND THE ONE FROM THOMAS LARSEN ALSO ADD HOUSING NEAR GH 4"})]});
+  const {body}=slide("Expansion",{title:"Expansion"});
   /* the card is sized to the drawing, so the plan is not marooned in a wide
      empty sheet */
   body.appendChild(h("div",{class:"card imgcard",style:"align-self:center;width:auto;max-width:100%"},
