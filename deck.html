@@ -596,51 +596,51 @@ function drawPath(svg,d,col,w,delay){
 
 /* ---- % Short: shipped vs ordered, one card per product -------------- */
 function shortChart(key){
+  /* 2026 only — the 2025 half of this pair was doing nothing but making the
+     bars that matter too small to read */
+  const A=12, B=19;
   return function(host){
     const d=CUKE[key];
     const f=frame(host,{l:42,r:8,t:10,b:34}), {svg,X0,X1,Y0,Y1}=f;
-    const cG=C("--pos"),cR=C("--neg"),cInk=C("--ink"),cL=C("--faint");
+    const cG=C("--pos"),cR=C("--neg"),cL=C("--faint");
     const INI=["J","F","M","A","M","J","J","A","S","O","N","D"];
-    const YGAP=0.9, slots=MO.length+YGAP, step=(X1-X0)/slots;
-    const at=i=>X0+step*(i+(i>=12?YGAP:0)+0.5);
-    const divX=X0+step*(12+YGAP/2);
+    const M=MO.slice(A,B), n=M.length, step=(X1-X0)/n;
+    const at=i=>X0+step*(i+0.5);
     const mn=-68,mx=48,y=v=>Y0+((mx-v)/(mx-mn))*(Y1-Y0);
 
-    svg.appendChild(el("rect",{x:divX,y:y(40),width:X1-divX,height:y(-60)-y(40),
-      fill:cInk,opacity:.05,rx:3}));
     yAxis(svg,f,[40,20,0,-20,-40,-60],y,v=>v+"%",{size:9.5});
     svg.appendChild(el("line",{x1:X0,x2:X1,y1:y(0),y2:y(0),class:"zero"}));
-    svg.appendChild(el("line",{x1:divX,x2:divX,y1:Y0,y2:Y1+22,stroke:cL,"stroke-width":1.4}));
 
-    const D=MO.map((_,i)=>(d.f[i]-d.o[i])/d.o[i]*100);
-    const bw=Math.min(13,step*0.62), marks=[];
+    const D=M.map((_,i)=>{const j=A+i; return (d.f[j]-d.o[j])/d.o[j]*100});
+    const bw=Math.min(30,step*0.56), marks=[];
     const g=el("g"); svg.appendChild(g);
     D.forEach((v,i)=>{
       const up=v>=0, hh=Math.max(1.4,Math.abs(y(v)-y(0)));
-      const p=el("rect",{x:at(i)-bw/2,y:up?y(v):y(0),width:bw,height:hh,rx:1.5,
-        fill:up?cG:cR,class:"mk gy",style:`--d:${i*16}ms;--oy:${y(0)}px`});
+      const p=el("rect",{x:at(i)-bw/2,y:up?y(v):y(0),width:bw,height:hh,rx:2,
+        fill:up?cG:cR,class:"mk gy",style:`--d:${i*30}ms;--oy:${y(0)}px`});
       marks.push(p); g.appendChild(p);
     });
-    MO.forEach((m,i)=>{
-      const t=el("text",{x:at(i),y:Y1+15,"text-anchor":"middle",class:"ax","font-size":9.5});
-      t.textContent=INI[i%12]; svg.appendChild(t);
+    M.forEach((m,i)=>{
+      const t=el("text",{x:at(i),y:Y1+15,"text-anchor":"middle",class:"ax","font-size":10.5});
+      t.textContent=INI[(A+i)%12]; svg.appendChild(t);
     });
-    [[0,11,"2025"],[12,18,"2026"]].forEach(([a,b,lab])=>{
-      const t=el("text",{x:(at(a)+at(b))/2,y:Y1+29,"text-anchor":"middle",class:"axb","font-size":10});
-      t.textContent=lab; svg.appendChild(t);
-    });
-    MO.forEach((m,i)=>{
+    const yl=el("text",{x:(X0+X1)/2,y:Y1+29,"text-anchor":"middle",class:"axb","font-size":10});
+    yl.textContent="2026"; svg.appendChild(yl);
+
+    M.forEach((m,i)=>{
+      const j=A+i;
       const r=el("rect",{x:at(i)-step/2,y:Y0,width:step,height:Y1-Y0,class:"hit"});
       hoverable(r,`${key} · ${m}`,()=>[
-        {c:C("--muted"),k:"Ordered",v:nf(d.o[i])+" cases"},
-        {c:cG,k:"Shipped",v:nf(d.f[i])+" cases"},
+        {c:C("--muted"),k:"Ordered",v:nf(d.o[j])+" cases"},
+        {c:cG,k:"Shipped",v:nf(d.f[j])+" cases"},
         {c:D[i]>=0?cG:cR,k:"Vs order",v:(D[i]>=0?"+":"−")+Math.abs(D[i]).toFixed(1)+"%"}]);
       r.addEventListener("pointerenter",()=>{g.classList.add("dim");marks[i].classList.add("hi")});
       r.addEventListener("pointerleave",()=>{g.classList.remove("dim");marks[i].classList.remove("hi")});
       svg.appendChild(r);
     });
     return {table:dataTable(["Month","Ordered","Shipped","Vs order"],
-      MO.map((m,i)=>[m,nf(d.o[i]),nf(d.f[i]),(D[i]>=0?"+":"−")+Math.abs(D[i]).toFixed(1)+"%"]))};
+      M.map((m,i)=>[m,nf(d.o[A+i]),nf(d.f[A+i]),
+        (D[i]>=0?"+":"−")+Math.abs(D[i]).toFixed(1)+"%"]))};
   };
 }
 /* shipped vs ordered over a month window — the 2026 YTD runs Jan–Jul (12..18),
@@ -954,7 +954,7 @@ function fsChart(host){
 /* ------------------------------------------------------- 1 · % Short */
 {
   const {body}=slide("% Short",
-    {title:"Winter Shorting is not Year-round"});
+    {title:"Winter Shorting is Now Year-round Shorting"});
   const grid=h("div",{class:"g2x2"});
   body.appendChild(grid);
   ["KR","KW","JR","JW"].forEach(k=>{
@@ -1108,12 +1108,6 @@ packSlide("Pack · Fails per day",
 {
   const {body}=slide("Tech · where we are on the ladder",
     {title:"Tech · where we are on the ladder"});
-
-  body.appendChild(h("div",{class:"card rail",
-    style:"--acc:var(--green);flex:none;padding:11px 16px 11px 15px;gap:0"},[
-    h("div",{class:"rb",style:"font-size:12.5px;line-height:1.45",
-      text:"We have partnered with another Hydroponic farm in Puerto Rico, "+
-           "Campo Caribe to deploy Aloha. We will be cross sharing all of our data."})]));
 
   /* the screenshots run edge to edge and crop from the top-left rather than
      sitting letterboxed in the middle of a white panel */
@@ -1315,6 +1309,13 @@ function go(i){
   count.textContent=`${cur+1} / ${SLIDES.length}`;
   hideTip(); location.hash=String(cur+1);
 }
+/* go() writes the hash, so every slide is a history entry — listening for the
+   change is what makes the browser's own back and forward buttons (and the
+   trackpad swipe) step through the deck rather than silently change the URL */
+addEventListener("hashchange",()=>{
+  const i=(parseInt(location.hash.slice(1),10)||1)-1;
+  if(i!==cur) go(i);
+});
 const toggleOv=on=>ov.classList.toggle("on",on===undefined?!ov.classList.contains("on"):on);
 document.getElementById("prev").onclick=()=>go(cur-1);
 document.getElementById("next").onclick=()=>go(cur+1);
