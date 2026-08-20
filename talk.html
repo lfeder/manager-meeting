@@ -127,14 +127,15 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 .cols{flex:1;min-height:0;display:flex;gap:14px}
 
 /* ─────────────────────────────────────────────── cover */
-/* the one slide that drops the header grid: dark ground, mark, title */
+/* the one slide that drops the header grid — but it keeps the same light
+   ground as every other slide, so the deck does not open on one world and
+   then switch to another */
 .slide.cover{padding:0 96px;flex-direction:row;align-items:center;justify-content:center;
-  gap:64px;color:#E9F1EC;
-  background:radial-gradient(105% 125% at 12% 0%,#1C3B2C 0%,var(--shell) 74%)}
-.cover .hf{height:340px;width:auto;display:block;flex:none}
-.cover h1{margin:0;font-size:96px;font-weight:700;letter-spacing:-.042em;
-  line-height:.96;color:#FFFFFF}
-.cover .pnum{color:rgba(255,255,255,.3)}
+  gap:64px;color:var(--body);background:var(--canvas)}
+.cover .hf{height:300px;width:auto;display:block;flex:none}
+.cover h1{margin:0;font-size:92px;font-weight:700;letter-spacing:-.042em;
+  line-height:.96;color:var(--ink)}
+.cover .pnum{color:var(--faint)}
 
 /* ─────────────────────────────────────────────── tech ladder */
 .ladder{flex:1;min-height:0;display:flex;align-items:flex-end;gap:14px}
@@ -1425,6 +1426,23 @@ function dowChart(host){
     fn:rateHoursChart});
 }
 
+/* ---------------------------------------------- 10a · Section break */
+{
+  const sec=h("section",{class:"slide","aria-hidden":"true"});
+  sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
+  sec.append(
+    h("div",{class:"fi",style:"--d:.15s;font-family:var(--mono);font-size:15px;"+
+      "font-weight:700;letter-spacing:.28em;color:var(--green);margin-bottom:22px",
+      text:"EXPANSION I"}),
+    h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
+      "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"ALOHA v3"}),
+    h("div",{class:"fi",style:"--d:.4s;margin-top:20px;font-size:21px;color:var(--body)",
+      text:"The company gets bigger"}),
+    h("div",{class:"pnum"}));
+  stage.appendChild(sec);
+  SLIDES.push({el:sec,title:"Expansion I · ALOHA v3"});
+}
+
 /* ------------------------------------------------- 11 · The ladder */
 {
   const {body}=slide("v3 · Paper to AI",{title:"Paper → AI"});
@@ -1594,6 +1612,23 @@ const WETDAY=[["When to start harvest",4],["All or some rows of wet lettuce",5],
        "Instead of building your own spreadsheet, you ask Claude for a dashboard — "+
        "shareable by default"],C("--green")));
   body.appendChild(cols);
+}
+
+/* ---------------------------------------------- 15a · Section break */
+{
+  const sec=h("section",{class:"slide","aria-hidden":"true"});
+  sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
+  sec.append(
+    h("div",{class:"fi",style:"--d:.15s;font-family:var(--mono);font-size:15px;"+
+      "font-weight:700;letter-spacing:.28em;color:var(--green);margin-bottom:22px",
+      text:"EXPANSION II"}),
+    h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
+      "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"GREENHOUSES"}),
+    h("div",{class:"fi",style:"--d:.4s;margin-top:20px;font-size:21px;color:var(--body)",
+      text:"The farm gets bigger"}),
+    h("div",{class:"pnum"}));
+  stage.appendChild(sec);
+  SLIDES.push({el:sec,title:"Expansion II · Greenhouses"});
 }
 
 /* -------------------------------------------------- 16 · Why we must */
