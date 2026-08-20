@@ -3,8 +3,26 @@
 20 minutes · 23 slides. Edit the wording freely; keep the **SLIDE nn** headings
 and the field labels so the edits can be put back into the deck.
 
-Fields: **TITLE** = the header line on the slide · **BODY** = what appears on the
-slide · **SAY** = spoken, not on the slide · **[…]** = still missing.
+Fields: TITLE = the header line on the slide · BODY = what appears on the slide ·
+SAY = spoken, not on the slide · […] = still missing.
+
+## Leaving notes for Claude
+
+Do not use `**` or `_` as markers — Google Docs turns them into bold or italic
+and deletes the characters, so the marker is gone by the time it comes back.
+Use an ALL-CAPS prefix at the start of a line instead:
+
+    CLAUDE: build this as two columns instead
+    CLAUDE: is this number right?
+    CUT
+    NEW SLIDE: what it should be
+
+1. `CLAUDE:` means the line is an instruction or a question, not slide copy.
+2. `CUT` on its own line deletes the block above it.
+3. Keep the `SLIDE nn` headings — they are the anchor for putting edits back.
+   Rewrite anything underneath them freely.
+4. Do not match this file's formatting. Write the copy the way it should read;
+   turning it back into layout is my job.
 
 ---
 
