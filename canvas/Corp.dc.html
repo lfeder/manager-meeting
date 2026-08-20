@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    :root{
+      --ink:#0E1F19; --body:#41544C; --muted:#84968D; --faint:#AEBCB5;
+      --line:#E4EAE6; --hair:#EDF1EF;
+      --canvas:#FCFDFC; --card:#FFFFFF; --wash:#F5F8F6; --shell:#0B1512;
+      --green:#2E8B57; --green-d:#1D6B41; --grn-lt:#A8D5BA;
+      --dark:#0F2A21; --red:#C0392B; --amber:#C4881C;
+      --s25:#C4881C; --s26:#2E8B57;
+      --pos:#44554E; --neg:#C0392B;
+      --c1:#7B5EA7; --c2:#3D7EA6; --c3:#2E7D7D; --c4:#647A83;
+      --font:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+      --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+      --shadow:0 1px 2px rgba(14,31,25,.05), 0 18px 40px -26px rgba(14,31,25,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);color:var(--body);
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    a{color:var(--green-d)} a:hover{color:var(--green)}
+    .slide{width:1280px;height:720px;position:relative;background:var(--canvas);
+      display:flex;flex-direction:column;padding:36px 52px 42px;overflow:hidden}
+    .shead{flex:none;display:flex;align-items:flex-end;justify-content:space-between;
+      gap:28px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+    h1.h1{margin:0;font-size:33px;font-weight:700;letter-spacing:-.026em;color:var(--ink);line-height:1.04}
+    .hright{flex:none;display:flex;align-items:center;gap:20px;padding-bottom:4px}
+    .pnum{position:absolute;right:52px;bottom:16px;font-family:var(--mono);
+      font-size:10px;letter-spacing:.12em;color:var(--faint)}
+    .sbody{flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+    .card{position:relative;background:var(--card);border:1px solid var(--line);
+      border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;
+      min-height:0;min-width:0;overflow:hidden}
+    .ceyebrow{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .rail{border-left:3px solid var(--acc,var(--green));padding:19px 19px 16px 18px;
+      display:flex;flex-direction:column;gap:9px;justify-content:flex-start}
+    .rail .rt{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.014em;line-height:1.25}
+    .rail .rb{font-size:13.5px;line-height:1.6;color:var(--body)}
+    .rail .rb.thin{color:var(--faint)}
+    .rail .rgo{margin-top:auto;padding-top:8px;font-family:var(--mono);font-size:9.5px;
+      font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    .kl{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;
+      text-transform:uppercase;color:var(--muted)}
+    .kv{font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1;color:var(--ink);
+      font-variant-numeric:tabular-nums}
+    .kc{font-size:11.5px;color:var(--body);line-height:1.4}
+    .pill{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.01em;
+      padding:3px 8px;border-radius:999px;background:var(--wash);color:var(--body)}
+    .g4x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-rows:repeat(3,minmax(0,1fr));gap:15px}
+    .cols{flex:1;min-height:0;display:flex;gap:14px}
+  </style>
+</helmet>
+<div class="slide">
+<div class="shead">
+  <div style="min-width:0"><h1 class="h1">Corp · food safety and people</h1></div>
+  <div class="hright"></div>
+</div>
+  <div class="sbody">
+    <div class="cols">
+      <div style="flex:1.35;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div class="ceyebrow">FOOD SAFETY</div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;height:122px">
+        <div class="card" style="padding:16px 18px;gap:9px;justify-content:flex-start">
+          <span class="kl">PCR</span>
+          <span class="kv" style="color:var(--green-d);font-size:36px">100%</span>
+          <span class="kc" style="visibility:hidden">—</span>
+        </div>
+        <div class="card" style="padding:16px 18px;gap:9px;justify-content:flex-start">
+          <span class="kl">AUDIT SCORE</span>
+          <span class="kv" style="color:var(--green-d);font-size:36px">100%</span>
+          <span class="kc" style="color:var(--muted)">All 6 modules, 2 years in a row</span>
+        </div>
+        </div>
+        <div class="card" style="flex:1">
+          <div style="flex:none;padding:13px 16px 0"><span class="ceyebrow">FOOD SAFETY SPEND</span></div>
+          <div style="flex:1;min-height:0;margin:6px 12px 8px">
+    <svg viewBox="0 0 470 240" width="100%" height="100%" style="display:block">
+      <line x1="44" y1="196.0" x2="458" y2="196.0" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="199.5" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">0</text>
+      <line x1="44" y1="172.6" x2="458" y2="172.6" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="176.1" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">20K</text>
+      <line x1="44" y1="149.1" x2="458" y2="149.1" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="152.6" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">40K</text>
+      <line x1="44" y1="125.7" x2="458" y2="125.7" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="129.2" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">60K</text>
+      <line x1="44" y1="102.2" x2="458" y2="102.2" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="105.7" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">80K</text>
+      <line x1="44" y1="78.8" x2="458" y2="78.8" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="82.3" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">100K</text>
+      <line x1="44" y1="55.3" x2="458" y2="55.3" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="58.8" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">120K</text>
+      <line x1="44" y1="31.9" x2="458" y2="31.9" stroke="#EDF1EF" stroke-width="1" shape-rendering="crispEdges"/>
+      <text x="36" y="35.4" text-anchor="end" font-family="var(--font)" font-size="10.5" fill="#84968D">140K</text>
+      <rect x="75.7" y="42.0" width="74.5" height="154.0" fill="#647A83" rx="3"/>
+      <text x="113.0" y="32.0" text-anchor="middle" font-family="var(--font)" font-size="13" font-weight="700" fill="#0E1F19">$131K</text>
+      <text x="113.0" y="213" text-anchor="middle" font-family="var(--font)" font-size="10.5" fill="#84968D">2024</text>
+      <rect x="213.7" y="93.3" width="74.5" height="102.7" fill="#C4881C" rx="3"/>
+      <text x="251.0" y="83.3" text-anchor="middle" font-family="var(--font)" font-size="13" font-weight="700" fill="#0E1F19">$88K</text>
+      <text x="251.0" y="213" text-anchor="middle" font-family="var(--font)" font-size="10.5" fill="#84968D">2025</text>
+      <rect x="351.7" y="120.4" width="74.5" height="75.6" fill="#2E8B57" rx="3"/>
+      <text x="389.0" y="110.4" text-anchor="middle" font-family="var(--font)" font-size="13" font-weight="700" fill="#0E1F19">$65K</text>
+      <text x="389.0" y="213" text-anchor="middle" font-family="var(--font)" font-size="10.5" fill="#84968D">2026</text>
+      <text x="389.0" y="226" text-anchor="middle" font-family="var(--font)" font-size="10.5" fill="#84968D">run-rate</text>
+    </svg>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div class="ceyebrow" style="visibility:hidden">·</div>
+      <div class="card rail" style="--acc:#2E8B57;flex:1;justify-content:center">
+        <div class="rt">Dedicated Sales</div>
+        <div class="rb">The account list has outgrown part-time coverage.</div>
+      </div>
+      <div class="card rail" style="--acc:#2E8B57;flex:1;justify-content:center">
+        <div class="rt">Dedicated Logistics</div>
+        <div class="rb">Interviewing Candidates</div>
+      </div>
+      <div class="card rail" style="--acc:#C0392B;flex:1;justify-content:center">
+        <div class="rt">Need to hire more people</div>
+      </div>
+      <div class="card rail" style="--acc:#647A83;flex:1;justify-content:center">
+        <div class="rt">HR is part-time</div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">12 / 15</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

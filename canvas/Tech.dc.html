@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    :root{
+      --ink:#0E1F19; --body:#41544C; --muted:#84968D; --faint:#AEBCB5;
+      --line:#E4EAE6; --hair:#EDF1EF;
+      --canvas:#FCFDFC; --card:#FFFFFF; --wash:#F5F8F6; --shell:#0B1512;
+      --green:#2E8B57; --green-d:#1D6B41; --grn-lt:#A8D5BA;
+      --dark:#0F2A21; --red:#C0392B; --amber:#C4881C;
+      --s25:#C4881C; --s26:#2E8B57;
+      --pos:#44554E; --neg:#C0392B;
+      --c1:#7B5EA7; --c2:#3D7EA6; --c3:#2E7D7D; --c4:#647A83;
+      --font:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+      --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+      --shadow:0 1px 2px rgba(14,31,25,.05), 0 18px 40px -26px rgba(14,31,25,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);color:var(--body);
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    a{color:var(--green-d)} a:hover{color:var(--green)}
+    .slide{width:1280px;height:720px;position:relative;background:var(--canvas);
+      display:flex;flex-direction:column;padding:36px 52px 42px;overflow:hidden}
+    .shead{flex:none;display:flex;align-items:flex-end;justify-content:space-between;
+      gap:28px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+    h1.h1{margin:0;font-size:33px;font-weight:700;letter-spacing:-.026em;color:var(--ink);line-height:1.04}
+    .hright{flex:none;display:flex;align-items:center;gap:20px;padding-bottom:4px}
+    .pnum{position:absolute;right:52px;bottom:16px;font-family:var(--mono);
+      font-size:10px;letter-spacing:.12em;color:var(--faint)}
+    .sbody{flex:1;min-height:0;display:flex;flex-direction:column;gap:14px}
+    .card{position:relative;background:var(--card);border:1px solid var(--line);
+      border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;
+      min-height:0;min-width:0;overflow:hidden}
+    .ceyebrow{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .rail{border-left:3px solid var(--acc,var(--green));padding:19px 19px 16px 18px;
+      display:flex;flex-direction:column;gap:9px;justify-content:flex-start}
+    .rail .rt{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.014em;line-height:1.25}
+    .rail .rb{font-size:13.5px;line-height:1.6;color:var(--body)}
+    .rail .rb.thin{color:var(--faint)}
+    .rail .rgo{margin-top:auto;padding-top:8px;font-family:var(--mono);font-size:9.5px;
+      font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    .kl{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;
+      text-transform:uppercase;color:var(--muted)}
+    .kv{font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1;color:var(--ink);
+      font-variant-numeric:tabular-nums}
+    .kc{font-size:11.5px;color:var(--body);line-height:1.4}
+    .pill{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.01em;
+      padding:3px 8px;border-radius:999px;background:var(--wash);color:var(--body)}
+    .g4x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-rows:repeat(3,minmax(0,1fr));gap:15px}
+    .cols{flex:1;min-height:0;display:flex;gap:14px}
+  </style>
+</helmet>
+<div class="slide">
+<div class="shead">
+  <div style="min-width:0"><h1 class="h1">Tech · where we are on the ladder</h1></div>
+  <div class="hright"></div>
+</div>
+  <div class="sbody" style="position:relative">
+    <div style="flex:1;min-height:0;display:flex;align-items:flex-end;gap:14px">
+    <div style="flex:1;height:52%;background:#D8DFDB;color:#0E1F19;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 8px 16px;text-align:center;box-shadow:0 14px 30px -22px rgba(14,31,25,.6)">
+      <span style="font-size:15px;font-weight:700;letter-spacing:.05em">PAPER</span>
+    </div>
+    <div style="flex:1;height:64%;background:#C0CBC5;color:#0E1F19;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 8px 16px;text-align:center;box-shadow:0 14px 30px -22px rgba(14,31,25,.6)">
+      <span style="font-size:15px;font-weight:700;letter-spacing:.05em">EXCEL</span>
+    </div>
+    <div style="flex:1;height:76%;background:#A8D5BA;color:#0E2A1E;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 8px 16px;text-align:center;box-shadow:0 14px 30px -22px rgba(14,31,25,.6)">
+      <span style="font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;opacity:.9">1.0</span>
+      <span style="font-size:15px;font-weight:700;letter-spacing:.05em">NO CODE</span>
+    </div>
+    <div style="flex:1;height:88%;background:#2E8B57;color:#FFFFFF;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 8px 16px;text-align:center;box-shadow:0 14px 30px -22px rgba(14,31,25,.6)">
+      <span style="font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;opacity:.9">2.0</span>
+      <span style="font-size:15px;font-weight:700;letter-spacing:.05em">FULL CODE</span>
+    </div>
+    <div style="flex:1;height:100%;background:#0F2A21;color:#FFFFFF;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 8px 16px;text-align:center;box-shadow:0 14px 30px -22px rgba(14,31,25,.6)">
+      <span style="font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;opacity:.9">3.0</span>
+      <span style="font-size:15px;font-weight:700;letter-spacing:.05em">AGENTIC</span>
+    </div>
+    </div>
+    <div class="card rail" style="--acc:var(--green);position:absolute;left:0;top:0;width:calc(40% - 8px);height:33%;justify-content:center;padding:20px 22px 20px 19px;z-index:2">
+      <div class="rb" style="font-size:15px;line-height:1.6">We have partnered with another Hydroponic farm in Puerto Rico, Campo Caribe to deploy Aloha. We will be cross sharing all of our data</div>
+    </div>
+  </div>
+  <div class="pnum">11 / 15</div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

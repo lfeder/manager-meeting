@@ -1,0 +1,11 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Cover", "x": 0, "y": 0, "w": 1280, "h": 720 },
+    { "file": "Opportunities.dc.html", "title": "Sales Opportunities", "x": 1400, "y": 0, "w": 1280, "h": 720 },
+    { "file": "Tech.dc.html", "title": "Tech ladder", "x": 2800, "y": 0, "w": 1280, "h": 720 },
+    { "file": "Corp.dc.html", "title": "Corp", "x": 0, "y": 840, "w": 1280, "h": 720 },
+    { "file": "Capital.dc.html", "title": "Capital", "x": 1400, "y": 840, "w": 1280, "h": 720 },
+    { "file": "Expansion.dc.html", "title": "Expansion", "x": 2800, "y": 840, "w": 1280, "h": 720 }
+  ],
+  "launch": { "view": "canvas" }
+}
