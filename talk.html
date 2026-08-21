@@ -1267,24 +1267,24 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
   /* the grid takes two thirds of the slide so the flags can be read from the
      back of the room — four across rather than five, and the names sized to
      match */
-  const left=h("div",{class:"card",style:"flex:2;padding:20px 22px;gap:14px"});
+  const left=h("div",{class:"card",style:"flex:2.15;padding:16px 18px;gap:11px"});
   left.appendChild(h("div",{class:"ceyebrow",style:"font-size:11px",
     text:"WHERE OUR PEOPLE COME FROM"}));
   const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
     "grid-template-columns:repeat(4,minmax(0,1fr));"+
-    "grid-template-rows:repeat(4,minmax(0,1fr));gap:12px"});
+    "grid-template-rows:repeat(4,minmax(0,1fr));gap:10px"});
   FLAGS.forEach(([name,flag],i)=>{
     const empty=!name;
     grid.appendChild(h("div",{class:empty?"":"fi",
       style:"display:flex;flex-direction:column;align-items:center;justify-content:center;"+
-        "gap:7px;border-radius:11px;padding:8px 4px;"+
+        "gap:6px;border-radius:11px;padding:6px 4px;"+
         (empty?"border:1px dashed var(--line);background:transparent"
               :"background:var(--wash)")+
         `;--d:${(.15+i*.04).toFixed(2)}s`},[
-      h("span",{style:"font-size:"+(empty?"16px":"46px")+";line-height:1",
+      h("span",{style:"font-size:"+(empty?"18px":"64px")+";line-height:1",
         text:empty?"+":flag}),
-      h("span",{style:"font-size:13.5px;font-weight:600;line-height:1.2;text-align:center;"+
-        "letter-spacing:-.006em;color:"+(empty?"var(--faint)":"var(--ink)"),
+      h("span",{style:"font-size:17px;font-weight:700;line-height:1.15;text-align:center;"+
+        "letter-spacing:-.012em;color:"+(empty?"var(--faint)":"var(--ink)"),
         text:empty?"":name})]));
   });
   left.appendChild(grid);
