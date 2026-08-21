@@ -1421,7 +1421,7 @@ const DOWPACK=[["Mon",540,11.7,8.3],["Tue",476,12.9,1.2],["Wed",700,12.2,8.8],
                ["Sun",610,12.1,8.4]];
 const perPerson=r=>r[1]/r[2];
 function dowChart(host){
-  const f=frame(host,{l:48,r:50,t:16,b:44}), {svg,X0,X1,Y0,Y1}=f;
+  const f=frame(host,{l:48,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
   const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(52,step*0.46);
   const yMax=64, y=v=>Y1-(v/yMax)*(Y1-Y0);
   const pMax=16, yP=v=>Y1-(v/pMax)*(Y1-Y0);
@@ -1445,8 +1445,6 @@ function dowChart(host){
     const t=el("text",{x:cx,y:Y1+18,"text-anchor":"middle",class:"axb","font-size":12.5,
       fill:light?C("--amber"):C("--ink")});
     t.textContent=r[0]; svg.appendChild(t);
-    const c2=el("text",{x:cx,y:Y1+33,"text-anchor":"middle",class:"ax","font-size":9.5});
-    c2.textContent=r[3]<3?"lettuce closed":""; svg.appendChild(c2);
   });
   /* people scheduled, on its own scale, so the gap between bodies and output
      is the thing you see */
