@@ -323,25 +323,16 @@ two new housing sites
 
 ## ACT 5 · WHAT I'M ASKING — 2:30
 
-### SLIDE 23 — What I'm asking
-TITLE: What I'm asking
+### SLIDE 23 — Takeaway
+TITLE: Takeaway
 
-NOTE ACROSS THE TOP: Look at your own business and see what continuous improvements you can make: growing more, deploying people better, embracing the shit out of AI.
-
+FOUR CARDS:
 - 01 · Kill your busy — Find what eats your day, and let the tech do it.
-- 02 · Automate your judgment — Hand the 7am decisions to the system.
-- 03 · Nothing lives outside ALOHA — And the part that runs your area is yours to improve.
-- 04 · Bring me both — The small thing you improved this month, and the impossible thing we should try next.
+- 02 · Automate your judgment — Wet lettuce is an example.
+- 03 · Nothing lives outside Aloha — You own your Aloha, your data, your functionality.
+- 04 · Think Small / Think Big — A small productivity gain this month, an impossible
+  step change next year.
 
-SAY: One four-letter word I don't want to hear: busy. One thing I want you spending better: judgment.
+SAY: One four-letter word I don't want to hear: busy. One thing I want you spending
+better: judgment.
 SAY: All four are the same ask — take the friction out.
-
----
-
-## Still missing
-
-1. The two `[ number ]` tiles on slide 07 — cases and expenses
-2. Matt's lettuce yield numbers for slide 03
-3. Five more countries for slide 05
-4. The line behind "it's an obligation" on slide 18
-5. What's built vs. coming in v3, for slide 12
