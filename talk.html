@@ -1077,6 +1077,9 @@ function fsChart(host){
 const REVEALS=[];
 function splitSlide(navName,title,leftBuild,rightBuild){
   const {s,body}=slide(navName,{title});
+  /* a slide can carry no header at all — then the panels take the full
+     height instead of sitting under an empty rule */
+  if(!title) s.querySelector(".shead").remove();
   const cols=h("div",{class:"cols"});
   const L=h("div",{style:"flex:1;min-width:0;display:flex;flex-direction:column"});
   const R=h("div",{class:"reveal",
@@ -1100,7 +1103,7 @@ function splitSlide(navName,title,leftBuild,rightBuild){
 }
 
 /* ------------------------------------------- 1 · The quote / cucumbers */
-splitSlide("Impossible · Cukes","People really do love OUR cucumbers",
+splitSlide("Impossible · Cukes",null,
   L=>{
     /* set as a newspaper page: masthead, rule, headline, then the line that
        does the damage. The masthead is typographic — swap in the real logo
@@ -1131,7 +1134,12 @@ splitSlide("Impossible · Cukes","People really do love OUR cucumbers",
   R=>{
     /* the rebuttal, as two plain facts under the title */
     const card=h("div",{class:"card rail",
-      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 32px;gap:24px"});
+      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 32px;gap:22px"});
+    /* the answer heads the card, and the two facts back it up */
+    card.appendChild(h("div",{class:"fi",
+      style:"--d:.12s;font-size:31px;font-weight:700;line-height:1.22;"+
+        "letter-spacing:-.024em;color:var(--green-d);padding-bottom:4px",
+      text:"People really do love OUR cucumbers"}));
     [["The #1 product in the largest warehouses of the largest grocer in the US"],
      ["Resulting in over 1% of every fresh cucumber grown in America"]
     ].forEach(([t],i)=>{

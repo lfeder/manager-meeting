@@ -40,7 +40,7 @@ SAY: The purpose of this talk is a quick recap of how things are going, and shar
 SAY: I want to start by taking stock of what we've achieved. When you step back from the fray, it's kind of crazy. We've said this before — we've done the impossible, and we've done it more than once. Let me recap.
 
 ### SLIDE 02 — The WSJ page, then our cucumbers  *(click reveals the right half)*
-TITLE: People really do love OUR cucumbers
+TITLE: none — the slide carries no header, the two panels fill the frame
 
 LEFT — set as a newspaper page:
 - MASTHEAD: THE WALL STREET JOURNAL   (typographic — send the logo file if you want the real mark)
@@ -50,6 +50,7 @@ LEFT — set as a newspaper page:
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
 
 RIGHT (on click):
+- HEADING: People really do love OUR cucumbers
 - BULLET: The #1 product in the largest warehouses of the largest grocer in the US
 - BULLET: Resulting in over 1% of every fresh cucumber grown in America
 
