@@ -1533,61 +1533,44 @@ function dowChart(host){
   cols.append(grid,dest); body.appendChild(cols);
 }
 
-/* --------------------------------------------------- 12 · Friction */
+/* ------------------------------------------------ 12 · Today = friction */
 {
-  const {body}=slide("v3 · Friction",{title:"v3 is frictionless"});
-  const cols=h("div",{class:"cols"});
-  const left=h("div",{class:"card",style:"flex:1.2;padding:24px 26px;gap:14px;justify-content:center"});
-  left.appendChild(h("div",{class:"ceyebrow",text:"FRICTION IS"}));
-  ["Reconciling two versions of a number",
-   "Confusion over whether it is called X or Y",
-   "Rekeying data between systems",
-   "Re-establishing context that was established last week"
+  const {body}=slide("v3 · Today = Friction",{title:"Today = Friction"});
+  const card=h("div",{class:"card",style:"flex:1;padding:20px 26px 18px;gap:14px"});
+  card.appendChild(h("div",{class:"ceyebrow",text:"HOW WE SPEND OUR TIME"}));
+  const cols=h("div",{style:"flex:1;min-height:0;display:grid;"+
+    "grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 34px"});
+  ["Typing in fert recipes for 7 ponds for 13 nutrients",
+   "Manually coding expenses and receivables in QB",
+   "Using text to tell people what to do for the day",
+   "Writing down the weekly schedule on paper",
+   "Manually entering spray schedules",
+   "Non real-time food safety",
+   "Building lettuce schedules being a pain",
+   "Gmail is unsearchable",
+   "Making your own cool spreadsheet, but not everyone can access it",
+   "Manually pulling data to decide when to up J seeds",
+   "There is a gap between the business and the tech team",
+   "Everyone is Busy. This is a four letter word."
   ].forEach((t,i)=>{
-    left.appendChild(h("div",{class:"fi",
-      style:`display:flex;gap:11px;align-items:baseline;--d:${(.2+i*.1).toFixed(2)}s`},[
-      h("span",{style:"width:6px;height:6px;border-radius:50%;background:var(--neg);flex:none"}),
-      h("span",{style:"font-size:16px;line-height:1.45;color:var(--body)",text:t})]));
+    const last=i===11;
+    cols.appendChild(h("div",{class:"fi",
+      style:`display:flex;gap:11px;align-items:center;min-width:0;`+
+        `--d:${(.15+i*.05).toFixed(2)}s`},[
+      h("span",{style:"width:6px;height:6px;border-radius:50%;flex:none;background:"+
+        (last?C("--neg"):C("--faint"))}),
+      h("span",{style:"font-size:17px;line-height:1.3;letter-spacing:-.008em;color:"+
+        (last?C("--neg"):C("--ink"))+(last?";font-weight:700":""),text:t})]));
   });
-  left.appendChild(h("div",{style:"margin-top:8px;padding-top:14px;"+
-    "border-top:1px solid var(--line);font-size:19px;font-weight:700;line-height:1.35;"+
-    "color:var(--ink);letter-spacing:-.014em",
-    text:"The majority of most people’s week — and almost none of the work."}));
-  const right=h("div",{class:"card rail",
-    style:"--acc:var(--green);flex:1;justify-content:center;gap:16px;padding:26px 24px"},[
-    h("span",{class:"kl",text:"WHAT WE GET BACK"}),
-    h("span",{style:"font-size:30px;font-weight:700;line-height:1.2;letter-spacing:-.022em;"+
-      "color:var(--ink)",text:"Every day feels like being back in school"}),
-    h("span",{style:"font-size:15px;line-height:1.55;color:var(--body)",
-      text:"v3 is about elevating everyone. Work has some four-letter words, and our goal "+
-           "is to kill some of them."})]);
-  cols.append(left,right); body.appendChild(cols);
+  card.appendChild(cols);
+  card.appendChild(h("div",{style:"flex:none;padding-top:13px;"+
+    "border-top:1px solid var(--line);font-size:21px;font-weight:700;"+
+    "letter-spacing:-.016em;color:var(--ink)",
+    text:"Friction: the majority of everyone’s week — none of the value add"}));
+  body.appendChild(card);
 }
 
-/* ----------------------------------------------- 13 · What it takes */
-{
-  const {body}=slide("v3 · What it takes",{title:"What it takes"});
-  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
-    "grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:14px"});
-  [["01","Claude understands our business","We built ALOHA — and keep improving it — so the "+
-     "model knows every table, every rule, every name.",C("--green")],
-   ["02","Common naming","Agree the words once, and the training material comes free.",C("--green")],
-   ["03","Nothing lives outside ALOHA","Not a spreadsheet, not a notebook. If it is not in "+
-     "the system, nobody else gets the benefit.",C("--green")],
-   ["—","BUSY","This is what friction causes. If you are busy, you are not thinking "+
-     "or learning.",C("--neg")]
-  ].forEach(([n,t,d,acc],i)=>{
-    grid.appendChild(h("div",{class:"card rail fi",
-      style:`--acc:${acc};gap:8px;justify-content:center;--d:${(.15+i*.1).toFixed(2)}s`},[
-      h("span",{style:`font-family:var(--mono);font-size:11px;font-weight:700;`+
-        `letter-spacing:.14em;color:${acc}`,text:n}),
-      h("div",{class:"rt",style:"font-size:19px",text:t}),
-      h("div",{class:"rb",text:d})]));
-  });
-  body.appendChild(grid);
-}
-
-/* --------------------------------------------- 14 · A wet harvest day */
+/* --------------------------------------------- 13 · A wet harvest day */
 const WETDAY=[["When to start harvest",4],["All or some rows of wet lettuce",5],
   ["Cut height",3],["Packhouse fans on or off",2],
   ["Dryer heater off, or at what temperature",4],["Dryer fan speed",3],
@@ -1609,30 +1592,25 @@ function wetTree(host){
     const sp=spread(n), mid=(TX0+TX1)/2, halfW=(TX1-TX0)*sp/2;
     return mid-halfW+((i+.5)/n)*halfW*2;
   };
-
   svg.appendChild(el("circle",{cx:(TX0+TX1)/2,cy:20,r:5,fill:C("--ink")}));
-
   WETDAY.forEach(([name,opts],L)=>{
-    const n=cum[L], y=rowY(L), py=L?rowY(L-1):22, pn=L?cum[L-1]:1;
+    const n=cum[L], y=rowY(L), py=L?rowY(L-1):20, pn=L?cum[L-1]:1;
     if(n<=120){
       for(let i=0;i<n;i++){
         const p=Math.floor(i/opts);
         svg.appendChild(el("line",{x1:xAt(p,pn),y1:py,x2:xAt(i,n),y2:y,
-          stroke:C("--green"),"stroke-width":n<=20?1.6:1.1,
-          opacity:n<=20?.65:.4}));
+          stroke:C("--green"),"stroke-width":n<=20?1.6:1.1,opacity:n<=20?.65:.4}));
       }
       for(let i=0;i<n;i++)
         svg.appendChild(el("circle",{cx:xAt(i,n),cy:y,r:n<=20?3.2:2,
           fill:C("--green-d"),opacity:n<=20?1:.7}));
     } else {
-      /* a wedge from the parent row's span to this row's span */
       const ph=(TX1-TX0)*spread(pn)/2, ch=(TX1-TX0)*spread(n)/2, mid=(TX0+TX1)/2;
       svg.appendChild(el("path",{
         d:`M${mid-ph},${py} L${mid+ph},${py} L${mid+ch},${y} L${mid-ch},${y} Z`,
         fill:C("--green"),opacity:L===WETDAY.length-1?.30:.18}));
       svg.appendChild(el("line",{x1:mid-ch,y1:y,x2:mid+ch,y2:y,
-        stroke:C("--green-d"),"stroke-width":L===WETDAY.length-1?3:1.6,
-        opacity:.85}));
+        stroke:C("--green-d"),"stroke-width":L===WETDAY.length-1?3:1.6,opacity:.85}));
     }
     const t=el("text",{x:NX0,y:y+6,"text-anchor":"end",class:"ax","font-size":17,
       fill:C("--ink")});
@@ -1649,13 +1627,12 @@ function wetTree(host){
     WETDAY.map(([name,opts],i)=>[name,String(opts),nf(cum[i])]))};
 }
 {
-  const {body}=slide("v3 · A wet harvest day",{title:"Judgment Call — a wet harvest day"});
+  const {body}=slide("v3 · Judgment call",{title:"Judgment call"});
   const card=h("div",{class:"card",style:"flex:1;padding:16px 22px 18px;gap:8px"});
   card.appendChild(h("div",{class:"ceyebrow",text:"SEVEN DECISIONS BEFORE THE CREW STARTS"}));
   const plot=h("div",{style:"flex:1;min-height:0"});
   card.appendChild(plot);
   wetTree(plot);
-  /* the number lands under the tree that produced it */
   card.appendChild(h("div",{class:"fi",
     style:"--d:1.3s;flex:none;display:flex;align-items:baseline;justify-content:center;"+
       "gap:16px;padding-top:6px;border-top:1px solid var(--hair);margin-top:4px"},[
@@ -1665,30 +1642,60 @@ function wetTree(host){
   body.appendChild(card);
 }
 
-/* ------------------------------------------ 15 · The world in v3 */
+/* --------------------------------------------------- 14 · What we will do */
 {
-  const {body}=slide("v3 · What changes",{title:"What the world looks like in v3"});
-  const cols=h("div",{class:"cols"});
-  const mk=(eyebrow,items,acc)=>{
-    const card=h("div",{class:"card rail",style:`--acc:${acc};flex:1;padding:18px 20px;gap:11px`});
-    card.appendChild(h("div",{class:"ceyebrow",text:eyebrow}));
-    items.forEach((t,i)=>card.appendChild(h("div",{class:"fi",
-      style:`display:flex;gap:10px;align-items:baseline;--d:${(.2+i*.07).toFixed(2)}s`},[
-      h("span",{style:`width:5px;height:5px;border-radius:50%;background:${acc};flex:none`}),
-      h("span",{style:"font-size:14px;line-height:1.45;color:var(--body)",text:t})])));
-    return card;
-  };
-  cols.append(
-    mk("THE SYSTEM DOES IT NOW",
-      ["Spray schedules","Seeding schedules","Daily work tasks",
-       "Auto-ordering via Amazon","Fert schedules entered automatically",
-       "Coding from QuickBooks","Financial reports generated"],C("--c4")),
-    mk("YOU SPEND YOUR TIME ON",
-      ["Nudging productivity","A new product","Making jobs better and more enjoyable",
-       "More time with customers",
-       "Instead of building your own spreadsheet, you ask Claude for a dashboard — "+
-       "shareable by default"],C("--green")));
-  body.appendChild(cols);
+  const {body}=slide("v3 · What we will do",{title:"What we will do"});
+  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
+    "grid-template-columns:repeat(3,minmax(0,1fr));gap:16px"});
+  [["01","Claude understands our business",
+    "We built ALOHA, and keep improving it, so the model knows every table, "+
+    "every rule, every name."],
+   ["02","Common naming",
+    "Agree the words once, like we did with the Site Map. Training material "+
+    "comes free."],
+   ["03","Nothing lives outside Aloha",
+    "Not a spreadsheet, not a notebook, not email. If it is not in the system, "+
+    "nobody else gets the benefit."]
+  ].forEach(([n,t,d],i)=>{
+    grid.appendChild(h("div",{class:"card rail fi",
+      style:`--acc:var(--green);gap:10px;justify-content:center;padding:26px 24px;`+
+        `--d:${(.15+i*.12).toFixed(2)}s`},[
+      h("span",{style:"font-family:var(--mono);font-size:13px;font-weight:700;"+
+        "letter-spacing:.14em;color:var(--green)",text:n}),
+      h("div",{class:"rt",style:"font-size:23px",text:t}),
+      h("div",{class:"rb",style:"font-size:16px",text:d})]));
+  });
+  body.appendChild(grid);
+}
+
+/* --------------------------------------------- 15 · Friction removed */
+{
+  const {body}=slide("v3 · Friction removed",{title:"Future — friction removed"});
+  const card=h("div",{class:"card rail",
+    style:"--acc:var(--green);flex:1;padding:22px 28px 20px;gap:16px"});
+  card.appendChild(h("div",{class:"ceyebrow",text:"HOW WE WILL SPEND OUR TIME"}));
+  const list=h("div",{style:"flex:1;min-height:0;display:flex;flex-direction:column;"+
+    "justify-content:space-evenly"});
+  ["Nudging productivity",
+   "Spending more time with customers and vendors",
+   "Making workers’ jobs more enjoyable",
+   "Develop new products",
+   "Chatting with AI to build a shareable dashboard",
+   "Coming up with the next “impossible”"
+  ].forEach((t,i)=>{
+    list.appendChild(h("div",{class:"fi",
+      style:`display:flex;gap:14px;align-items:center;--d:${(.15+i*.09).toFixed(2)}s`},[
+      h("span",{style:"width:8px;height:8px;border-radius:50%;flex:none;"+
+        "background:var(--green)"}),
+      h("span",{style:"font-size:24px;font-weight:600;line-height:1.3;"+
+        "letter-spacing:-.016em;color:var(--ink)",text:t})]));
+  });
+  card.appendChild(list);
+  card.appendChild(h("div",{style:"flex:none;padding-top:14px;"+
+    "border-top:1px solid var(--line);font-size:22px;font-weight:700;"+
+    "letter-spacing:-.016em;color:var(--green-d)",
+    text:"Like being back in school — we are learning something new every day"}));
+  body.appendChild(card);
 }
 
 /* ---------------------------------------------- 15a · Section break */

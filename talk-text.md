@@ -211,36 +211,28 @@ DESTINATION PANEL, its own column on the right:
 
 SAY: One sentence on what is built and what is coming.
 
-### SLIDE 13 — Friction
-TITLE: v3 is frictionless
+### SLIDE 13 — Today = Friction
+TITLE: Today = Friction
+EYEBROW: HOW WE SPEND OUR TIME
 
-LEFT — eyebrow: FRICTION IS
-- Reconciling two versions of a number
-- Confusion over whether it is called X or Y
-- Rekeying data between systems
-- Re-establishing context that was established last week
-- CLOSING LINE: The majority of most people's week — and almost none of the work.
+Two columns of six:
+- Typing in fert recipes for 7 ponds for 13 nutrients
+- Manually coding expenses and receivables in QB
+- Using text to tell people what to do for the day
+- Writing down the weekly schedule on paper
+- Manually entering spray schedules
+- Non real-time food safety
+- Building lettuce schedules being a pain
+- Gmail is unsearchable
+- Making your own cool spreadsheet, but not everyone can access it
+- Manually pulling data to decide when to up J seeds
+- There is a gap between the business and the tech team
+- Everyone is Busy. This is a four letter word.   ← set in red, it is the punchline
 
-RIGHT:
-- LABEL: WHAT WE GET BACK
-- LINE: Every day feels like being back in school
-- BODY: v3 is about elevating everyone. Work has some four-letter words, and our
-  goal is to kill some of them.
+FOOTER: Friction: the majority of everyone's week — none of the value add
 
-### SLIDE 14 — What it takes
-TITLE: What it takes
-
-FOUR CARDS:
-- 01 · Claude understands our business — We built ALOHA, and keep improving it,
-  so the model knows every table, every rule, every name.
-- 02 · Common naming — Agree the words once, and the training material comes free.
-- 03 · Nothing lives outside ALOHA — Not a spreadsheet, not a notebook. If it is
-  not in the system, nobody else gets the benefit.
-- — · BUSY — This is what friction causes. If you are busy, you are not thinking
-  or learning.
-
-### SLIDE 15 — A wet harvest day
-TITLE: Judgment Call — a wet harvest day
+### SLIDE 14 — Judgment call
+TITLE: Judgment call
 
 FULL WIDTH, an expanding decision tree. Eyebrow: SEVEN DECISIONS BEFORE THE CREW
 STARTS. Each row names the decision, its multiplier, and the running total; four
@@ -261,18 +253,29 @@ UNDER THE TREE: 2,880 ways to run the day
 SAY: Nobody holds seven interacting variables in their head at 7am. That isn't
 what your judgment is for.
 
-### SLIDE 16 — What changes
-TITLE: What the world looks like in v3
+### SLIDE 15 — What we will do
+TITLE: What we will do
 
-LEFT — THE SYSTEM DOES IT NOW:
-Spray schedules · Seeding schedules · Daily work tasks · Auto-ordering via Amazon ·
-Fert schedules entered automatically · Coding from QuickBooks · Financial reports
-generated
+THREE CARDS:
+- 01 · Claude understands our business — We built ALOHA, and keep improving it,
+  so the model knows every table, every rule, every name.
+- 02 · Common naming — Agree the words once, like we did with the Site Map.
+  Training material comes free.
+- 03 · Nothing lives outside Aloha — Not a spreadsheet, not a notebook, not
+  email. If it is not in the system, nobody else gets the benefit.
 
-RIGHT — YOU SPEND YOUR TIME ON:
-Nudging productivity · A new product · Making jobs better and more enjoyable ·
-More time with customers · Instead of building your own spreadsheet, you ask
-Claude for a dashboard — shareable by default
+### SLIDE 16 — Future, friction removed
+TITLE: Future — friction removed
+EYEBROW: HOW WE WILL SPEND OUR TIME
+
+- Nudging productivity
+- Spending more time with customers and vendors
+- Making workers' jobs more enjoyable
+- Develop new products
+- Chatting with AI to build a shareable dashboard
+- Coming up with the next "impossible"
+
+FOOTER: Like being back in school — we are learning something new every day
 
 ---
 
