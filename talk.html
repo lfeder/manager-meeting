@@ -1615,6 +1615,11 @@ function wetTree(host){
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",height:"100%",
     preserveAspectRatio:"xMidYMid meet",style:"display:block"});
   host.appendChild(svg);
+  /* everything is drawn into a group scaled slightly under 1, so the tree has
+     air around it inside the card */
+  const K=.88, root=el("g",{transform:`translate(${(W*(1-K)/2).toFixed(1)},`+
+    `${(H*(1-K)/2).toFixed(1)}) scale(${K})`});
+  svg.appendChild(root);
   const NX0=392, TX0=424, TX1=1004, CX=W-8;
   const rowY=i=>42+i*((H-64)/WETDAY.length);
   const cum=[]; WETDAY.reduce((a,[,n],i)=>(cum[i]=a*n),1);
@@ -1623,36 +1628,36 @@ function wetTree(host){
     const sp=spread(n), mid=(TX0+TX1)/2, halfW=(TX1-TX0)*sp/2;
     return mid-halfW+((i+.5)/n)*halfW*2;
   };
-  svg.appendChild(el("circle",{cx:(TX0+TX1)/2,cy:20,r:5,fill:C("--ink")}));
+  root.appendChild(el("circle",{cx:(TX0+TX1)/2,cy:20,r:5,fill:C("--ink")}));
   WETDAY.forEach(([name,opts],L)=>{
     const n=cum[L], y=rowY(L), py=L?rowY(L-1):20, pn=L?cum[L-1]:1;
     if(n<=120){
       for(let i=0;i<n;i++){
         const p=Math.floor(i/opts);
-        svg.appendChild(el("line",{x1:xAt(p,pn),y1:py,x2:xAt(i,n),y2:y,
+        root.appendChild(el("line",{x1:xAt(p,pn),y1:py,x2:xAt(i,n),y2:y,
           stroke:C("--green"),"stroke-width":n<=20?1.6:1.1,opacity:n<=20?.65:.4}));
       }
       for(let i=0;i<n;i++)
-        svg.appendChild(el("circle",{cx:xAt(i,n),cy:y,r:n<=20?3.2:2,
+        root.appendChild(el("circle",{cx:xAt(i,n),cy:y,r:n<=20?3.2:2,
           fill:C("--green-d"),opacity:n<=20?1:.7}));
     } else {
       const ph=(TX1-TX0)*spread(pn)/2, ch=(TX1-TX0)*spread(n)/2, mid=(TX0+TX1)/2;
-      svg.appendChild(el("path",{
+      root.appendChild(el("path",{
         d:`M${mid-ph},${py} L${mid+ph},${py} L${mid+ch},${y} L${mid-ch},${y} Z`,
         fill:C("--green"),opacity:L===WETDAY.length-1?.30:.18}));
-      svg.appendChild(el("line",{x1:mid-ch,y1:y,x2:mid+ch,y2:y,
+      root.appendChild(el("line",{x1:mid-ch,y1:y,x2:mid+ch,y2:y,
         stroke:C("--green-d"),"stroke-width":L===WETDAY.length-1?3:1.6,opacity:.85}));
     }
-    const t=el("text",{x:NX0,y:y+6,"text-anchor":"end",class:"ax","font-size":17,
+    const t=el("text",{x:NX0,y:y-2,"text-anchor":"end",class:"ax","font-size":17,
       fill:C("--ink")});
-    t.textContent=name; svg.appendChild(t);
-    const o=el("text",{x:NX0+14,y:y+6,"text-anchor":"start",class:"axb","font-size":17,
+    t.textContent=name; root.appendChild(t);
+    const o=el("text",{x:NX0+14,y:y-2,"text-anchor":"start",class:"axb","font-size":17,
       fill:C("--green")});
-    o.textContent="×"+opts; svg.appendChild(o);
-    const c=el("text",{x:CX,y:y+6,"text-anchor":"end","font-size":17,
+    o.textContent="×"+opts; root.appendChild(o);
+    const c=el("text",{x:CX,y:y-2,"text-anchor":"end","font-size":17,
       "font-family":"var(--mono)","font-weight":600,fill:C("--body"),
       style:"font-variant-numeric:tabular-nums"});
-    c.textContent=nf(n); svg.appendChild(c);
+    c.textContent=nf(n); root.appendChild(c);
   });
   return {table:dataTable(["Decision","Options","Ways to run the day so far"],
     WETDAY.map(([name,opts],i)=>[name,String(opts),nf(cum[i])]))};
@@ -1689,8 +1694,11 @@ function wetTree(host){
     "nobody else gets the benefit."]
   ].forEach(([n,t,d],i)=>{
     grid.appendChild(h("div",{class:"card rail fi",
-      style:`--acc:var(--green);gap:10px;justify-content:flex-start;padding:26px 24px;`+
+      style:`--acc:var(--green);gap:10px;justify-content:flex-start;padding:0 24px 26px;`+
         `--d:${(.15+i*.12).toFixed(2)}s`},[
+      /* the copy starts a third down rather than at the very top, so the three
+         cards read as a row of statements instead of three stacked columns */
+      h("div",{style:"flex:0 0 30%"}),
       h("span",{style:"font-family:var(--mono);font-size:13px;font-weight:700;"+
         "letter-spacing:.14em;color:var(--green)",text:n}),
       h("div",{class:"rt",style:"font-size:23px",text:t}),
@@ -1708,7 +1716,7 @@ function wetTree(host){
     "justify-content:space-evenly"});
   ["Aloha manages fertigation",
    "Spending more time with customers and vendors",
-   "Making workers’ jobs more enjoyable",
+   "Making everyone’s jobs more enjoyable",
    "Develop new products",
    "Chatting with AI to build a shareable dashboard",
    "Coming up with the next “impossible”"
@@ -1778,7 +1786,7 @@ function wetTree(host){
 
 /* --------------------------------------- 18 · Sales opportunities */
 {
-  const {body}=slide("Expansion · Opportunities",{title:"There is more where that came from"});
+  const {body}=slide("Expansion · Opportunities",{title:"Endless Sales Opportunities"});
   const grid=h("div",{class:"g4x3"});
   [["Costco Japanese, orders up 30% and we sold them 10% less",""],
    ["Lettuce flat, but we can grow sales",""],
@@ -1807,13 +1815,13 @@ function wetTree(host){
 
 /* ------------------------------------- 19 · Can we execute it? */
 {
-  const {body}=slide("Expansion · Execution",{title:"Can we execute it?"});
+  const {body}=slide("Expansion · Execution",{title:"What needs to change to make this happen"});
   const cols=h("div",{class:"cols"});
   const left=h("div",{style:"flex:1;min-width:0;display:flex;flex-direction:column;gap:12px"});
   left.appendChild(h("div",{class:"ceyebrow",text:"THE PEOPLE CHANGES"}));
   [[C("--green"),"Maria moves to Sales full-time","We’ve outgrown part-time coverage."],
    [C("--green"),"Maria backfill",null],
-   [C("--green"),"Construction GC will be more outsourced",
+   [C("--green"),"GCing will be more outsourced",
     "We’re hiring a turn-key greenhouse construction company."],
    [C("--green"),"Recruiting a part-time HR person",null]
   ].forEach(([acc,t,b])=>left.appendChild(h("div",{class:"card rail",

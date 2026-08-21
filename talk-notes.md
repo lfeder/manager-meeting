@@ -80,7 +80,8 @@ Winter shorting is now year-round shorting. 30% shorting in the summer!
 ## 20 — There is more where that came from
 We have more opportunity than ever!
 
-## 21 — Can we execute it?
+## 21 — What needs to change to make this happen
+We've learned from the past. We need proper management bandwidth when expanding.
 Maria to sales full-time, with a backfill behind her.
 Turn-key greenhouse construction company for the build.
 Risk is lower with cucumbers than it was with lettuce
