@@ -1168,7 +1168,7 @@ const GRAVE=[
   ["AeroFarms","IKEA Foundation","$300M"],
   ["Revol Greens","CA private equity","$215M"],
   ["Square Roots","Kimbal Musk","$90M"]];
-splitSlide("Impossible · Who we compete against","Who we compete against",
+splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market",
   L=>{
     const card=h("div",{class:"card",style:"flex:1;padding:18px 20px 14px;gap:0"});
     const head=h("div",{style:"flex:none;display:grid;grid-template-columns:1.15fr .85fr .6fr;"+
@@ -1197,17 +1197,13 @@ splitSlide("Impossible · Who we compete against","Who we compete against",
     L.appendChild(card);
   },
   R=>{
+    /* one line, alone on the card, so it lands like the answer it is */
     R.appendChild(h("div",{class:"card rail",
-      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 30px;gap:24px"},[
-      h("div",{style:"display:flex;flex-direction:column;gap:6px"},[
-        h("span",{class:"kl",text:"OUR LETTUCE"}),
-        h("span",{style:"font-size:24px;font-weight:700;line-height:1.3;color:var(--ink);"+
-          "letter-spacing:-.014em",text:"Approaching high yields for our system"})]),
-      h("div",{style:"height:1px;background:var(--line)"}),
-      h("div",{style:"font-size:19px;font-weight:700;line-height:1.38;color:var(--green-d);"+
-        "letter-spacing:-.012em",
+      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 32px"},
+      h("div",{class:"fi",style:"--d:.15s;font-size:29px;font-weight:700;line-height:1.34;"+
+        "color:var(--green-d);letter-spacing:-.02em",
         text:"We operate in the most expensive state in the country and yet provide the "+
-             "most affordable lettuce on the shelves."})]));
+             "freshest, safest and most affordable lettuce on the shelves."})));
   });
 
 /* --------------------------------------------------- 3 · Food safety */
@@ -1480,7 +1476,7 @@ function dowChart(host){
 }
 {
   const {body}=slide("Review · Tuesday and Friday",
-    {title:"Tuesday and Friday: fewest cases, most bodies",
+    {title:"How to Optimize the awkward lettuce work week",
      right:[legend([["Cases per person",C("--green")],["People scheduled",C("--vK")]])]});
   const row=h("div",{class:"tilerow",style:"height:92px"});
   [["FRIDAY","14.6","people","Our most-staffed cuke pack day — and second-fewest cases"],

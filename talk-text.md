@@ -54,8 +54,8 @@ RIGHT (on click):
 - BULLET: The #1 product in the largest warehouses of the largest grocer in the US
 - BULLET: Resulting in over 1% of every fresh cucumber grown in America
 
-### SLIDE 03 — Who we compete against  *(click reveals the right half)*
-TITLE: Who we compete against
+### SLIDE 03 — The greenhouse lettuce market  *(click reveals the right half)*
+TITLE: The Greenhouse Lettuce market
 
 LEFT — columns are COMPANY · BACKER · RAISED:
 
@@ -79,10 +79,9 @@ you want them tighter: Local Bounti $310M is Cargill's committed facilities
 ($200M + $110M), since total raise is undisclosed; Revol $215M is Tracxn's total
 across two rounds, not the $250M you remembered.
 
-RIGHT (on click):
-- LABEL: OUR LETTUCE
-- LINE: Approaching high yields for our system
-- LINE: We operate in the most expensive state in the country and yet provide the most affordable lettuce on the shelves.
+RIGHT (on click) — one line, alone on the card:
+We operate in the most expensive state in the country and yet provide the
+freshest, safest and most affordable lettuce on the shelves.
 
 ### SLIDE 04 — Food safety
 TITLE: Food safety
@@ -150,7 +149,7 @@ columns, no legend
 SAY: Did we need more time, or more labor?
 
 ### SLIDE 09 — Tuesday and Friday
-TITLE: Tuesday and Friday: fewest cases, most bodies
+TITLE: How to Optimize the awkward lettuce work week
 LEGEND: Cases per person · People scheduled
 
 TILES:
