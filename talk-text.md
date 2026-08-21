@@ -194,16 +194,16 @@ this month.
 ### SLIDE 11 — Section break
 EYEBROW: EXPANSION I
 TITLE: Aloha 3.0
-SUBTITLE: The company gets bigger
+SUBTITLE: Growing with AI
 
 ### SLIDE 12 — Paper → AI
 TITLE: Paper → AI
 
-FOUR PANELS, each a screenshot with a label underneath:
-- PAPER — the handwritten maintenance log
-- EXCEL — the fsafe log sheet
-- 1.0 APPSHEETS — the app, mid-sync
-- 2.0 ALOHA 2.0 — the palletization board
+FOUR PANELS, each a screenshot with a label underneath — named, not numbered:
+- Paper — the handwritten maintenance log
+- Sheets — the fsafe log sheet
+- Appsheets — the app, mid-sync
+- Aloha 2.0 — the palletization board
 
 DESTINATION PANEL, its own column on the right:
 - 3.0
