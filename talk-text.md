@@ -31,70 +31,69 @@ Use an ALL-CAPS prefix at the start of a line instead:
 ### SLIDE 01 — Cover
 TITLE: Opportunities Discussion
 BODY: Hawaii Farming logo
-SAY: The purpose of this talk is a quick recap of how things are going, and then where we're heading.
-SAY: The two biggest opportunities in front of us are both expansions. One is the farm getting bigger. One is the company getting bigger.
+SAY: The purpose of this talk is a quick recap of how things are going, and share our vision for where we're heading.
 
 ---
 
 ## ACT 1 · IMPOSSIBLE FARMING — 4:00
 
-Opening narration: I want to start by taking stock of what we've achieved. When you step back from the fray, it's kind of crazy. We've said this before — we've done the impossible, and we've done it more than once. Let me recap.
+SAY: I want to start by taking stock of what we've achieved. When you step back from the fray, it's kind of crazy. We've said this before — we've done the impossible, and we've done it more than once. Let me recap.
 
-### SLIDE 02 — The quote, then our cucumbers  *(click reveals the right half)*
-TITLE: They said nobody wants cucumbers
+### SLIDE 02 — The WSJ page, then our cucumbers  *(click reveals the right half)*
+TITLE: Cukes
 
-LEFT:
+LEFT — set as a newspaper page:
+- MASTHEAD: THE WALL STREET JOURNAL   (typographic — send the logo file if you want the real mark)
+- DATE: FEB. 24, 2025
+- HEADLINE: Ellison's Half-Billion-Dollar Quest to Change Farming Has Been a Bust
 - QUOTE: "People, no offense, don't really love cucumbers."
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
-- SOURCE: WSJ · 24 FEB 2025
 
 RIGHT (on click):
-- BIG NUMBER: 1%
-- CAPTION: of every fresh cucumber grown in America — from an island of 200,000 people
+- BIG NUMBER: 1%+
+- CAPTION: of every fresh cucumber grown in America
 - LABEL: AND
-- LINE: the #1 product in the largest store of the largest grocer in the US
+- LINE: the #1 product in the largest warehouses of the largest grocer in the US
 
-SAY: That's Larry Ellison's farm. Same state, same crop, half a billion dollars. They looked at the market and quit.
+### SLIDE 03 — Who we compete against  *(click reveals the right half)*
+TITLE: Who we compete against
 
-### SLIDE 03 — The graveyard, then our lettuce  *(click reveals the right half)*
-TITLE: Everyone else who tried this
+LEFT — columns are COMPANY · BACKER · RAISED:
 
-LEFT — eyebrow: WHAT THE MONEY BOUGHT
-
-| Company | Backer | Outcome |
+| Company | Backer | Raised |
 |---|---|---|
-| Plenty | Bezos | Chapter 11 · Mar 2025 |
-| Bowery Farming | Fidelity | Shut down · Nov 2024 |
-| AeroFarms | IKEA | Chapter 11 · Jun 2023 |
-| 80 Acres Farms | Private equity | Shut down · Aug 2026 |
-| Square Roots | Kimbal Musk | Shut down · Jul 2023 |
-| Local Bounti | Cargill | $530M deficit |
-| Revol Greens | — | WARN filed · closes 4 Oct 2026 |
+| Plenty | Bezos | $1B |
+| Bowery Farming | Fidelity | $700M |
+| 80 Acres Farms | Private equity | $350M |
+| Local Bounti | Cargill | $310M |
+| AeroFarms | IKEA | $300M |
+| Revol Greens | — | $215M |
+| Square Roots | Kimbal Musk | $90M |
 
-FOOTER: North of $3.5 billion · and 14 more indoor-farm bankruptcies in 2025
+FOOTER: $3 billion — all bankrupt, shut down, or fighting to survive
+SUB-FOOTER: And 14 more indoor-farm bankruptcies in 2025
+
+CLAUDE NOTE: "all bankrupt" would be wrong — Local Bounti is still listed with a
+going-concern warning, and Revol has filed WARN notices but not Chapter 11. The
+wording above covers all seven and cannot be corrected. Two figures to check if
+you want them tighter: Local Bounti $310M is Cargill's committed facilities
+($200M + $110M), since total raise is undisclosed; Revol $215M is Tracxn's total
+across two rounds, not the $250M you remembered.
 
 RIGHT (on click):
 - LABEL: OUR LETTUCE
-- LINE: Approaching world-class yields for our system — while operations across the country fail
-- PLACEHOLDER: [ MATT'S NUMBERS ]
-- LINE: The most expensive state in the country. The most affordable lettuce on the shelf.
-
-SAY: 80 Acres shut down last week — $350 million, eleven years, 145 people in Ohio.
-SAY: Revol Greens is a lettuce grower in a greenhouse, like us. They filed WARN notices two weeks ago after a Cyclospora outbreak took the demand out of the category.
+- LINE: Approaching high yields for our system
+- LINE: We operate in the most expensive state in the country and yet provide the most affordable lettuce on the shelves.
 
 ### SLIDE 04 — Food safety
 TITLE: Food safety
 
-LEFT: illustration — a petri dish of colonies resolving into a PCR trace
-- CAPTION LEFT: Wait three days
-- CAPTION RIGHT: Read the DNA
+FULL BLEED: a petri dish of colonies, an arrow, and a DNA double helix
+- CAPTION LEFT: 48 hours turnaround
+- CAPTION RIGHT: 4 hour turnaround
+- CAPTION RIGHT, SMALL: First farm globally Costco approved to use PCR
 
-RIGHT:
-- LABEL: PCR TESTING · BIG NUMBER: 100% · CAPTION: We may be the only farm in the world testing everything this way
-- LABEL: AUDIT SCORE · BIG NUMBER: 100% · CAPTION: All six modules, two years running
-- QUOTE: "One of the most advanced food safety programs we've seen." — Costco
-
-SAY: Revol's problem was a food safety event in the category. This is why we're still standing.
+SAY: 6 x 100%, two years. Are we nervous about audits anymore?
 
 ### SLIDE 05 — People
 TITLE: We grow people too
@@ -112,7 +111,6 @@ RIGHT:
 TITLE (the whole slide): What is the single common denominator?
 
 SAY: Every one of those was done by this room. Nobody replaced, nobody hired over.
-SAY: No growth or margin figures on this — the point is who did it, not what it returned.
 
 ---
 
