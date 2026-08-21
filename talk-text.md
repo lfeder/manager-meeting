@@ -314,8 +314,8 @@ RIGHT — AND THE RISK:
 
 ### SLIDE 22 — The plan
 TITLE: Here is the plan
-IMAGE: site plan, rotated 90° to landscape so it fills the slide — four grow houses,
-the support building, the runoff buffer, two new housing sites
+IMAGE: site plan — four grow houses, the support building, the runoff buffer,
+two new housing sites
 
 ---
 
