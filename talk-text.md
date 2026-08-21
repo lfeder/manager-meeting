@@ -66,8 +66,8 @@ LEFT — columns are COMPANY · BACKER · RAISED:
 | Bowery Farming | Henry Kravis | $700M |
 | 80 Acres Farms | Private equity | $350M |
 | Local Bounti | Cargill | $310M |
-| AeroFarms | IKEA | $300M |
-| Revol Greens | — | $215M |
+| AeroFarms | IKEA Foundation | $300M |
+| Revol Greens | CA private equity | $215M |
 | Square Roots | Kimbal Musk | $90M |
 
 FOOTER: $3 billion — all bankrupt, shut down, or fighting to survive
@@ -132,7 +132,7 @@ TITLE: Financial Update — Year to Date
 THREE VERTICAL CARDS:
 
 1  CASES SOLD · +9% · Cukes +5% · Lettuce +25%
-2  EXPENSES · TRACKING TO BUDGET · [ actual vs budget — needs the number ]
+2  EXPENSES · Tracking to Budget
 3  CAPITAL
    DONE: Reefer truck · SIP
    COMMITTED: Lettuce boards · Drippers · Gutters for GH5/6 · Fertigator
@@ -140,14 +140,15 @@ THREE VERTICAL CARDS:
 
 ### SLIDE 08 — Longer cycles
 TITLE: Growing Longer Experiment
-LEGEND: 2025 cohort · 2026 cohort
 
-TILES:
+TILES (two):
 - POUNDS HARVESTED · +1.5% · 1.95M lb vs 1.92M
-- WEEKS GROWN · +1.4 wk · 10.8 vs 9.4 — 15% more time
-- THE QUESTION · Did we need more time, or more labor?
+- WEEKS GROWN · +1.4 wks (15%)
 
-CHART: How long each cycle kept picking
+CHART: How long each cycle kept picking — 2025 and 2026 named over their own
+columns, no legend
+
+SAY: Did we need more time, or more labor?
 
 ### SLIDE 09 — Tuesday and Friday
 TITLE: Tuesday and Friday: fewest cases, most bodies

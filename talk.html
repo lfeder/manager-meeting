@@ -902,7 +902,7 @@ const packRows=col=>({
 const cycAvg=a=>a.reduce((s,x)=>s+x[2],0)/a.length;
 function cyclesChart(host){
   /* the left margin carries the first bar's rotated label, not just the axis */
-  const f=frame(host,{l:48,r:14,t:14,b:46}), {svg,X0,X1,Y0,Y1}=f;
+  const f=frame(host,{l:48,r:14,t:38,b:46}), {svg,X0,X1,Y0,Y1}=f;
   /* the axis starts at 4, not 0: every cycle runs 8.7-13 weeks, and a zero
      baseline spent two thirds of the panel on empty bar. Bar LENGTH is no
      longer proportional to weeks — read the values off the axis */
@@ -931,6 +931,14 @@ function cyclesChart(host){
     });
     g.appendChild(hitr);
     svg.appendChild(g);
+  });
+  /* each cohort is named over its own block, which does the job a legend
+     was doing off in the header */
+  [2025,2026].forEach(yr=>{
+    const a=yr===2025?X0:X0+GAP+N25*pitch, b=yr===2025?X0+N25*pitch:X1;
+    const t=el("text",{x:(a+b)/2,y:Y0-14,"text-anchor":"middle",class:"axb",
+      "font-size":19,fill:yr===2025?C("--s25"):C("--s26")});
+    t.textContent=String(yr); svg.appendChild(t);
   });
   [2025,2026].forEach(yr=>{
     const m=cycAvg(CYC[yr]), col=yr===2025?C("--s25"):C("--s26");
@@ -1148,8 +1156,8 @@ const GRAVE=[
   ["Bowery Farming","Henry Kravis","$700M"],
   ["80 Acres Farms","Private equity","$350M"],
   ["Local Bounti","Cargill","$310M"],
-  ["AeroFarms","IKEA","$300M"],
-  ["Revol Greens","—","$215M"],
+  ["AeroFarms","IKEA Foundation","$300M"],
+  ["Revol Greens","CA private equity","$215M"],
   ["Square Roots","Kimbal Musk","$90M"]];
 splitSlide("Impossible · Who we compete against","Who we compete against",
   L=>{
@@ -1338,20 +1346,23 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
 {
   const {body}=slide("Review · Financial update",{title:"Financial Update — Year to Date"});
   const row=h("div",{class:"tilerow",style:"height:auto;flex:1"});
+  /* all three cards start their content at the top, so the labels sit on one
+     line across the slide instead of floating to each card's own centre */
+  const CARD="padding:26px 26px 24px;gap:12px;justify-content:flex-start";
 
-  row.appendChild(h("div",{class:"card",style:"padding:24px 26px;gap:11px;justify-content:center"},[
+  row.appendChild(h("div",{class:"card",style:CARD},[
     h("span",{class:"kl",text:"CASES SOLD"}),
-    h("span",{class:"kv up",style:"font-size:60px"},[
+    h("span",{class:"kv up",style:"font-size:60px",},[
       document.createTextNode("+9"),h("span",{class:"ku",text:"%"})]),
     h("span",{class:"kc",style:"font-size:14px",text:"Cukes +5% · Lettuce +25%"})]));
 
-  row.appendChild(h("div",{class:"card",style:"padding:24px 26px;gap:11px;justify-content:center"},[
-    h("span",{class:"kl",text:"EXPENSES · TRACKING TO BUDGET"}),
-    h("span",{class:"kv",style:"font-size:60px",text:"—"}),
-    h("span",{class:"kc",style:"font-size:14px",text:"[ actual vs budget ]"})]));
+  row.appendChild(h("div",{class:"card",style:CARD},[
+    h("span",{class:"kl",text:"EXPENSES"}),
+    h("span",{style:"font-size:38px;font-weight:700;letter-spacing:-.026em;"+
+      "line-height:1.1;color:var(--green-d)",text:"Tracking to Budget"})]));
 
   /* capital as the work itself, in three buckets */
-  const cap=h("div",{class:"card",style:"padding:24px 26px;gap:16px;justify-content:center"});
+  const cap=h("div",{class:"card",style:CARD+";gap:16px"});
   cap.appendChild(h("span",{class:"kl",text:"CAPITAL"}));
   [["DONE",C("--green"),["Reefer truck","SIP"]],
    ["COMMITTED",C("--c2"),["Lettuce boards","Drippers","Gutters for GH5/6","Fertigator"]],
@@ -1359,7 +1370,7 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
      "Greenwaste tractor"]]
   ].forEach(([head,acc,items],g)=>{
     const grp=h("div",{style:"display:flex;flex-direction:column;gap:6px"});
-    grp.appendChild(h("div",{style:`font-family:var(--mono);font-size:10px;font-weight:700;`+
+    grp.appendChild(h("div",{style:`font-family:var(--mono);font-size:13px;font-weight:700;`+
       `letter-spacing:.13em;color:${acc}`,text:head}));
     items.forEach((t,i)=>grp.appendChild(h("div",{class:"fi",
       style:`display:flex;gap:9px;align-items:baseline;--d:${(.2+g*.1+i*.05).toFixed(2)}s`},[
@@ -1374,18 +1385,21 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
 
 /* ----------------------------------------- 7 · Grow · longer cycles */
 {
-  const {body}=slide("Review · Longer cycles",{title:"Growing Longer Experiment",
-    right:[legend([["2025 cohort",C("--s25")],["2026 cohort",C("--s26")]])]});
-  const row=h("div",{class:"tilerow",style:"height:96px"});
+  const {body}=slide("Review · Longer cycles",{title:"Growing Longer Experiment"});
+  /* two tiles, each one line: the movement, then what it was measured
+     against, on the same baseline */
+  const row=h("div",{class:"tilerow",
+    style:"height:96px;grid-template-columns:repeat(2,minmax(0,1fr))"});
   [["POUNDS HARVESTED","+1.5","%","1.95M lb vs 1.92M"],
-   ["WEEKS GROWN","+1.4","wk","10.8 vs 9.4 — 15% more time"],
-   ["THE QUESTION","","","Did we need more time, or more labor?"]
-  ].forEach(([l,v,u,c])=>{
-    row.appendChild(h("div",{class:"card",style:"padding:14px 16px;gap:6px;justify-content:center"},[
+   ["WEEKS GROWN","+1.4","wks (15%)",""]
+  ].forEach(([l,v,u,tail])=>{
+    row.appendChild(h("div",{class:"card",
+      style:"padding:14px 18px;gap:7px;justify-content:center"},[
       h("span",{class:"kl",text:l}),
-      v?h("span",{class:"kv",style:"font-size:32px"},[
-        document.createTextNode(v),u?h("span",{class:"ku",text:u}):null]):null,
-      h("span",{class:"kc",text:c})]));
+      h("span",{class:"kv",style:"font-size:34px"},[
+        document.createTextNode(v),
+        h("span",{class:"ku",text:u}),
+        tail?h("span",{class:"ku",style:"margin-left:14px",text:tail}):null])]));
   });
   body.appendChild(row);
   chartCard(body,{title:"How long each cycle kept picking",flex:"1",fn:cyclesChart});
