@@ -53,7 +53,7 @@ Just like FS is no longer stressful - the point of 3.0 is to remove friction, al
 Read a few, don't read them all. The room will recognise their own week.
 Busy is the four-letter word.
 
-## 14 — Judgment call
+## 14 — Judgment calls
 Build the table one row at a time and let the room do the multiplication.
 The work moves upstream: battle-test the reasoning, define what good means. Every wet day makes the next one better.
 
