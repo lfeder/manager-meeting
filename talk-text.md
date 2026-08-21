@@ -152,11 +152,6 @@ SAY: Did we need more time, or more labor?
 TITLE: How to Optimize the awkward lettuce work week
 LEGEND: Cases per person · People scheduled
 
-TILES:
-- FRIDAY · 14.6 people · Our most-staffed cuke pack day — and second-fewest cases
-- TUESDAY · 476 cases · The fewest of any day, with the second-most people on
-- THE GAP · 35 vs 56 · Cases per person on Tue and Fri against Wed and Thu
-
 CHART: Cucumber cases per scheduled person, 1 Jan – 11 Aug 2026
 NOTE: Both are days the lettuce house is closed. How do we deploy those people — servicing with Pete, or over to JV?
 

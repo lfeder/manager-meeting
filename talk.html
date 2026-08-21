@@ -1478,18 +1478,6 @@ function dowChart(host){
   const {body}=slide("Review · Tuesday and Friday",
     {title:"How to Optimize the awkward lettuce work week",
      right:[legend([["Cases per person",C("--green")],["People scheduled",C("--vK")]])]});
-  const row=h("div",{class:"tilerow",style:"height:92px"});
-  [["FRIDAY","14.6","people","Our most-staffed cuke pack day — and second-fewest cases"],
-   ["TUESDAY","476","cases","The fewest of any day, with the second-most people on"],
-   ["THE GAP","35","vs 56","Cases per person on Tue and Fri against Wed and Thu"]
-  ].forEach(([l,v,u,c])=>{
-    row.appendChild(h("div",{class:"card",style:"padding:14px 16px;gap:5px;justify-content:center"},[
-      h("span",{class:"kl",text:l}),
-      h("span",{class:"kv",style:"font-size:30px"},[
-        document.createTextNode(v),h("span",{class:"ku",text:u})]),
-      h("span",{class:"kc",text:c})]));
-  });
-  body.appendChild(row);
   chartCard(body,{title:"Cucumber cases per scheduled person, 1 Jan – 11 Aug 2026",flex:"1",
     fn:dowChart});
   body.appendChild(h("div",{class:"card rail",
