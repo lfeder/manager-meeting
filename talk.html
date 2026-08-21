@@ -33,7 +33,8 @@ body{
 }
 button{font:inherit;color:inherit}
 
-#viewport{position:fixed;inset:0;display:grid;place-items:center;
+#viewport{position:fixed;top:0;left:0;right:0;bottom:var(--notesH,0px);
+  display:grid;place-items:center;transition:bottom .2s ease;
   background:radial-gradient(120% 90% at 50% 0%,#16221D 0%,#0B1512 70%)}
 #stage{
   width:1280px;height:720px;position:relative;flex:none;transform-origin:center center;
@@ -206,7 +207,7 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 /* an overlay, not part of the slide: it sits over the letterbox so the deck
    itself never reflows when the notes come on */
 #notes{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
-  max-height:38vh;overflow:auto;padding:16px 26px 22px;
+  height:auto;max-height:34vh;overflow:auto;padding:14px 26px 18px;
   background:rgba(11,21,18,.94);color:#DCE8E1;
   border-top:1px solid rgba(168,213,186,.25);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
@@ -1567,11 +1568,11 @@ function dowChart(host){
   const card=h("div",{class:"card",style:"flex:1;padding:20px 26px 18px;gap:14px"});
   const cols=h("div",{style:"flex:1;min-height:0;display:grid;"+
     "grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 34px"});
-  ["Manually managing the fertigators",
+  ["Typing in fert recipes for 7 ponds for 13 nutrients",
    "Manually coding expenses and receivables in QB",
    "Using text to tell people what to do for the day",
    "Writing down the weekly schedule on paper",
-   "Manually entering spray schedules",
+   "Manually managing the fertigators",
    "Non real-time food safety",
    "Building lettuce schedules being a pain",
    "Gmail is unsearchable",
@@ -1877,14 +1878,20 @@ function parseNotes(md){
 }
 function drawNotes(){
   notesEl.classList.toggle("on",notesOn);
-  if(!notesOn) return;
-  const lines=NOTES[cur+1]||[];
-  notesEl.replaceChildren(
-    h("div",{class:"nhead",text:`${cur+1} / ${SLIDES.length} · ${SLIDES[cur].title}`}),
-    ...(lines.length
-      ? lines.map(t=>h("div",{class:"nline",text:t}))
-      : [h("div",{class:"nline dim",text:"No notes for this slide yet — add a “## "+
-          (cur+1)+"” section to talk-notes.md"})]));
+  if(notesOn){
+    const lines=NOTES[cur+1]||[];
+    notesEl.replaceChildren(
+      h("div",{class:"nhead",text:`${cur+1} / ${SLIDES.length} · ${SLIDES[cur].title}`}),
+      ...(lines.length
+        ? lines.map(t=>h("div",{class:"nline",text:t}))
+        : [h("div",{class:"nline dim",text:"No notes for this slide yet — add a “## "+
+            (cur+1)+"” section to talk-notes.md"})]));
+  }
+  /* measure AFTER the content is in, so a two-line note costs two lines of
+     slide and not a third of the screen */
+  document.documentElement.style.setProperty("--notesH",
+    notesOn?notesEl.offsetHeight+"px":"0px");
+  if(typeof fit==="function") fit();
 }
 fetch("talk-notes.md",{cache:"no-store"})
   .then(r=>r.ok?r.text():Promise.reject(r.status))
@@ -1969,8 +1976,12 @@ addEventListener("keydown",e=>{
   else if(e.key==="Escape") toggleOv(false);
   else if(/^[1-9]$/.test(e.key)) go(+e.key-1);
 });
+/* the stage scales to the viewport box rather than the window, so turning the
+   notes on shrinks the slide instead of covering it */
+const viewport=document.getElementById("viewport");
 function fit(){
-  stage.style.transform=`scale(${Math.min(innerWidth/1280,innerHeight/720)})`;
+  const w=viewport.clientWidth||innerWidth, ht=viewport.clientHeight||innerHeight;
+  stage.style.transform=`scale(${Math.min(w/1280,ht/720)})`;
 }
 addEventListener("resize",fit); fit();
 stage.addEventListener("click",ev=>{ if(!ev.target.closest("button")) advance(); });
