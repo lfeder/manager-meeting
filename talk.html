@@ -1651,11 +1651,13 @@ function wetTree(host){
       root.appendChild(el("line",{x1:mid-ch,y1:y,x2:mid+ch,y2:y,
         stroke:C("--green-d"),"stroke-width":L===WETDAY.length-1?3:1.6,opacity:.85}));
     }
-    const t=el("text",{x:NX0,y:y-3,"text-anchor":"end",class:"ax","font-size":22,
-      fill:C("--ink")});
+    /* font-size goes in style, not as an attribute — .ax/.axb set it in CSS
+       and a presentation attribute loses to a class rule */
+    const t=el("text",{x:NX0,y:y-3,"text-anchor":"end",class:"ax",
+      style:"font-size:22px",fill:C("--ink")});
     t.textContent=name; root.appendChild(t);
-    const o=el("text",{x:NX0+14,y:y-3,"text-anchor":"start",class:"axb","font-size":22,
-      fill:C("--green")});
+    const o=el("text",{x:NX0+14,y:y-3,"text-anchor":"start",class:"axb",
+      style:"font-size:22px",fill:C("--green")});
     o.textContent="×"+opts; root.appendChild(o);
     const c=el("text",{x:CX,y:y-3,"text-anchor":"end","font-size":21,
       "font-family":"var(--mono)","font-weight":600,fill:C("--body"),
