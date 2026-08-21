@@ -129,14 +129,14 @@ SAY: Every one of those was done by this room. Nobody replaced, nobody hired ove
 ### SLIDE 07 — Financial update
 TITLE: Financial Update — Year to Date
 
-TILES:
-- CASES SOLD · +9% · 165,917 cases vs 152,214 — cucumbers +5%, lettuce +25%
-- EXPENSES · TRACKING TO BUDGET · [ actual vs budget — needs the number ]
+THREE VERTICAL CARDS:
 
-CAPITAL, three columns:
-- DONE THIS YEAR: Reefer truck · Lettuce PH SIP · Dryer spare parts · Drying carts · CRV
-- COMMITTED, STILL TO COME: Lettuce boards · Drippers, GH5 & 6 gutters · Cuke fertigators
-- ON THE HORIZON: Box erector · Japanese packing machine · Commercial AC / dehumidifier · Greenwaste tractor · Cluster housing septic
+1  CASES SOLD · +9% · Cukes +5% · Lettuce +25%
+2  EXPENSES · TRACKING TO BUDGET · [ actual vs budget — needs the number ]
+3  CAPITAL
+   DONE: Reefer · SIP
+   COMMITTED: Lettuce boards · Drippers · Gutters · Fertigator
+   PLANNED: Japanese packing machine · Commercial AC / dehumidifier · Greenwaste tractor
 
 ### SLIDE 08 — Longer cycles
 TITLE: Growing Longer Experiment
