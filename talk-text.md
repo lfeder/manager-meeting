@@ -51,7 +51,7 @@ LEFT, set as a newspaper page:
 
 RIGHT (on click) — the answer is set in the same face and size as the quote,
 and starts on the same line:
-- QUOTE: "People, no offense taken, really do love OUR cucumbers."
+- QUOTE: "People, no offense taken, do really love OUR cucumbers."
 - BULLET: The #1 product in the largest warehouses of the largest grocer in the US
 - BULLET: Over 1% of all America's cucumbers grown
 
