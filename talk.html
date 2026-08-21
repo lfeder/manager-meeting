@@ -1411,24 +1411,23 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
 }
 
 /* -------------------------------- 8 · Pack · Tuesday and Friday */
-/* Cases from pack_session_cases, bodies from ops_task_schedule (Cuke PH and
-   Lettuce PH), 1 Jan - 11 Aug 2026. Friday is the most-staffed cucumber pack
-   day and the second-lowest for cases; Tuesday is the lowest for cases with
-   the second-most people. Both are days the lettuce house is dark.
-   [day, cuke cases, cuke PH people, lettuce PH people] */
-const DOWPACK=[["Mon",540,11.7,8.3],["Tue",476,12.9,1.2],["Wed",700,12.2,8.8],
-               ["Thu",639,11.4,8.0],["Fri",502,14.6,1.1],["Sat",592,10.6,1.0],
-               ["Sun",610,12.1,8.4]];
-const perPerson=r=>r[1]/r[2];
+/* Cases from pack_session_cases; crews from ops_task_schedule, split by who
+   normally works where — "lettuce crew" is anyone with five or more Lettuce
+   PH shifts this year. 1 Jan - 11 Aug 2026.
+   [day, cuke cases, cuke crew in Cuke PH, lettuce crew in Cuke PH] */
+const DOWPACK=[["Mon",540,9.4,2.3],["Tue",476,7.3,5.6],["Wed",700,9.2,3.0],
+               ["Thu",639,8.1,3.3],["Fri",502,8.0,6.6],["Sat",592,5.5,5.1],
+               ["Sun",610,9.3,2.8]];
+const dTot=r=>r[2]+r[3], perPerson=r=>r[1]/dTot(r);
 function dowChart(host){
   const f=frame(host,{l:48,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
-  const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(52,step*0.46);
+  const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(56,step*0.5);
   const yMax=64, y=v=>Y1-(v/yMax)*(Y1-Y0);
   const pMax=16, yP=v=>Y1-(v/pMax)*(Y1-Y0);
   yAxis(svg,f,[0,16,32,48,64],y,v=>String(v));
   [0,4,8,12,16].forEach(v=>{
     const t=el("text",{x:X1+9,y:yP(v)+3.6,"text-anchor":"start",class:"ax",
-      "font-size":10.5,fill:C("--vK")});
+      "font-size":12.5,fill:C("--muted")});
     t.textContent=String(v); svg.appendChild(t);
   });
   DOWPACK.forEach((r,i)=>{
@@ -1437,47 +1436,53 @@ function dowChart(host){
       fill:C("--amber"),opacity:.1,rx:4}));
     const v=perPerson(r);
     svg.appendChild(el("rect",{x:cx-bw/2,y:y(v),width:bw,height:Y1-y(v),
-      fill:light?C("--amber"):C("--green"),rx:2.5,class:"gy",
-      style:`--d:${i*50}ms;--oy:${Y1}px`}));
-    const lab=el("text",{x:cx,y:y(v)-9,"text-anchor":"middle",class:"vlab fi",
-      "font-size":12,fill:light?C("--amber"):C("--ink"),style:`--d:${(.5+i*.05).toFixed(2)}s`});
+      fill:light?C("--amber"):C("--grn-lt"),opacity:light?.5:.55,rx:2.5,
+      class:"gy",style:`--d:${i*50}ms;--oy:${Y1}px`}));
+    const lab=el("text",{x:cx,y:y(v)+22,"text-anchor":"middle",class:"vlab fi",
+      "font-size":15,fill:light?C("--amber"):C("--green-d"),
+      style:`--d:${(.5+i*.05).toFixed(2)}s`});
     lab.textContent=v.toFixed(0); svg.appendChild(lab);
-    const t=el("text",{x:cx,y:Y1+18,"text-anchor":"middle",class:"axb","font-size":12.5,
+    const t=el("text",{x:cx,y:Y1+18,"text-anchor":"middle",class:"axb","font-size":13.5,
       fill:light?C("--amber"):C("--ink")});
     t.textContent=r[0]; svg.appendChild(t);
   });
-  /* people scheduled, on its own scale, so the gap between bodies and output
-     is the thing you see */
-  let d="";
-  DOWPACK.forEach((r,i)=>{
-    const cx=X0+step*(i+.5);
-    d+=(i?"L":"M")+cx.toFixed(1)+","+yP(r[2]).toFixed(1);
-  });
-  drawPath(svg,d,C("--vK"),2.4,.35);
-  DOWPACK.forEach((r,i)=>{
-    const cx=X0+step*(i+.5);
-    svg.appendChild(el("circle",{cx,cy:yP(r[2]),r:3.4,fill:C("--vK"),
-      class:"fi",style:`--d:${(.7+i*.05).toFixed(2)}s`}));
-  });
+  /* who is actually in the cuke packhouse: its own crew, the lettuce crew
+     backfilling, and the two added together */
+  [[r=>dTot(r),C("--ink"),3.2],[r=>r[2],C("--green"),2.6],[r=>r[3],C("--vK"),2.6]]
+    .forEach(([fn,col,w],k)=>{
+      let d="";
+      DOWPACK.forEach((r,i)=>{
+        const cx=X0+step*(i+.5);
+        d+=(i?"L":"M")+cx.toFixed(1)+","+yP(fn(r)).toFixed(1);
+      });
+      drawPath(svg,d,col,w,.3+k*.08);
+      DOWPACK.forEach((r,i)=>{
+        const cx=X0+step*(i+.5);
+        svg.appendChild(el("circle",{cx,cy:yP(fn(r)),r:3.6,fill:col,
+          class:"fi",style:`--d:${(.7+i*.04).toFixed(2)}s`}));
+      });
+    });
   DOWPACK.forEach((r,i)=>{
     const hit=el("rect",{x:X0+step*i,y:Y0,width:step,height:Y1-Y0,class:"hit"});
     hoverable(hit,r[0],()=>[
-      {c:C("--green"),k:"Cases per person",v:perPerson(r).toFixed(1)},
+      {c:C("--green-d"),k:"Cases per person",v:perPerson(r).toFixed(1)},
       {c:C("--muted"),k:"Cucumber cases",v:nf(r[1])},
-      {c:C("--vK"),k:"Cuke PH scheduled",v:r[2].toFixed(1)+" people"},
-      {c:C("--muted"),k:"Lettuce PH scheduled",v:r[3]<3?"closed":r[3].toFixed(1)+" people"}]);
+      {c:C("--ink"),k:"Total in Cuke PH",v:dTot(r).toFixed(1)},
+      {c:C("--green"),k:"Cuke crew",v:r[2].toFixed(1)},
+      {c:C("--vK"),k:"Lettuce crew",v:r[3].toFixed(1)}]);
     svg.appendChild(hit);
   });
-  return {table:dataTable(["Day","Cases","Cuke PH people","Cases per person","Lettuce PH people"],
-    DOWPACK.map(r=>[r[0],nf(r[1]),r[2].toFixed(1),perPerson(r).toFixed(1),
-      r[3]<3?"closed":r[3].toFixed(1)]))};
+  return {table:dataTable(["Day","Cases","Cuke crew","Lettuce crew","Total","Cases per person"],
+    DOWPACK.map(r=>[r[0],nf(r[1]),r[2].toFixed(1),r[3].toFixed(1),dTot(r).toFixed(1),
+      perPerson(r).toFixed(1)]))};
 }
 {
   const {body}=slide("Review · Tuesday and Friday",
     {title:"How to Optimize the awkward lettuce work week",
-     right:[legend([["Cases per person",C("--green")],["People scheduled",C("--vK")]])]});
-  chartCard(body,{title:"Cucumber cases per scheduled person, 1 Jan – 11 Aug 2026",flex:"1",
-    fn:dowChart});
+     right:[legend([["Total in cuke PH",C("--ink")],["Cuke crew",C("--green")],
+                    ["Lettuce crew",C("--vK")]])]});
+  chartCard(body,{title:"Who is in the cucumber packhouse, and cases per person · 1 Jan – 11 Aug 2026",
+    flex:"1",fn:dowChart});
 }
 
 /* ------------------------------- 9 · Pack · the productivity question */

@@ -148,12 +148,32 @@ columns, no legend
 
 SAY: Did we need more time, or more labor?
 
-### SLIDE 09 — Tuesday and Friday
+### SLIDE 09 — The awkward lettuce work week
 TITLE: How to Optimize the awkward lettuce work week
-LEGEND: Cases per person · People scheduled
+LEGEND: Total in cuke PH · Cuke crew · Lettuce crew
 
-CHART: Cucumber cases per scheduled person, 1 Jan – 11 Aug 2026
-SAY: Both are days the lettuce house is closed. How do we deploy those people — servicing with Pete, or over to JV?
+CHART: Who is in the cucumber packhouse, and cases per person · 1 Jan – 11 Aug 2026
+Bars are cases per scheduled person; three lines are the crews. Tuesday and
+Friday shaded — the days the lettuce house is dark.
+
+| Day | Cases | Cuke crew | Lettuce crew | Total | Cases per person |
+|---|---|---|---|---|---|
+| Mon | 540 | 9.4 | 2.3 | 11.7 | 46 |
+| Tue | 476 | 7.3 | 5.6 | 12.9 | 37 |
+| Wed | 700 | 9.2 | 3.0 | 12.2 | 57 |
+| Thu | 639 | 8.1 | 3.3 | 11.4 | 56 |
+| Fri | 502 | 8.0 | 6.6 | 14.6 | 34 |
+| Sat | 592 | 5.5 | 5.1 | 10.6 | 56 |
+| Sun | 610 | 9.3 | 2.8 | 12.1 | 50 |
+
+SAY: On Tuesday and Friday the lettuce house is dark, and about two-thirds of that
+crew comes across to the cucumber packhouse.
+SAY: The cuke crew dips those days because Tuesday is their day off — only 8 of 20
+are rostered anywhere. The lettuce crew is backfilling a rest day, not being
+added on top.
+SAY: But Friday we end up with 14.6 people and 34 cases each, against 57 on
+Wednesday. Saturday runs the same borrowed share at 56 cases each — so it is the
+headcount, not the transfer.
 
 ### SLIDE 10 — Pack productivity
 TITLE: Pack productivity
