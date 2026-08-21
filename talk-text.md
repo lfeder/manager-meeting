@@ -92,14 +92,14 @@ TWO NAMED METHODS, side by side with an arrow between them:
 
 LEFT
 - BIG TITLE: Petri Film
+- TURNAROUND: 48 hours turnaround
 - ART: a petri dish of colonies
-- CAPTION: 48 hours turnaround
 
 RIGHT
 - BIG TITLE: PCR
-- SUBTITLE: First farm globally Costco approved to use PCR
+- TURNAROUND: 4 hour turnaround
+- NOTE: First farm globally Costco approved to use PCR
 - ART: a DNA double helix
-- CAPTION: 4 hour turnaround
 
 SAY: 6 x 100%, two years. Are we nervous about audits anymore?
 
@@ -114,7 +114,7 @@ Vietnam · Zambia
 
 RIGHT:
 - US flag
-- LINE: A path to citizenship — for them and their families
+- LINE: A path to citizenship
 SAY: We find people from around the world, pick the best, and bring them here. A mini United Nations.
 
 ### SLIDE 06 — The common denominator
@@ -126,20 +126,24 @@ SAY: Every one of those was done by this room. Nobody replaced, nobody hired ove
 
 ## ACT 2 · QUICK REVIEW — 3:00
 
-### SLIDE 07 — The half
-TITLE: The half
+### SLIDE 07 — Financial update
+TITLE: Financial Update — Year to Date
 
 TILES:
-- CASES · [ number ] · [ caption ]
-- EXPENSES · [ number ] · [ caption ]
-- CAPITAL · $478K · Funded and committed across 8 projects · $818K more under review
+- CASES SOLD · +9% · 165,917 cases vs 152,214 — cucumbers +5%, lettuce +25%
+- EXPENSES · TRACKING TO BUDGET · [ actual vs budget — needs the number ]
+
+CAPITAL, three columns:
+- DONE THIS YEAR: Reefer truck · Lettuce PH SIP · Dryer spare parts · Drying carts · CRV
+- COMMITTED, STILL TO COME: Lettuce boards · Drippers, GH5 & 6 gutters · Cuke fertigators
+- ON THE HORIZON: Box erector · Japanese packing machine · Commercial AC / dehumidifier · Greenwaste tractor · Cluster housing septic
 
 ### SLIDE 08 — Longer cycles
-TITLE: We grew them longer
+TITLE: Growing Longer Experiment
 LEGEND: 2025 cohort · 2026 cohort
 
 TILES:
-- POUNDS HARVESTED · +1.5% · 1,950,566 lb vs 1,922,039
+- POUNDS HARVESTED · +1.5% · 1.95M lb vs 1.92M
 - WEEKS GROWN · +1.4 wk · 10.8 vs 9.4 — 15% more time
 - THE QUESTION · Did we need more time, or more labor?
 
