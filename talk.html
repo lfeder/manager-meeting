@@ -1397,11 +1397,11 @@ const DOWPACK=[["Mon",540,9.4,2.3],["Tue",476,7.3,5.6],["Wed",700,9.2,3.0],
                ["Sun",610,9.3,2.8]];
 const dTot=r=>r[2]+r[3], perPerson=r=>r[1]/dTot(r);
 function dowChart(host){
-  const f=frame(host,{l:48,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
+  const f=frame(host,{l:16,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
   const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(56,step*0.5);
   const yMax=760, y=v=>Y1-(v/yMax)*(Y1-Y0);
   const pMax=16, yP=v=>Y1-(v/pMax)*(Y1-Y0);
-  yAxis(svg,f,[0,200,400,600],y,v=>String(v));
+  /* no left axis: every bar carries its own number */
   [0,4,8,12,16].forEach(v=>{
     const t=el("text",{x:X1+9,y:yP(v)+3.6,"text-anchor":"start",class:"ax",
       "font-size":12.5,fill:C("--muted")});
