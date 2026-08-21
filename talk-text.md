@@ -107,7 +107,7 @@ Vietnam · Zambia
 RIGHT:
 - US flag
 - LINE: A path to citizenship — for them and their families
-- NOTE: We find people from around the world, pick the best, and bring them here. A mini United Nations.
+SAY: We find people from around the world, pick the best, and bring them here. A mini United Nations.
 
 ### SLIDE 06 — The common denominator
 TITLE (the whole slide): What is the single common denominator?
