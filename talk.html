@@ -1446,42 +1446,34 @@ function dowChart(host){
       fill:light?C("--amber"):C("--ink")});
     t.textContent=r[0]; svg.appendChild(t);
   });
-  /* who is actually in the cuke packhouse: its own crew, the lettuce crew
-     backfilling, and the two added together */
-  [[r=>dTot(r),C("--ink"),3.2],[r=>r[2],C("--green"),2.6],[r=>r[3],C("--vK"),2.6]]
-    .forEach(([fn,col,w],k)=>{
-      let d="";
-      DOWPACK.forEach((r,i)=>{
-        const cx=X0+step*(i+.5);
-        d+=(i?"L":"M")+cx.toFixed(1)+","+yP(fn(r)).toFixed(1);
-      });
-      drawPath(svg,d,col,w,.3+k*.08);
-      DOWPACK.forEach((r,i)=>{
-        const cx=X0+step*(i+.5);
-        svg.appendChild(el("circle",{cx,cy:yP(fn(r)),r:3.6,fill:col,
-          class:"fi",style:`--d:${(.7+i*.04).toFixed(2)}s`}));
-      });
-    });
+  /* total people scheduled into the cuke packhouse, on its own scale */
+  let d="";
+  DOWPACK.forEach((r,i)=>{
+    const cx=X0+step*(i+.5);
+    d+=(i?"L":"M")+cx.toFixed(1)+","+yP(dTot(r)).toFixed(1);
+  });
+  drawPath(svg,d,C("--vK"),2.8,.35);
+  DOWPACK.forEach((r,i)=>{
+    const cx=X0+step*(i+.5);
+    svg.appendChild(el("circle",{cx,cy:yP(dTot(r)),r:3.8,fill:C("--vK"),
+      class:"fi",style:`--d:${(.7+i*.04).toFixed(2)}s`}));
+  });
   DOWPACK.forEach((r,i)=>{
     const hit=el("rect",{x:X0+step*i,y:Y0,width:step,height:Y1-Y0,class:"hit"});
     hoverable(hit,r[0],()=>[
       {c:C("--green-d"),k:"Cases per person",v:perPerson(r).toFixed(1)},
       {c:C("--muted"),k:"Cucumber cases",v:nf(r[1])},
-      {c:C("--ink"),k:"Total in Cuke PH",v:dTot(r).toFixed(1)},
-      {c:C("--green"),k:"Cuke crew",v:r[2].toFixed(1)},
-      {c:C("--vK"),k:"Lettuce crew",v:r[3].toFixed(1)}]);
+      {c:C("--vK"),k:"People scheduled",v:dTot(r).toFixed(1)}]);
     svg.appendChild(hit);
   });
-  return {table:dataTable(["Day","Cases","Cuke crew","Lettuce crew","Total","Cases per person"],
-    DOWPACK.map(r=>[r[0],nf(r[1]),r[2].toFixed(1),r[3].toFixed(1),dTot(r).toFixed(1),
-      perPerson(r).toFixed(1)]))};
+  return {table:dataTable(["Day","Cases","People scheduled","Cases per person"],
+    DOWPACK.map(r=>[r[0],nf(r[1]),dTot(r).toFixed(1),perPerson(r).toFixed(1)]))};
 }
 {
   const {body}=slide("Review · Tuesday and Friday",
-    {title:"How to Optimize the awkward lettuce work week",
-     right:[legend([["Total in cuke PH",C("--ink")],["Cuke crew",C("--green")],
-                    ["Lettuce crew",C("--vK")]])]});
-  chartCard(body,{title:"Who is in the cucumber packhouse, and cases per person · 1 Jan – 11 Aug 2026",
+    {title:"How to optimize the awkward lettuce work week",
+     right:[legend([["Cases per person",C("--green")],["People scheduled",C("--vK")]])]});
+  chartCard(body,{title:"Cucumber cases per scheduled person · 1 Jan – 11 Aug 2026",
     flex:"1",fn:dowChart});
 }
 
