@@ -65,12 +65,13 @@ h1.h1{margin:0;font-size:33px;font-weight:700;letter-spacing:-.026em;color:var(-
   min-height:0;min-width:0;overflow:hidden}
 .chead{flex:none;display:flex;align-items:center;justify-content:space-between;
   gap:16px;padding:13px 16px 0}
-.ctitle{font-size:12.5px;font-weight:700;color:var(--ink);letter-spacing:-.004em}
-.ceyebrow{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ctitle{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.008em}
+.ceyebrow{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--body)}
 .plot{flex:1;min-height:0;position:relative;margin:6px 12px 8px}
 .plot svg{display:block}
 
-.legend{display:flex;align-items:center;gap:18px;font-size:11.5px;color:var(--body);white-space:nowrap}
+.legend{display:flex;align-items:center;gap:20px;font-size:14px;font-weight:500;
+  color:var(--body);white-space:nowrap}
 .legend>span{display:inline-flex;align-items:center;gap:7px}
 .legend i{width:16px;height:3px;border-radius:2px;flex:none}
 .legend .dots{display:inline-flex;align-items:center;gap:3px}
@@ -109,13 +110,15 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 .kpi[aria-expanded="true"]{border-left-color:var(--ink)}
 .kpi[aria-expanded="false"]{background:var(--wash);box-shadow:none;opacity:.78}
 .kpi:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-.kl{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--muted)}
+/* every label on a slide has to survive a projector at the back of a room,
+   so the small-caps labels are set at presentation size, not report size */
+.kl{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--body)}
 .kv{font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1;color:var(--ink);
   font-variant-numeric:tabular-nums}
 .kv.up{color:var(--green-d)} .kv.down{color:var(--red)}
-.ku{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:6px;letter-spacing:-.01em}
-.kc{font-size:11.5px;color:var(--body);line-height:1.4}
+.ku{font-size:17px;font-weight:600;color:var(--muted);margin-left:7px;letter-spacing:-.01em}
+.kc{font-size:14.5px;color:var(--body);line-height:1.45}
 
 /* ─────────────────────────────────────────────── grids */
 .g2x2{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;
@@ -173,8 +176,8 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 /* ─────────────────────────────────────────────── chart chrome */
 /* axis labels sit on --body, not --muted: --muted is a 2.9:1 grey that
    disappears on a projector, and these are the numbers people read */
-.ax{font-family:var(--font);font-size:10.5px;font-variant-numeric:tabular-nums;fill:var(--body)}
-.axb{font-family:var(--font);font-size:11px;font-weight:700;fill:var(--ink)}
+.ax{font-family:var(--font);font-size:12.5px;font-variant-numeric:tabular-nums;fill:var(--body)}
+.axb{font-family:var(--font);font-size:13.5px;font-weight:700;fill:var(--ink)}
 .grid line{stroke:var(--hair);stroke-width:1;shape-rendering:crispEdges}
 .zero{stroke:var(--faint);stroke-width:1.2;shape-rendering:crispEdges}
 .hit{fill:transparent;cursor:crosshair}
@@ -1286,8 +1289,7 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
      back of the room — four across rather than five, and the names sized to
      match */
   const left=h("div",{class:"card",style:"flex:2.15;padding:16px 18px;gap:11px"});
-  left.appendChild(h("div",{class:"ceyebrow",style:"font-size:11px",
-    text:"WHERE OUR PEOPLE COME FROM"}));
+  left.appendChild(h("div",{class:"ceyebrow",text:"WHERE OUR PEOPLE COME FROM"}));
   const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
     "grid-template-columns:repeat(4,minmax(0,1fr));"+
     "grid-template-rows:repeat(4,minmax(0,1fr));gap:10px"});
@@ -1358,7 +1360,7 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
   ].forEach(([head,acc,items],g)=>{
     const grp=h("div",{style:"display:flex;flex-direction:column;gap:6px"});
     grp.appendChild(h("div",{style:`font-family:var(--mono);font-size:10px;font-weight:700;`+
-      `letter-spacing:.14em;color:${acc}`,text:head}));
+      `letter-spacing:.13em;color:${acc}`,text:head}));
     items.forEach((t,i)=>grp.appendChild(h("div",{class:"fi",
       style:`display:flex;gap:9px;align-items:baseline;--d:${(.2+g*.1+i*.05).toFixed(2)}s`},[
       h("span",{style:`width:5px;height:5px;border-radius:50%;background:${acc};flex:none`}),
