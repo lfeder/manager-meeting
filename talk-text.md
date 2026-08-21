@@ -50,7 +50,7 @@ LEFT — set as a newspaper page:
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
 
 RIGHT (on click):
-- HEADING: People really do love OUR cucumbers
+- HEADING: People do really love OUR cucumbers
 - BULLET: The #1 product in the largest warehouses of the largest grocer in the US
 - BULLET: Resulting in over 1% of every fresh cucumber grown in America
 
