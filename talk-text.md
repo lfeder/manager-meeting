@@ -40,7 +40,7 @@ SAY: The purpose of this talk is a quick recap of how things are going, and shar
 SAY: I want to start by taking stock of what we've achieved. When you step back from the fray, it's kind of crazy. We've said this before — we've done the impossible, and we've done it more than once. Let me recap.
 
 ### SLIDE 02 — The WSJ page, then our cucumbers  *(click reveals the right half)*
-TITLE: Cukes
+TITLE: People really do love OUR cucumbers
 
 LEFT — set as a newspaper page:
 - MASTHEAD: THE WALL STREET JOURNAL   (typographic — send the logo file if you want the real mark)
@@ -50,10 +50,8 @@ LEFT — set as a newspaper page:
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
 
 RIGHT (on click):
-- LINE: The #1 product in the largest warehouses of the largest grocer in the US
-- LABEL: RESULTING IN OVER
-- BIG NUMBER: 1%
-- CAPTION: of every fresh cucumber grown in America
+- BULLET: The #1 product in the largest warehouses of the largest grocer in the US
+- BULLET: Resulting in over 1% of every fresh cucumber grown in America
 
 ### SLIDE 03 — Who we compete against  *(click reveals the right half)*
 TITLE: Who we compete against
@@ -218,17 +216,19 @@ TITLE: What it takes
 ### SLIDE 15 — A wet harvest day
 TITLE: A wet harvest day
 
-LEFT — eyebrow: SEVEN DECISIONS BEFORE THE CREW STARTS
+LEFT — an expanding decision tree, eyebrow: SEVEN DECISIONS BEFORE THE CREW STARTS
+Each row names the decision, its multiplier, and the running total. Four
+countable branches at the top; by the seventh decision it is a solid wall.
 
-| Decision | Options |
-|---|---|
-| When to start harvest | 4 |
-| All or some rows of wet lettuce | 5 |
-| Cut height | 3 |
-| Packhouse fans on or off | 2 |
-| Dryer heater off, or at what temperature | 4 |
-| Dryer fan speed | 3 |
-| Cold room hold before packing | 2 |
+| Decision | Options | Running total |
+|---|---|---|
+| When to start harvest | ×4 | 4 |
+| All or some rows of wet lettuce | ×5 | 20 |
+| Cut height | ×3 | 60 |
+| Packhouse fans on or off | ×2 | 120 |
+| Dryer heater off, or at what temperature | ×4 | 480 |
+| Dryer fan speed | ×3 | 1,440 |
+| Cold room hold before packing | ×2 | 2,880 |
 
 RIGHT:
 - BIG NUMBER: 2,880 · ways to run the day

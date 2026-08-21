@@ -1100,7 +1100,7 @@ function splitSlide(navName,title,leftBuild,rightBuild){
 }
 
 /* ------------------------------------------- 1 · The quote / cucumbers */
-splitSlide("Impossible · Cukes","Cukes",
+splitSlide("Impossible · Cukes","People really do love OUR cucumbers",
   L=>{
     /* set as a newspaper page: masthead, rule, headline, then the line that
        does the damage. The masthead is typographic — swap in the real logo
@@ -1129,19 +1129,20 @@ splitSlide("Impossible · Cukes","Cukes",
     L.appendChild(card);
   },
   R=>{
-    /* the placement comes first and the share is what it produces, so the
-       panel reads as one sentence rather than two facts */
-    R.appendChild(h("div",{class:"card rail",
-      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 30px;gap:26px"},[
-      h("span",{style:"font-size:23px;font-weight:700;line-height:1.32;color:var(--ink);"+
-        "letter-spacing:-.016em",
-        text:"The #1 product in the largest warehouses of the largest grocer in the US"}),
-      h("div",{style:"height:1px;background:var(--line)"}),
-      h("div",{style:"display:flex;flex-direction:column;gap:5px"},[
-        h("span",{class:"kl",text:"RESULTING IN OVER"}),
-        h("span",{class:"kv",style:"font-size:74px;color:var(--green-d)",text:"1%"}),
-        h("span",{style:"font-size:17px;line-height:1.45;color:var(--body)",
-          text:"of every fresh cucumber grown in America"})])]));
+    /* the rebuttal, as two plain facts under the title */
+    const card=h("div",{class:"card rail",
+      style:"--acc:var(--green);flex:1;justify-content:center;padding:34px 32px;gap:24px"});
+    [["The #1 product in the largest warehouses of the largest grocer in the US"],
+     ["Resulting in over 1% of every fresh cucumber grown in America"]
+    ].forEach(([t],i)=>{
+      card.appendChild(h("div",{class:"fi",
+        style:`display:flex;gap:15px;align-items:flex-start;--d:${(.2+i*.14).toFixed(2)}s`},[
+        h("span",{style:"width:10px;height:10px;border-radius:50%;flex:none;margin-top:9px;"+
+          "background:var(--green)"}),
+        h("span",{style:"font-size:25px;font-weight:700;line-height:1.34;color:var(--ink);"+
+          "letter-spacing:-.018em",text:t})]));
+    });
+    R.appendChild(card);
   });
 
 /* ------------------------------------------ 2 · Who we compete against */
@@ -1647,28 +1648,76 @@ const WETDAY=[["When to start harvest",4],["All or some rows of wet lettuce",5],
   ["Cut height",3],["Packhouse fans on or off",2],
   ["Dryer heater off, or at what temperature",4],["Dryer fan speed",3],
   ["Cold room hold before packing",2]];
+/* the tree earns the number: four branches you can count, and seven decisions
+   later a solid wall. Rows past 120 leaves are drawn as a filled wedge rather
+   than as individual strokes — at that density the strokes ARE a wedge, and
+   five thousand of them would cost a second of load for the same picture */
+function wetTree(host){
+  const W=760,H=470;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",height:"100%",
+    preserveAspectRatio:"xMidYMid meet",style:"display:block"});
+  host.appendChild(svg);
+  const NX0=250, TX0=272, TX1=676, CX=W-6;
+  const rowY=i=>44+i*((H-70)/WETDAY.length);
+  const cum=[]; WETDAY.reduce((a,[,n],i)=>(cum[i]=a*n),1);
+  const spread=n=>Math.min(1,.25+.75*Math.log(n)/Math.log(120));
+  const xAt=(i,n)=>{
+    const sp=spread(n), mid=(TX0+TX1)/2, halfW=(TX1-TX0)*sp/2;
+    return mid-halfW+((i+.5)/n)*halfW*2;
+  };
+
+  svg.appendChild(el("circle",{cx:(TX0+TX1)/2,cy:22,r:4.5,fill:C("--ink")}));
+
+  WETDAY.forEach(([name,opts],L)=>{
+    const n=cum[L], y=rowY(L), py=L?rowY(L-1):22, pn=L?cum[L-1]:1;
+    if(n<=120){
+      for(let i=0;i<n;i++){
+        const p=Math.floor(i/opts);
+        svg.appendChild(el("line",{x1:xAt(p,pn),y1:py,x2:xAt(i,n),y2:y,
+          stroke:C("--green"),"stroke-width":n<=20?1.6:1.1,
+          opacity:n<=20?.65:.4}));
+      }
+      for(let i=0;i<n;i++)
+        svg.appendChild(el("circle",{cx:xAt(i,n),cy:y,r:n<=20?3.2:2,
+          fill:C("--green-d"),opacity:n<=20?1:.7}));
+    } else {
+      /* a wedge from the parent row's span to this row's span */
+      const ph=(TX1-TX0)*spread(pn)/2, ch=(TX1-TX0)*spread(n)/2, mid=(TX0+TX1)/2;
+      svg.appendChild(el("path",{
+        d:`M${mid-ph},${py} L${mid+ph},${py} L${mid+ch},${y} L${mid-ch},${y} Z`,
+        fill:C("--green"),opacity:L===WETDAY.length-1?.30:.18}));
+      svg.appendChild(el("line",{x1:mid-ch,y1:y,x2:mid+ch,y2:y,
+        stroke:C("--green-d"),"stroke-width":L===WETDAY.length-1?3:1.6,
+        opacity:.85}));
+    }
+    const t=el("text",{x:NX0,y:y+5,"text-anchor":"end",class:"ax","font-size":14,
+      fill:C("--ink")});
+    t.textContent=name; svg.appendChild(t);
+    const o=el("text",{x:NX0+13,y:y+5,"text-anchor":"start",class:"axb","font-size":14,
+      fill:C("--green")});
+    o.textContent="×"+opts; svg.appendChild(o);
+    const c=el("text",{x:CX,y:y+5,"text-anchor":"end","font-size":14,
+      "font-family":"var(--mono)","font-weight":600,fill:C("--body"),
+      style:"font-variant-numeric:tabular-nums"});
+    c.textContent=nf(n); svg.appendChild(c);
+  });
+  return {table:dataTable(["Decision","Options","Ways to run the day so far"],
+    WETDAY.map(([name,opts],i)=>[name,String(opts),nf(cum[i])]))};
+}
 {
   const {body}=slide("v3 · A wet harvest day",{title:"A wet harvest day"});
   const cols=h("div",{class:"cols"});
-  const left=h("div",{class:"card",style:"flex:1.35;padding:16px 20px 18px;gap:0"});
-  left.appendChild(h("div",{class:"ceyebrow",style:"margin-bottom:10px",
-    text:"SEVEN DECISIONS BEFORE THE CREW STARTS"}));
-  const list=h("div",{style:"flex:1;min-height:0;display:flex;flex-direction:column"});
-  WETDAY.forEach(([t,n],i)=>{
-    list.appendChild(h("div",{class:"fi",
-      style:`flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;`+
-        `gap:14px;border-bottom:1px solid var(--hair);--d:${(.2+i*.13).toFixed(2)}s`},[
-      h("span",{style:"font-size:14.5px;color:var(--ink)",text:t}),
-      h("span",{style:"font-family:var(--mono);font-size:17px;font-weight:700;"+
-        "color:var(--green-d);font-variant-numeric:tabular-nums",text:String(n)})]));
-  });
-  left.appendChild(list);
+  const left=h("div",{class:"card",style:"flex:1.5;padding:16px 20px 14px;gap:10px"});
+  left.appendChild(h("div",{class:"ceyebrow",text:"SEVEN DECISIONS BEFORE THE CREW STARTS"}));
+  const plot=h("div",{style:"flex:1;min-height:0"});
+  left.appendChild(plot);
+  wetTree(plot);
   const right=h("div",{style:"flex:1;min-width:0;display:flex;flex-direction:column;gap:12px"});
   right.appendChild(h("div",{class:"card fi",
     style:"--d:1.25s;flex:1;align-items:center;justify-content:center;gap:8px;text-align:center"},[
     h("span",{style:"font-size:82px;font-weight:700;letter-spacing:-.045em;line-height:1;"+
       "color:var(--ink);font-variant-numeric:tabular-nums",text:"2,880"}),
-    h("span",{style:"font-size:17px;color:var(--body)",text:"ways to run the day"})]));
+    h("span",{style:"font-size:19px;color:var(--body)",text:"ways to run the day"})]));
   right.appendChild(h("div",{class:"card rail fi",
     style:"--acc:var(--neg);--d:1.45s;flex:none;padding:18px 20px;gap:6px"},[
     h("div",{class:"rt",style:"font-size:18px",text:"JUDGMENT"}),
