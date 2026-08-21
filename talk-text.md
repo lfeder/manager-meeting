@@ -282,7 +282,7 @@ FOOTER: Like being back in school — we are learning something new every day
 ### SLIDE 17 — Section break
 EYEBROW: EXPANSION II
 TITLE: GREENHOUSES
-SUBTITLE: The farm gets bigger
+SUBTITLE: We feed more of Hawaii
 
 ### SLIDE 18 — Why we must
 TITLE (the whole slide): This isn't an opportunity. It's an obligation.
