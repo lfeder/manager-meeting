@@ -50,10 +50,10 @@ LEFT — set as a newspaper page:
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
 
 RIGHT (on click):
-- BIG NUMBER: 1%+
+- LINE: The #1 product in the largest warehouses of the largest grocer in the US
+- LABEL: RESULTING IN OVER
+- BIG NUMBER: 1%
 - CAPTION: of every fresh cucumber grown in America
-- LABEL: AND
-- LINE: the #1 product in the largest warehouses of the largest grocer in the US
 
 ### SLIDE 03 — Who we compete against  *(click reveals the right half)*
 TITLE: Who we compete against
@@ -62,8 +62,8 @@ LEFT — columns are COMPANY · BACKER · RAISED:
 
 | Company | Backer | Raised |
 |---|---|---|
-| Plenty | Bezos | $1B |
-| Bowery Farming | Fidelity | $700M |
+| Plenty | Jeff Bezos | $1B |
+| Bowery Farming | Henry Kravis | $700M |
 | 80 Acres Farms | Private equity | $350M |
 | Local Bounti | Cargill | $310M |
 | AeroFarms | IKEA | $300M |
@@ -99,8 +99,10 @@ SAY: 6 x 100%, two years. Are we nervous about audits anymore?
 TITLE: We grow people too
 
 LEFT — eyebrow: WHERE OUR PEOPLE COME FROM
-Flags: Brazil · Mexico · El Salvador · Kenya · United Kingdom · Vietnam · Senegal · Congo · Australia · Thailand
-[ five empty slots — need the remaining countries from HR ]
+Flags (14, alphabetical): Australia · Brazil · Cambodia · Colombia · El Salvador ·
+Guatemala · Japan · Kenya · Mexico · Netherlands · Rwanda · United Kingdom ·
+Vietnam · Zambia
+[ one empty slot left in the grid ]
 
 RIGHT:
 - US flag
