@@ -1623,7 +1623,7 @@ function wetTree(host){
     preserveAspectRatio:"xMidYMid meet",style:"display:block"});
   host.appendChild(svg);
   const root=el("g"); svg.appendChild(root);
-  const NX0=452, TX0=546, TX1=1122, CX=W-2;
+  const NX0=388, TX0=470, TX1=1124, CX=W-2;
   const rowY=i=>58+i*((H-72-58)/(WETDAY.length-1));
   const cum=[]; WETDAY.reduce((a,[,n],i)=>(cum[i]=a*n),1);
   const spread=n=>Math.min(1,.25+.75*Math.log(n)/Math.log(120));
