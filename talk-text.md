@@ -305,14 +305,14 @@ Costco Japanese, orders up 30% and we sold them 10% less · Lettuce flat, but we
 TITLE: Can we execute it?
 
 LEFT — THE PEOPLE CHANGES:
-- Dedicated Sales — The account list has outgrown part-time coverage.
-- Dedicated Logistics — Interviewing candidates
-- More outsourced this time — We don't have to own every function to build.
-- HR is part-time
+- Maria moves to Sales full-time — We've outgrown part-time coverage.
+- Maria backfill
+- Construction GC will be more outsourced — We're hiring a turn-key greenhouse
+  construction company.
+- Recruiting a part-time HR person
 
 RIGHT — AND THE RISK:
 - LINE: Lower with cucumbers than it was with lettuce
-- BODY: We have grown this crop at scale for years. We know the yields, the labour and the buyers.
 
 ### SLIDE 22 — The plan
 TITLE: Here is the plan
