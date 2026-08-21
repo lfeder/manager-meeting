@@ -134,8 +134,8 @@ THREE VERTICAL CARDS:
 1  CASES SOLD · +9% · Cukes +5% · Lettuce +25%
 2  EXPENSES · TRACKING TO BUDGET · [ actual vs budget — needs the number ]
 3  CAPITAL
-   DONE: Reefer · SIP
-   COMMITTED: Lettuce boards · Drippers · Gutters · Fertigator
+   DONE: Reefer truck · SIP
+   COMMITTED: Lettuce boards · Drippers · Gutters for GH5/6 · Fertigator
    PLANNED: Japanese packing machine · Commercial AC / dehumidifier · Greenwaste tractor
 
 ### SLIDE 08 — Longer cycles
