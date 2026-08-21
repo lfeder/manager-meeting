@@ -1191,62 +1191,78 @@ splitSlide("Impossible · Who we compete against","Who we compete against",
   });
 
 /* --------------------------------------------------- 3 · Food safety */
-/* full bleed: a plate of colonies you wait two days for, resolving into the
-   helix you read in four hours. The audit record is spoken, not printed —
-   the picture is the argument */
+/* two named methods side by side — the plate you wait two days for, and the
+   helix you read in four hours. Titles carry it; the drawings are evidence */
 {
   const {body}=slide("Impossible · Food safety",{title:"Food safety"});
-  const card=h("div",{class:"card",style:"flex:1;align-items:center;justify-content:center;"+
-    "padding:14px 20px;background:var(--wash)"});
-  const svg=el("svg",{viewBox:"0 0 1120 400",width:"100%",height:"100%",style:"display:block"});
+  const card=h("div",{class:"card",style:"flex:1;padding:22px 26px 20px;"+
+    "background:var(--wash);gap:0"});
+  const row=h("div",{style:"flex:1;min-height:0;display:flex;align-items:stretch;gap:20px"});
+
+  const column=(title,sub,artNode,caption,flex)=>{
+    const col=h("div",{style:`flex:${flex};min-width:0;display:flex;flex-direction:column`});
+    col.appendChild(h("div",{style:"flex:none;font-size:38px;font-weight:700;"+
+      "letter-spacing:-.028em;line-height:1.05;color:var(--ink);text-align:center",
+      text:title}));
+    /* the left column keeps the subtitle row even when empty, so both
+       drawings start on the same line */
+    col.appendChild(h("div",{style:"flex:none;margin-top:7px;font-size:15px;line-height:1.4;"+
+      "text-align:center;color:var(--body);"+(sub?"":"visibility:hidden"),
+      text:sub||"—"}));
+    col.appendChild(h("div",{style:"flex:1;min-height:0;margin:14px 0 12px"},artNode));
+    col.appendChild(h("div",{style:"flex:none;font-size:19px;font-weight:700;"+
+      "letter-spacing:-.012em;text-align:center;color:var(--ink)",text:caption}));
+    return col;
+  };
 
   /* the plate */
-  svg.appendChild(el("circle",{cx:210,cy:186,r:132,fill:"#FFFFFF",stroke:C("--line"),"stroke-width":3}));
-  svg.appendChild(el("circle",{cx:210,cy:186,r:116,fill:"rgba(46,139,87,.07)",
+  const petri=el("svg",{viewBox:"0 0 300 300",width:"100%",height:"100%",
+    preserveAspectRatio:"xMidYMid meet",style:"display:block"});
+  petri.appendChild(el("circle",{cx:150,cy:150,r:132,fill:"#FFFFFF",stroke:C("--line"),
+    "stroke-width":3}));
+  petri.appendChild(el("circle",{cx:150,cy:150,r:116,fill:"rgba(46,139,87,.07)",
     stroke:C("--hair"),"stroke-width":2}));
-  [[176,142,11],[248,166,8],[196,228,14],[262,240,6],[144,200,8],[228,110,6],
-   [162,176,5],[286,196,7],[206,164,4]].forEach(([cx,cy,r],i)=>{
-    svg.appendChild(el("circle",{cx,cy,r,fill:C("--grn-lt"),"fill-opacity":.9,
+  [[116,106,11],[188,130,8],[136,192,14],[202,204,6],[84,164,8],[168,74,6],
+   [102,140,5],[226,160,7],[146,128,4]].forEach(([cx,cy,r],i)=>{
+    petri.appendChild(el("circle",{cx,cy,r,fill:C("--grn-lt"),"fill-opacity":.9,
       class:"fi",style:`--d:${(.2+i*.05).toFixed(2)}s`}));
   });
 
-  /* the arrow across */
-  svg.appendChild(el("line",{x1:378,y1:186,x2:470,y2:186,stroke:C("--faint"),"stroke-width":2.5}));
-  svg.appendChild(el("path",{d:"M458,176 L472,186 L458,196",fill:"none",stroke:C("--faint"),
-    "stroke-width":2.5,"stroke-linecap":"round","stroke-linejoin":"round"}));
-
-  /* the double helix: two counter-phased sine strands with rungs between */
-  const X0=540,X1=1040,CY=186,AMP=74,TURNS=2.4;
-  const yA=t=>CY+AMP*Math.sin(t*Math.PI*2*TURNS);
-  const yB=t=>CY-AMP*Math.sin(t*Math.PI*2*TURNS);
-  const strand=(fn,col,w)=>{
-    let d="";
-    for(let i=0;i<=120;i++){
-      const t=i/120, x=X0+(X1-X0)*t;
-      d+=(i?"L":"M")+x.toFixed(1)+","+fn(t).toFixed(1);
-    }
-    const p=el("path",{d,fill:"none",stroke:col,"stroke-width":w,
-      "stroke-linecap":"round",class:"dl"});
-    svg.appendChild(p);
-  };
+  /* the helix */
+  const helix=el("svg",{viewBox:"0 0 620 260",width:"100%",height:"100%",
+    preserveAspectRatio:"xMidYMid meet",style:"display:block"});
+  const HX0=14,HX1=606,HCY=130,AMP=98,TURNS=2.4;
+  const yA=t=>HCY+AMP*Math.sin(t*Math.PI*2*TURNS);
+  const yB=t=>HCY-AMP*Math.sin(t*Math.PI*2*TURNS);
   for(let i=0;i<=26;i++){
-    const t=i/26, x=X0+(X1-X0)*t;
-    const a=yA(t), b2=yB(t), near=Math.abs(a-b2)<AMP*0.55;
-    svg.appendChild(el("line",{x1:x,y1:a,x2:x,y2:b2,
-      stroke:near?C("--grn-lt"):C("--green"),"stroke-width":near?1.6:2.4,
+    const t=i/26, x=HX0+(HX1-HX0)*t;
+    const a2=yA(t), b2=yB(t), near=Math.abs(a2-b2)<AMP*0.55;
+    helix.appendChild(el("line",{x1:x,y1:a2,x2:x,y2:b2,
+      stroke:near?C("--grn-lt"):C("--green"),"stroke-width":near?1.8:2.8,
       "stroke-linecap":"round",opacity:near?.45:.75,
       class:"fi",style:`--d:${(.45+i*.02).toFixed(2)}s`}));
   }
-  strand(yA,C("--green-d"),4);
-  strand(yB,C("--green"),4);
+  [[yA,C("--green-d")],[yB,C("--green")]].forEach(([fn,col])=>{
+    let d="";
+    for(let i=0;i<=140;i++){
+      const t=i/140, x=HX0+(HX1-HX0)*t;
+      d+=(i?"L":"M")+x.toFixed(1)+","+fn(t).toFixed(1);
+    }
+    helix.appendChild(el("path",{d,fill:"none",stroke:col,"stroke-width":4.5,
+      "stroke-linecap":"round",class:"dl"}));
+  });
 
-  const t1=el("text",{x:210,y:352,"text-anchor":"middle",class:"axb","font-size":17});
-  t1.textContent="48 hours turnaround"; svg.appendChild(t1);
-  const t2=el("text",{x:790,y:352,"text-anchor":"middle",class:"axb","font-size":17});
-  t2.textContent="4 hour turnaround"; svg.appendChild(t2);
-  const t3=el("text",{x:790,y:376,"text-anchor":"middle",class:"ax","font-size":13.5});
-  t3.textContent="First farm globally Costco approved to use PCR"; svg.appendChild(t3);
-  card.appendChild(svg);
+  const arrow=el("svg",{viewBox:"0 0 60 40",width:"60",height:"40",style:"display:block"});
+  arrow.appendChild(el("line",{x1:2,y1:20,x2:48,y2:20,stroke:C("--faint"),"stroke-width":2.5}));
+  arrow.appendChild(el("path",{d:"M40,11 L52,20 L40,29",fill:"none",stroke:C("--faint"),
+    "stroke-width":2.5,"stroke-linecap":"round","stroke-linejoin":"round"}));
+
+  row.append(
+    column("Petri Film",null,petri,"48 hours turnaround","1"),
+    h("div",{style:"flex:none;display:flex;align-items:center"},arrow),
+    column("PCR","First farm globally Costco approved to use PCR",helix,
+      "4 hour turnaround","1.5"));
+  card.appendChild(row);
   body.appendChild(card);
 }
 

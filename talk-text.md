@@ -88,10 +88,18 @@ RIGHT (on click):
 ### SLIDE 04 — Food safety
 TITLE: Food safety
 
-FULL BLEED: a petri dish of colonies, an arrow, and a DNA double helix
-- CAPTION LEFT: 48 hours turnaround
-- CAPTION RIGHT: 4 hour turnaround
-- CAPTION RIGHT, SMALL: First farm globally Costco approved to use PCR
+TWO NAMED METHODS, side by side with an arrow between them:
+
+LEFT
+- BIG TITLE: Petri Film
+- ART: a petri dish of colonies
+- CAPTION: 48 hours turnaround
+
+RIGHT
+- BIG TITLE: PCR
+- SUBTITLE: First farm globally Costco approved to use PCR
+- ART: a DNA double helix
+- CAPTION: 4 hour turnaround
 
 SAY: 6 x 100%, two years. Are we nervous about audits anymore?
 
