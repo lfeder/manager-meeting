@@ -80,8 +80,8 @@ you want them tighter: Local Bounti $310M is Cargill's committed facilities
 across two rounds, not the $250M you remembered.
 
 RIGHT (on click) — one line, alone on the card:
-We operate in the most expensive state in the country and yet provide the
-freshest, safest and most affordable lettuce on the shelves.
+We operate in the most expensive state and provide the freshest, safest and
+most affordable lettuce on the shelves.
 
 ### SLIDE 04 — Food safety
 TITLE: Food safety
