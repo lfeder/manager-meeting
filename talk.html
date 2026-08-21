@@ -1165,11 +1165,8 @@ splitSlide("Impossible · Cukes",null,
      "1% of all America’s cucumbers grown"
     ].forEach((t,i)=>{
       list.appendChild(h("div",{class:"fi",
-        style:`display:flex;gap:13px;align-items:flex-start;--d:${(.28+i*.14).toFixed(2)}s`},[
-        h("span",{style:"width:9px;height:9px;border-radius:50%;flex:none;margin-top:8px;"+
-          "background:var(--green)"}),
-        h("span",{style:"font-size:21px;font-weight:600;line-height:1.36;color:var(--ink);"+
-          "letter-spacing:-.014em",text:t})]));
+        style:`--d:${(.28+i*.14).toFixed(2)}s;font-size:21px;font-weight:600;`+
+          "line-height:1.36;color:var(--ink);letter-spacing:-.014em",text:t}));
     });
     card.appendChild(list);
     R.appendChild(card);
@@ -1881,6 +1878,9 @@ function wetTree(host){
 /* the notes live in a markdown file next to the deck so they can be edited
    without touching the slides. Headings are "## <slide number>"; everything
    until the next heading belongs to that slide */
+/* declared up here because drawNotes() fits the stage, and drawNotes runs on
+   the first go() — before the nav section further down */
+const viewport=document.getElementById("viewport");
 const NOTES={};
 /* edits made in the viewer live in this browser only — a static page cannot
    write back to talk-notes.md — so they are kept in localStorage, layered over
@@ -2045,7 +2045,6 @@ addEventListener("keydown",e=>{
 });
 /* the stage scales to the viewport box rather than the window, so turning the
    notes on shrinks the slide instead of covering it */
-const viewport=document.getElementById("viewport");
 function fit(){
   const w=viewport.clientWidth||innerWidth, ht=viewport.clientHeight||innerHeight;
   stage.style.transform=`scale(${Math.min(w/1280,ht/720)})`;
