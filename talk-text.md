@@ -153,7 +153,7 @@ TITLE: How to Optimize the awkward lettuce work week
 LEGEND: Cases per person · People scheduled
 
 CHART: Cucumber cases per scheduled person, 1 Jan – 11 Aug 2026
-NOTE: Both are days the lettuce house is closed. How do we deploy those people — servicing with Pete, or over to JV?
+SAY: Both are days the lettuce house is closed. How do we deploy those people — servicing with Pete, or over to JV?
 
 ### SLIDE 10 — Pack productivity
 TITLE: Pack productivity
