@@ -206,7 +206,6 @@ FOUR PANELS, each a screenshot with a label underneath — named, not numbered:
 - Aloha 2.0 — the palletization board
 
 DESTINATION PANEL, its own column on the right:
-- 3.0
 - Aloha 3.0
 
 SAY: One sentence on what is built and what is coming.
