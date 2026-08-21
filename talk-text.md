@@ -267,7 +267,6 @@ THREE CARDS:
 TITLE: Future — friction removed
 EYEBROW: HOW WE WILL SPEND OUR TIME
 
-- Nudging productivity
 - Spending more time with customers and vendors
 - Making workers' jobs more enjoyable
 - Develop new products
