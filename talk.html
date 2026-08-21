@@ -734,84 +734,61 @@ function lettuceChart(host){
                 pct((LETT_T.c26-LETT_T.c25)/LETT_T.c25*100)]]))};
 }
 
-/* ---- rate against hours, 2026 only, two scales on one plot ----------
-   the rate fell because the denominator moved, so the pair only means
-   anything read together — side by side they were two separate stories */
+/* ---- lettuce pack rate, 2026, weekly mean ---------------------------- */
 function rateHoursChart(host){
-  const f=frame(host,{l:44,r:52,t:12,b:28}), {svg,X0,X1,Y0,Y1}=f;
+  const f=frame(host,{l:48,r:16,t:14,b:30}), {svg,X0,X1,Y0,Y1}=f;
   const XS=X0+8, XE=X1-10;
   const x=d=>XS+((d-1)/(DOY_END-1))*(XE-XS);
-  const SER=[
-    {row:3, col:C("--green"), min:0.8, max:2.4, ticks:[0.8,1.2,1.6,2.0,2.4],
-     fmt:v=>v.toFixed(1), name:"Trays per packer-minute", dec:2, side:"left"},
-    {row:2, col:C("--vK"),   min:0,   max:60,  ticks:[0,20,40,60],
-     fmt:v=>String(v), name:"Packer-hours per day", dec:0, side:"right"}];
-  SER.forEach(s=>{ s.y=v=>Y1-((Math.max(s.min,Math.min(v,s.max))-s.min)/(s.max-s.min))*(Y1-Y0); });
+  const MIN=0.8, MAX=2.4, y=v=>Y1-((Math.max(MIN,Math.min(v,MAX))-MIN)/(MAX-MIN))*(Y1-Y0);
 
   const g=el("g",{class:"grid"});
   MSTART.forEach((d,i)=>{ if(i) g.appendChild(el("line",{x1:x(d),x2:x(d),y1:Y0,y2:Y1})); });
   svg.appendChild(g);
-  yAxis(svg,f,SER[0].ticks,SER[0].y,SER[0].fmt);
-  /* the right-hand axis is drawn in the hours colour, so it is obvious which
-     line it belongs to — two scales on one plot is only safe if labelled */
-  SER[1].ticks.forEach(v=>{
-    const t=el("text",{x:X1+9,y:SER[1].y(v)+3.6,"text-anchor":"start",class:"ax",
-      "font-size":10.5,fill:SER[1].col});
-    t.textContent=SER[1].fmt(v); svg.appendChild(t);
-  });
+  yAxis(svg,f,[0.8,1.2,1.6,2.0,2.4],y,v=>v.toFixed(1));
   MSTART.forEach((d,i)=>{
-    const t=el("text",{x:x(d)+6,y:Y1+18,class:"ax","font-size":10.5});
+    const t=el("text",{x:x(d)+6,y:Y1+18,class:"ax","font-size":12.5});
     t.textContent=MNAME[i]; svg.appendChild(t);
   });
 
-  const rowsFor=i=>packRows(i)[2026];
-  SER.forEach((s,k)=>{
-    const bins=new Map();
-    rowsFor(s.row).forEach(r=>{ if(r[1]==null) return;
-      const w=Math.floor((r[0]-1)/7);
-      if(!bins.has(w)) bins.set(w,[]);
-      bins.get(w).push(r[1]);
-    });
-    const pts=[...bins.keys()].sort((a,b)=>a-b)
-      .map(w=>({w,x:x(w*7+4),v:sum(bins.get(w))/bins.get(w).length}));
-    let d="",prev=null;
-    pts.forEach(p=>{ d+=(prev!==null&&p.w===prev+1?"L":"M")+p.x.toFixed(1)+","+s.y(p.v).toFixed(1); prev=p.w; });
-    drawPath(svg,d,s.col,2.6,k*.12);
+  const rows=packRows(3)[2026];
+  const bins=new Map();
+  rows.forEach(r=>{ if(r[1]==null) return;
+    const w=Math.floor((r[0]-1)/7);
+    if(!bins.has(w)) bins.set(w,[]);
+    bins.get(w).push(r[1]);
   });
+  const pts=[...bins.keys()].sort((a,b)=>a-b)
+    .map(w=>({w,x:x(w*7+4),v:sum(bins.get(w))/bins.get(w).length}));
+  let d="",prev=null;
+  pts.forEach(p=>{ d+=(prev!==null&&p.w===prev+1?"L":"M")+p.x.toFixed(1)+","+y(p.v).toFixed(1); prev=p.w; });
+  drawPath(svg,d,C("--green"),3,.15);
 
   const cross=el("line",{y1:Y0,y2:Y1,stroke:C("--faint"),"stroke-width":1.2,opacity:0});
   svg.appendChild(cross);
-  const marks=SER.map(s=>{
-    const o=el("circle",{r:5,fill:s.col,stroke:"#fff","stroke-width":2,opacity:0});
-    svg.appendChild(o); return o;
-  });
-  const byDoy=SER.map(s=>{const m={}; rowsFor(s.row).forEach(r=>m[r[0]]=r); return m;});
+  const mark=el("circle",{r:5,fill:C("--green"),stroke:"#fff","stroke-width":2,opacity:0});
+  svg.appendChild(mark);
+  const byDoy={}; rows.forEach(r=>byDoy[r[0]]=r);
   const hit=el("rect",{x:X0,y:Y0,width:X1-X0,height:Y1-Y0,class:"hit"});
   hit.addEventListener("pointermove",ev=>{
     const bb=svg.getBoundingClientRect();
     const rel=(ev.clientX-bb.left)/bb.width*f.W;
-    const d=Math.max(1,Math.min(DOY_END,Math.round((rel-X0)/(X1-X0)*(DOY_END-1)+1)));
-    cross.setAttribute("x1",x(d)); cross.setAttribute("x2",x(d)); cross.setAttribute("opacity",.4);
-    const out=[];
-    SER.forEach((s,i)=>{
-      const r=byDoy[i][d];
-      if(r&&r[1]!=null){
-        marks[i].setAttribute("cx",x(d)); marks[i].setAttribute("cy",s.y(r[1]));
-        marks[i].setAttribute("opacity",1);
-        out.push({c:s.col,k:s.name,v:r[1].toFixed(s.dec)});
-      } else { marks[i].setAttribute("opacity",0); out.push({c:s.col,k:s.name,v:"no pack day"}); }
-    });
-    showTip(ev,doyLabel(d),out);
+    const dd=Math.max(1,Math.min(DOY_END,Math.round((rel-X0)/(X1-X0)*(DOY_END-1)+1)));
+    cross.setAttribute("x1",x(dd)); cross.setAttribute("x2",x(dd)); cross.setAttribute("opacity",.4);
+    const r=byDoy[dd];
+    if(r&&r[1]!=null){
+      mark.setAttribute("cx",x(dd)); mark.setAttribute("cy",y(r[1])); mark.setAttribute("opacity",1);
+      showTip(ev,doyLabel(dd),[{c:C("--green"),k:"Trays per packer-minute",v:r[1].toFixed(2)}]);
+    } else {
+      mark.setAttribute("opacity",0);
+      showTip(ev,doyLabel(dd),[{c:C("--green"),k:"Trays per packer-minute",v:"no pack day"}]);
+    }
   });
   hit.addEventListener("pointerleave",()=>{
-    cross.setAttribute("opacity",0); marks.forEach(o=>o.setAttribute("opacity",0)); hideTip();
+    cross.setAttribute("opacity",0); mark.setAttribute("opacity",0); hideTip();
   });
   svg.appendChild(hit);
-  const R3=packRows(3)[2026], R2=packRows(2)[2026];
-  const byd={}; R2.forEach(r=>byd[r[0]]=r[1]);
-  return {table:dataTable(["Day","Trays per packer-minute","Packer-hours"],
-    R3.filter(r=>r[1]!=null).map(r=>[doyLabel(r[0]),r[1].toFixed(2),
-      byd[r[0]]!=null?String(byd[r[0]]):"—"]))};
+  return {table:dataTable(["Day","Trays per packer-minute"],
+    rows.filter(r=>r[1]!=null).map(r=>[doyLabel(r[0]),r[1].toFixed(2)]))};
 }
 
 /* ---- day-of-year series: faint single days, weekly mean on top ------ */
@@ -1422,9 +1399,9 @@ const dTot=r=>r[2]+r[3], perPerson=r=>r[1]/dTot(r);
 function dowChart(host){
   const f=frame(host,{l:48,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
   const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(56,step*0.5);
-  const yMax=64, y=v=>Y1-(v/yMax)*(Y1-Y0);
+  const yMax=760, y=v=>Y1-(v/yMax)*(Y1-Y0);
   const pMax=16, yP=v=>Y1-(v/pMax)*(Y1-Y0);
-  yAxis(svg,f,[0,16,32,48,64],y,v=>String(v));
+  yAxis(svg,f,[0,200,400,600],y,v=>String(v));
   [0,4,8,12,16].forEach(v=>{
     const t=el("text",{x:X1+9,y:yP(v)+3.6,"text-anchor":"start",class:"ax",
       "font-size":12.5,fill:C("--muted")});
@@ -1434,14 +1411,14 @@ function dowChart(host){
     const cx=X0+step*(i+.5), light=(r[0]==="Tue"||r[0]==="Fri");
     if(light) svg.appendChild(el("rect",{x:X0+step*i+3,y:Y0,width:step-6,height:Y1-Y0,
       fill:C("--amber"),opacity:.1,rx:4}));
-    const v=perPerson(r);
+    const v=r[1];
     svg.appendChild(el("rect",{x:cx-bw/2,y:y(v),width:bw,height:Y1-y(v),
       fill:light?C("--amber"):C("--grn-lt"),opacity:light?.5:.55,rx:2.5,
       class:"gy",style:`--d:${i*50}ms;--oy:${Y1}px`}));
     const lab=el("text",{x:cx,y:y(v)+22,"text-anchor":"middle",class:"vlab fi",
       "font-size":15,fill:light?C("--amber"):C("--green-d"),
       style:`--d:${(.5+i*.05).toFixed(2)}s`});
-    lab.textContent=v.toFixed(0); svg.appendChild(lab);
+    lab.textContent=nf(v); svg.appendChild(lab);
     const t=el("text",{x:cx,y:Y1+18,"text-anchor":"middle",class:"axb","font-size":13.5,
       fill:light?C("--amber"):C("--ink")});
     t.textContent=r[0]; svg.appendChild(t);
@@ -1461,59 +1438,26 @@ function dowChart(host){
   DOWPACK.forEach((r,i)=>{
     const hit=el("rect",{x:X0+step*i,y:Y0,width:step,height:Y1-Y0,class:"hit"});
     hoverable(hit,r[0],()=>[
-      {c:C("--green-d"),k:"Cases per person",v:perPerson(r).toFixed(1)},
-      {c:C("--muted"),k:"Cucumber cases",v:nf(r[1])},
-      {c:C("--vK"),k:"People scheduled",v:dTot(r).toFixed(1)}]);
+      {c:C("--green-d"),k:"Cases packed",v:nf(r[1])},
+      {c:C("--vK"),k:"People scheduled",v:dTot(r).toFixed(1)},
+      {c:C("--muted"),k:"Cases per person",v:perPerson(r).toFixed(1)}]);
     svg.appendChild(hit);
   });
-  return {table:dataTable(["Day","Cases","People scheduled","Cases per person"],
+  return {table:dataTable(["Day","Cases packed","People scheduled","Cases per person"],
     DOWPACK.map(r=>[r[0],nf(r[1]),dTot(r).toFixed(1),perPerson(r).toFixed(1)]))};
 }
 {
   const {body}=slide("Review · Tuesday and Friday",
     {title:"How to optimize the awkward lettuce work week",
-     right:[legend([["Cases per person",C("--green")],["People scheduled",C("--vK")]])]});
-  chartCard(body,{title:"Cucumber cases per scheduled person · 1 Jan – 11 Aug 2026",
+     right:[legend([["Cases packed",C("--green")],["People scheduled",C("--vK")]])]});
+  chartCard(body,{title:"Average cucumber cases packed per day · 1 Jan – 11 Aug 2026",
     flex:"1",fn:dowChart});
 }
 
 /* ------------------------------- 9 · Pack · the productivity question */
 {
-  const {body}=slide("Review · Pack productivity",
-    {title:"Pack productivity",
-     right:[legend([["Trays per packer-minute",C("--green")],
-                    ["Packer-hours per day",C("--vK")]])]});
-  const row=h("div",{class:"tilerow",style:"height:96px"});
-  [["TRAYS PER PACKER-MINUTE","−22","%","1.63 through April, 1.27 from May"],
-   ["PACKER-HOURS A DAY","+19","%","28.9 through April, 34.3 from May"],
-   ["THE QUESTION","","","Slower to fill the hours, or the same hours on better work?"]
-  ].forEach(([l,v,u,c])=>{
-    row.appendChild(h("div",{class:"card",style:"padding:14px 16px;gap:6px;justify-content:center"},[
-      h("span",{class:"kl",text:l}),
-      v?h("span",{class:"kv down",style:"font-size:32px"},[
-        document.createTextNode(v),u?h("span",{class:"ku",text:u}):null]):null,
-      h("span",{class:"kc",text:c})]));
-  });
-  body.appendChild(row);
-  chartCard(body,{title:"Trays per packer-minute against packer-hours, 2026",flex:"1",
-    fn:rateHoursChart});
-}
-
-/* ---------------------------------------------- 10a · Section break */
-{
-  const sec=h("section",{class:"slide","aria-hidden":"true"});
-  sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
-  sec.append(
-    h("div",{class:"fi",style:"--d:.15s;font-family:var(--mono);font-size:15px;"+
-      "font-weight:700;letter-spacing:.28em;color:var(--green);margin-bottom:22px",
-      text:"EXPANSION I"}),
-    h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
-      "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"ALOHA v3"}),
-    h("div",{class:"fi",style:"--d:.4s;margin-top:20px;font-size:21px;color:var(--body)",
-      text:"The company gets bigger"}),
-    h("div",{class:"pnum"}));
-  stage.appendChild(sec);
-  SLIDES.push({el:sec,title:"Expansion I · ALOHA v3"});
+  const {body}=slide("Review · Pack productivity",{title:"Lettuce pack productivity"});
+  chartCard(body,{title:"Trays per packer-minute, 2026",flex:"1",fn:rateHoursChart});
 }
 
 /* ------------------------------------------------- 11 · The ladder */

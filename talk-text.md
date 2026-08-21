@@ -150,11 +150,11 @@ SAY: Did we need more time, or more labor?
 
 ### SLIDE 09 — The awkward lettuce work week
 TITLE: How to optimize the awkward lettuce work week
-LEGEND: Cases per person · People scheduled
+LEGEND: Cases packed · People scheduled
 
-CHART: Cucumber cases per scheduled person · 1 Jan – 11 Aug 2026
-Bars are cases per scheduled person, one line is total people in the cuke
-packhouse. Tuesday and Friday shaded — the days the lettuce house is dark.
+CHART: Average cucumber cases packed per day · 1 Jan – 11 Aug 2026
+Bars are cases packed, one line is total people in the cuke packhouse.
+Tuesday and Friday shaded — the days the lettuce house is dark.
 
 | Day | Cases | People scheduled | Cases per person |
 |---|---|---|---|
@@ -175,18 +175,16 @@ SAY: But Friday we end up with 14.6 people and 34 cases each, against 57 on
 Wednesday. Saturday runs the same borrowed share at 56 cases each — so it is the
 headcount, not the transfer.
 
-### SLIDE 10 — Pack productivity
-TITLE: Pack productivity
-LEGEND: Trays per packer-minute · Packer-hours per day
+### SLIDE 10 — Lettuce pack productivity
+TITLE: Lettuce pack productivity
 
-TILES:
-- TRAYS PER PACKER-MINUTE · −22% · 1.63 through April, 1.27 from May
-- PACKER-HOURS A DAY · +19% · 28.9 through April, 34.3 from May
-- THE QUESTION · Slower to fill the hours, or the same hours on better work?
+CHART: Trays per packer-minute, 2026 — one line, no tiles
 
-CHART: Trays per packer-minute against packer-hours, 2026
-
-SAY: Every one of these is a nudge. Run the same question on your own area this month.
+SAY: 1.63 through April, 1.27 from May on — down 22%.
+SAY: Packer-hours went the other way, 28.9 a day to 34.3.
+SAY: Slower to fill the hours, or the same hours on better work?
+SAY: Every one of these is a nudge. Run the same question on your own area
+this month.
 
 ---
 
