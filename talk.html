@@ -34,7 +34,9 @@ body{
 button{font:inherit;color:inherit}
 
 #viewport{position:fixed;top:0;left:0;right:0;bottom:var(--notesH,0px);
-  display:grid;place-items:center;transition:bottom .2s ease;
+  /* no transition on bottom: fit() measures this box, and an animating height
+     means it measures the wrong one and scales the slide too large */
+  display:grid;place-items:center;
   background:radial-gradient(120% 90% at 50% 0%,#16221D 0%,#0B1512 70%)}
 #stage{
   width:1280px;height:720px;position:relative;flex:none;transform-origin:center center;
@@ -209,15 +211,16 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
 #notes{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
   /* a fixed height so the slide is the same size on every page — a panel that
      grew with the notes would resize the deck as you moved through it */
-  height:26vh;overflow:auto;padding:14px 26px 18px;
+  height:20vh;overflow:auto;padding:11px 24px 14px;
   background:rgba(11,21,18,.94);color:#DCE8E1;
   border-top:1px solid rgba(168,213,186,.25);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 #notes.on{display:block}
-#notes .nhead{font-family:var(--mono);font-size:11px;font-weight:700;
-  letter-spacing:.14em;text-transform:uppercase;color:#8FC7A6;margin-bottom:10px}
-#notes .nline{font-size:17px;line-height:1.5;margin:6px 0;max-width:100ch}
-#notes .nline::before{content:"—";color:#5E8B75;margin-right:10px}
+#notes .nhead{font-family:var(--mono);font-size:9.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:#8FC7A6;margin-bottom:7px}
+/* small on purpose: the shorter the panel, the less the slide gives up */
+#notes .nline{font-size:14px;line-height:1.42;margin:4px 0;max-width:120ch}
+#notes .nline::before{content:"—";color:#5E8B75;margin-right:8px}
 #notes .nline.dim{color:#7E9A8C}
 
 /* ─────────────────────────────────────────────── entrance motion */
@@ -1123,14 +1126,14 @@ splitSlide("Impossible · Cukes",null,
       style:"flex:1;justify-content:flex-start;padding:34px 34px;gap:0"});
     const head=h("div",{style:"flex:none;height:200px;display:flex;flex-direction:column"});
     head.appendChild(h("div",{style:"font-family:Georgia,'Times New Roman',serif;"+
-      "font-size:19px;font-weight:700;letter-spacing:.06em;color:var(--ink);"+
+      "font-size:23px;font-weight:700;letter-spacing:.06em;color:var(--ink);"+
       "text-align:center;text-transform:uppercase",text:"The Wall Street Journal"}));
     head.appendChild(h("div",{style:"margin:9px 0 4px;height:2px;background:var(--ink)"}));
     head.appendChild(h("div",{style:"height:1px;background:var(--ink);opacity:.45"}));
-    head.appendChild(h("div",{style:"margin-top:7px;font-family:var(--mono);font-size:9.5px;"+
+    head.appendChild(h("div",{style:"margin-top:8px;font-family:var(--mono);font-size:11px;"+
       "letter-spacing:.14em;color:var(--muted);text-align:center",text:"FEB. 24, 2025"}));
     head.appendChild(h("div",{style:"margin-top:20px;font-family:Georgia,'Times New Roman',serif;"+
-      "font-size:17px;font-weight:700;line-height:1.35;color:var(--ink);text-align:center",
+      "font-size:21px;font-weight:700;line-height:1.32;color:var(--ink);text-align:center",
       text:"Ellison’s Half-Billion-Dollar Quest to Change Farming Has Been a Bust"}));
     card.appendChild(head);
     card.appendChild(h("div",{style:"font-size:30px;line-height:1.32;font-weight:600;"+
@@ -1151,8 +1154,8 @@ splitSlide("Impossible · Cukes",null,
       "font-weight:600;letter-spacing:-.02em;color:var(--green-d)",
       text:"“People, no offense taken, do really love OUR cucumbers.”"}));
     const list=h("div",{style:"margin-top:26px;display:flex;flex-direction:column;gap:16px"});
-    ["The #1 product in the largest warehouses of the largest grocer in the US",
-     "Over 1% of all America’s cucumbers grown"
+    ["#1 product in the largest warehouses of the largest grocer in the US",
+     "1% of all America’s cucumbers grown"
     ].forEach((t,i)=>{
       list.appendChild(h("div",{class:"fi",
         style:`display:flex;gap:13px;align-items:flex-start;--d:${(.28+i*.14).toFixed(2)}s`},[
@@ -1419,7 +1422,7 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
         tail?h("span",{class:"ku",style:"margin-left:14px",text:tail}):null])]));
   });
   body.appendChild(row);
-  chartCard(body,{title:"How long each cycle kept picking",flex:"1",fn:cyclesChart});
+  chartCard(body,{title:"Weeks Harvested",flex:"1",fn:cyclesChart});
 }
 
 /* -------------------------------- 8 · Pack · Tuesday and Friday */
@@ -1444,8 +1447,6 @@ function dowChart(host){
   });
   DOWPACK.forEach((r,i)=>{
     const cx=X0+step*(i+.5), light=(r[0]==="Tue"||r[0]==="Fri");
-    if(light) svg.appendChild(el("rect",{x:X0+step*i+3,y:Y0,width:step-6,height:Y1-Y0,
-      fill:C("--amber"),opacity:.1,rx:4}));
     const v=r[1];
     svg.appendChild(el("rect",{x:cx-bw/2,y:y(v),width:bw,height:Y1-y(v),
       fill:light?C("--amber"):C("--grn-lt"),opacity:light?.5:.55,rx:2.5,
@@ -1892,7 +1893,8 @@ function drawNotes(){
      slide and not a third of the screen */
   document.documentElement.style.setProperty("--notesH",
     notesOn?notesEl.offsetHeight+"px":"0px");
-  if(typeof fit==="function") fit();
+  /* refit once now and again after layout settles */
+  if(typeof fit==="function"){ fit(); requestAnimationFrame(fit); }
 }
 fetch("talk-notes.md",{cache:"no-store"})
   .then(r=>r.ok?r.text():Promise.reject(r.status))
