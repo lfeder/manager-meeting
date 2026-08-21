@@ -39,20 +39,21 @@ SAY: The purpose of this talk is a quick recap of how things are going, and shar
 
 SAY: I want to start by taking stock of what we've achieved. When you step back from the fray, it's kind of crazy. We've said this before — we've done the impossible, and we've done it more than once. Let me recap.
 
-### SLIDE 02 — The WSJ page, then our cucumbers  *(click reveals the right half)*
-TITLE: none — the slide carries no header, the two panels fill the frame
+### SLIDE 02 — The WSJ page, then our answer  *(click reveals the right half)*
+TITLE: none — no header, the two panels fill the frame
 
-LEFT — set as a newspaper page:
-- MASTHEAD: THE WALL STREET JOURNAL   (typographic — send the logo file if you want the real mark)
+LEFT, set as a newspaper page:
+- MASTHEAD: THE WALL STREET JOURNAL
 - DATE: FEB. 24, 2025
-- HEADLINE: Ellison's Half-Billion-Dollar Quest to Change Farming Has Been a Bust
-- QUOTE: "People, no offense, don't really love cucumbers."
+- HEADLINE (small): Ellison's Half-Billion-Dollar Quest to Change Farming Has Been a Bust
+- QUOTE (large): "People, no offense, don't really love cucumbers."
 - ATTRIBUTION: Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop
 
-RIGHT (on click):
-- HEADING: People do really love OUR cucumbers
+RIGHT (on click) — the answer is set in the same face and size as the quote,
+and starts on the same line:
+- QUOTE: "People, no offense taken, really do love OUR cucumbers."
 - BULLET: The #1 product in the largest warehouses of the largest grocer in the US
-- BULLET: Resulting in over 1% of every fresh cucumber grown in America
+- BULLET: Over 1% of all America's cucumbers grown
 
 ### SLIDE 03 — The greenhouse lettuce market  *(click reveals the right half)*
 TITLE: The Greenhouse Lettuce market
@@ -149,8 +150,8 @@ columns, no legend
 SAY: Did we need more time, or more labor?
 
 ### SLIDE 09 — The awkward lettuce work week
-TITLE: How to optimize the awkward lettuce work week
-LEGEND: Cases packed · People scheduled
+TITLE: The awkward lettuce work week
+LEGEND: Cases packed (bar swatch) · People scheduled (line)
 
 CHART: Average cucumber cases packed per day · 1 Jan – 11 Aug 2026
 Bars are cases packed, one line is total people in the cuke packhouse.
@@ -192,16 +193,23 @@ this month.
 
 ### SLIDE 11 — Section break
 EYEBROW: EXPANSION I
-TITLE: ALOHA v3
+TITLE: Aloha 3.0
 SUBTITLE: The company gets bigger
 
 ### SLIDE 12 — Paper → AI
 TITLE: Paper → AI
 
-PANELS: PAPER (the notebook) · EXCEL (the fsafe sheet) · 1.0 NO CODE (the app, still syncing) · 2.0 FULL CODE (Aloha today)
-DESTINATION PANEL: 3.0 · ALOHA v3 · Announced today
+FOUR PANELS, each a screenshot with a label underneath:
+- PAPER — the handwritten maintenance log
+- EXCEL — the fsafe log sheet
+- 1.0 APPSHEETS — the app, mid-sync
+- 2.0 ALOHA 2.0 — the palletization board
 
-SAY: One sentence on what's built and what's coming.
+DESTINATION PANEL, its own column on the right:
+- 3.0
+- Aloha 3.0
+
+SAY: One sentence on what is built and what is coming.
 
 ### SLIDE 13 — Friction
 TITLE: v3 is frictionless
@@ -216,22 +224,27 @@ LEFT — eyebrow: FRICTION IS
 RIGHT:
 - LABEL: WHAT WE GET BACK
 - LINE: Every day feels like being back in school
-- BODY: v3 is about elevating everyone. Work has some four-letter words, and our goal is to kill some of them.
+- BODY: v3 is about elevating everyone. Work has some four-letter words, and our
+  goal is to kill some of them.
 
 ### SLIDE 14 — What it takes
 TITLE: What it takes
 
-- 01 · Claude understands our business — We built ALOHA, and keep improving it, so the model knows every table, every rule, every name.
+FOUR CARDS:
+- 01 · Claude understands our business — We built ALOHA, and keep improving it,
+  so the model knows every table, every rule, every name.
 - 02 · Common naming — Agree the words once, and the training material comes free.
-- 03 · Nothing lives outside ALOHA — Not a spreadsheet, not a notebook. If it is not in the system, nobody else gets the benefit.
-- — · BUSY — This is what friction causes. If you are busy, you are not thinking or learning.
+- 03 · Nothing lives outside ALOHA — Not a spreadsheet, not a notebook. If it is
+  not in the system, nobody else gets the benefit.
+- — · BUSY — This is what friction causes. If you are busy, you are not thinking
+  or learning.
 
 ### SLIDE 15 — A wet harvest day
-TITLE: A wet harvest day
+TITLE: Judgment Call — a wet harvest day
 
-LEFT — an expanding decision tree, eyebrow: SEVEN DECISIONS BEFORE THE CREW STARTS
-Each row names the decision, its multiplier, and the running total. Four
-countable branches at the top; by the seventh decision it is a solid wall.
+FULL WIDTH, an expanding decision tree. Eyebrow: SEVEN DECISIONS BEFORE THE CREW
+STARTS. Each row names the decision, its multiplier, and the running total; four
+countable branches at the top, a solid wall by the seventh.
 
 | Decision | Options | Running total |
 |---|---|---|
@@ -243,18 +256,23 @@ countable branches at the top; by the seventh decision it is a solid wall.
 | Dryer fan speed | ×3 | 1,440 |
 | Cold room hold before packing | ×2 | 2,880 |
 
-RIGHT:
-- BIG NUMBER: 2,880 · ways to run the day
-- JUDGMENT — Nobody holds seven interacting variables in their head at 7am. That isn't what your judgment is for.
+UNDER THE TREE: 2,880 ways to run the day
+
+SAY: Nobody holds seven interacting variables in their head at 7am. That isn't
+what your judgment is for.
 
 ### SLIDE 16 — What changes
 TITLE: What the world looks like in v3
 
 LEFT — THE SYSTEM DOES IT NOW:
-Spray schedules · Seeding schedules · Daily work tasks · Auto-ordering via Amazon · Fert schedules entered automatically · Coding from QuickBooks · Financial reports generated
+Spray schedules · Seeding schedules · Daily work tasks · Auto-ordering via Amazon ·
+Fert schedules entered automatically · Coding from QuickBooks · Financial reports
+generated
 
 RIGHT — YOU SPEND YOUR TIME ON:
-Nudging productivity · A new product · Making jobs better and more enjoyable · More time with customers · Instead of building your own spreadsheet, you ask Claude for a dashboard — shareable by default
+Nudging productivity · A new product · Making jobs better and more enjoyable ·
+More time with customers · Instead of building your own spreadsheet, you ask
+Claude for a dashboard — shareable by default
 
 ---
 
@@ -296,7 +314,8 @@ RIGHT — AND THE RISK:
 
 ### SLIDE 22 — The plan
 TITLE: Here is the plan
-IMAGE: site plan — four grow houses, the support building, the runoff buffer, two new housing sites
+IMAGE: site plan, rotated 90° to landscape so it fills the slide — four grow houses,
+the support building, the runoff buffer, two new housing sites
 
 ---
 
