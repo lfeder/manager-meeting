@@ -1622,7 +1622,7 @@ function wetTree(host){
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",height:"100%",
     preserveAspectRatio:"xMidYMid meet",style:"display:block"});
   host.appendChild(svg);
-  const root=el("g"); svg.appendChild(root);
+  const root=el("g",{transform:"translate(0,16)"}); svg.appendChild(root);
   const NX0=388, TX0=470, TX1=1124, CX=W-2;
   const rowY=i=>58+i*((H-72-58)/(WETDAY.length-1));
   const cum=[]; WETDAY.reduce((a,[,n],i)=>(cum[i]=a*n),1);
