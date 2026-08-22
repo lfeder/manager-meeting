@@ -1694,7 +1694,7 @@ function wetTree(host){
    ["02","Claude understands our business",
     "We built Aloha, and keep improving it, so the model knows every table, "+
     "every rule, every name."],
-   ["03","Nothing lives outside Aloha",
+   ["03","Everything lives inside Aloha",
     "Not a spreadsheet, not a notebook, not email. If it is not in the system, "+
     "nobody else gets the benefit."]
   ].forEach(([n,t,d],i)=>{
@@ -1866,7 +1866,7 @@ function wetTree(host){
     "grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:14px"});
   [["01","Kill your busy","Find what eats your day, and let the tech do it."],
    ["02","Automate your judgment calls","Wet lettuce is an example."],
-   ["03","Nothing lives outside Aloha","You own your Aloha — your data, your functionality."],
+   ["03","Everything lives inside Aloha","You own your Aloha — your data, your functionality."],
    ["04","Think Small / Think Big","A small productivity gain this month, an impossible "+
      "step change next year."]
   ].forEach(([n,t,d],i)=>{
@@ -1879,6 +1879,26 @@ function wetTree(host){
       h("div",{class:"rb",style:"font-size:22px;line-height:1.4",text:d})]));
   });
   body.appendChild(grid);
+}
+
+/* ------------------------------------- 24 · Back to the quote we opened on */
+{
+  const {body}=slide("Close · People love our cucumbers",{title:"One more time"});
+  const card=h("div",{class:"card",
+    style:"flex:1;display:flex;flex-direction:column;justify-content:center;"+
+      "align-items:center;text-align:center;padding:40px 90px;gap:0"});
+  card.appendChild(h("div",{class:"fi",style:"--d:.12s;font-size:44px;line-height:1.28;"+
+    "font-weight:600;letter-spacing:-.025em;color:var(--ink);max-width:22ch",
+    text:"“People, no offense, don’t really love cucumbers.”"}));
+  card.appendChild(h("div",{class:"fi",style:"--d:.22s;margin-top:16px;font-size:16px;"+
+    "line-height:1.5;color:var(--muted)",
+    text:"Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop"}));
+  card.appendChild(h("div",{class:"fi",style:"--d:.5s;width:180px;height:1px;"+
+    "background:var(--line);margin:34px 0"}));
+  card.appendChild(h("div",{class:"fi",style:"--d:.6s;font-size:44px;line-height:1.28;"+
+    "font-weight:600;letter-spacing:-.025em;color:var(--green-d);max-width:24ch",
+    text:"“People, no offense taken, do really love OUR cucumbers.”"}));
+  body.appendChild(card);
 }
 
 /* =====================================================================

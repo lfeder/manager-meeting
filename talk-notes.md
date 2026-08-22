@@ -87,3 +87,7 @@ We've learned from the past. We need proper management bandwidth when expanding.
 ## 23 — Takeaway
 Remember busy is a 4 letter word. Turn judgement calls into pre-planning. Put everythign inside Aloha (you can be a technologist), Think Small / Think Big / What's the next impossible we're going to do
 What's the goal again - reflect on food safety audits - let's massively embrace AI to elevate the joy of working at the farm for everyone
+
+## 24 — One more time
+Close where we opened. Half a billion dollars said people don't love cucumbers.
+We sell them by the container. Never let anyone tell you what is impossible here.
