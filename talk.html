@@ -1871,11 +1871,12 @@ function wetTree(host){
      "step change next year."]
   ].forEach(([n,t,d],i)=>{
     grid.appendChild(h("div",{class:"card rail fi",
-      style:`--acc:var(--green);gap:8px;justify-content:center;--d:${(.15+i*.1).toFixed(2)}s`},[
-      h("span",{style:"font-family:var(--mono);font-size:11px;font-weight:700;"+
+      style:`--acc:var(--green);gap:12px;justify-content:center;padding:26px 30px;`+
+        `--d:${(.15+i*.1).toFixed(2)}s`},[
+      h("span",{style:"font-family:var(--mono);font-size:13px;font-weight:700;"+
         "letter-spacing:.14em;color:var(--green)",text:n}),
-      h("div",{class:"rt",style:"font-size:20px",text:t}),
-      h("div",{class:"rb",text:d})]));
+      h("div",{class:"rt",style:"font-size:36px;line-height:1.15",text:t}),
+      h("div",{class:"rb",style:"font-size:22px;line-height:1.4",text:d})]));
   });
   body.appendChild(grid);
 }
