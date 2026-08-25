@@ -1138,6 +1138,13 @@ function splitSlide(navName,title,leftBuild,rightBuild){
    HF_LOGO is, paste a data: URI here instead of the filename. */
 const COSTCO_LOGO="costco-logo.png";
 const MEETING_DATE="Thursday, August 27, 2026";
+
+/* Paste the WSJ article between the backticks — blank line between paragraphs.
+   Left empty on purpose: the text is the Journal's, not ours to ship, and
+   inventing it would put words we wrote under their masthead. Empty is safe,
+   the slide simply falls back to the quote alone. */
+const ARTICLE_BODY=`
+`;
 {
   const s=h("section",{class:"slide cover meet","aria-hidden":"true"});
   const row=h("div",{class:"row"});
@@ -1180,9 +1187,34 @@ splitSlide("Impossible · Cukes",null,
       "font-size:21px;font-weight:700;line-height:1.32;color:var(--ink);text-align:center",
       text:"Ellison’s Half-Billion-Dollar Quest to Change Farming Has Been a Bust"}));
     card.appendChild(head);
-    card.appendChild(h("div",{style:"font-size:30px;line-height:1.32;font-weight:600;"+
-      "letter-spacing:-.02em;color:var(--ink)",
-      text:"“People, no offense, don’t really love cucumbers.”"}));
+    /* The article set as it ran — two dense columns of newsprint nobody is
+       meant to read — with the one sentence that matters left at full size
+       inside it. The point is the ratio: half a billion dollars of reporting,
+       and the line that decided the crop.
+
+       ARTICLE_BODY is empty until the text is pasted in below. While it is,
+       this falls back to the quote on its own, which is the slide as it was —
+       so the deck is never broken, just less pointed. */
+    if (ARTICLE_BODY.trim()) {
+      const body=h("div",{style:"flex:1;min-height:0;overflow:hidden;"+
+        "column-count:2;column-gap:20px;column-rule:1px solid var(--hair);"+
+        "font-family:Georgia,'Times New Roman',serif;font-size:6.5px;"+
+        "line-height:1.5;color:var(--faint);text-align:justify;hyphens:auto"});
+      ARTICLE_BODY.trim().split(/\n\s*\n/).forEach(para=>{
+        body.appendChild(h("p",{style:"margin:0 0 4px",text:para.trim()}));
+      });
+      /* Not a separate block after the article — the quote sits where it fell,
+         at the end, so the small type runs into it. */
+      body.appendChild(h("p",{style:"margin:8px 0 0;font-family:var(--font);"+
+        "font-size:30px;line-height:1.32;font-weight:600;letter-spacing:-.02em;"+
+        "color:var(--ink);break-inside:avoid",
+        text:"“People, no offense, don’t really love cucumbers.”"}));
+      card.appendChild(body);
+    } else {
+      card.appendChild(h("div",{style:"font-size:30px;line-height:1.32;font-weight:600;"+
+        "letter-spacing:-.02em;color:var(--ink)",
+        text:"“People, no offense, don’t really love cucumbers.”"}));
+    }
     card.appendChild(h("div",{style:"margin-top:14px;font-size:13px;line-height:1.5;"+
       "color:var(--muted)",
       text:"Dr. David Agus, Sensei Ag co-founder, on why they dropped the crop"}));
