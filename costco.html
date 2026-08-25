@@ -1764,7 +1764,9 @@ function wetTree(host){
   const left=h("div",{style:"flex:1;min-width:0;display:flex;flex-direction:column;gap:12px"});
   left.appendChild(h("div",{class:"ceyebrow",text:"THE PEOPLE CHANGES"}));
   [[C("--green"),"Maria moves to Sales full-time","We’ve outgrown part-time coverage."],
-   [C("--green"),"Maria backfill","mini COO"],
+   /* no sub-line: the renderer below skips the body when it is absent, so the
+      title centres on its own */
+   [C("--green"),"Maria backfill"],
    [C("--green"),"GCing will be more outsourced",
     "We’re hiring a turn-key greenhouse construction company."]
   ].forEach(([acc,t,b])=>left.appendChild(h("div",{class:"card rail",
