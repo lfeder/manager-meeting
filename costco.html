@@ -1244,8 +1244,9 @@ splitSlide("Impossible · Cukes",null,
 /* ------------------------------------------ 2 · Who we compete against */
 /* Total funding raised, not outcome — the money is the point, and the fate
    of all seven goes in one line underneath. Local Bounti is Cargill's
-   committed facilities ($200M + $110M); Revol is Tracxn's total across two
-   rounds. Neither of those two is bankrupt, so the footer does not say so */
+   committed facilities ($200M + $110M). The 2025 bankruptcies are a row of the
+   table rather than a footnote: fourteen more is the scale of the thing, and
+   sitting under the total in small grey it read as an aside. */
 const GRAVE=[
   ["Plenty","Jeff Bezos","$1B"],
   /* Kravis co-led the Series B with Temasek; Fidelity led a later round and
@@ -1254,8 +1255,11 @@ const GRAVE=[
   ["80 Acres Farms","Private equity","$350M"],
   ["Local Bounti","Cargill","$310M"],
   ["AeroFarms","IKEA Foundation","$300M"],
-  ["Revol Greens","CA private equity","$215M"],
-  ["Square Roots","Kimbal Musk","$90M"]];
+  ["Revol Greens","CA private equity","$275M"],
+  ["Square Roots","Kimbal Musk","$90M"],
+  /* Not a company — the rest of the field, given the same row so it is read
+     rather than skipped. The renderer greys it and drops the rule beneath. */
+  ["14 more indoor farms","Filed in 2025","—",true]];
 splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market",
   L=>{
     const card=h("div",{class:"card",style:"flex:1;padding:18px 20px 14px;gap:0"});
@@ -1265,23 +1269,26 @@ splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market
       h("span",{class:"ceyebrow",style:i===2?"text-align:right":"",text:t})));
     card.appendChild(head);
     const list=h("div",{style:"flex:1;min-height:0;display:flex;flex-direction:column"});
-    GRAVE.forEach(([name,backer,raised],i)=>{
+    GRAVE.forEach(([name,backer,raised,rest],i)=>{
+      /* the summary row keeps the grid but not the weight — it is the field,
+         not another competitor, and a hairline above sets it apart */
+      const ink=rest?"var(--body)":"var(--ink)";
       list.appendChild(h("div",{class:"fi",
         style:`flex:1;min-height:0;display:grid;grid-template-columns:1.15fr .85fr .6fr;`+
-          `gap:10px;align-items:center;padding:0 2px;border-bottom:1px solid var(--hair);`+
+          `gap:10px;align-items:center;padding:0 2px;`+
+          (rest?`border-top:1px solid var(--line);`
+               :`border-bottom:1px solid var(--hair);`)+
           `--d:${(.15+i*.07).toFixed(2)}s`},[
-        h("span",{style:"font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em",
-          text:name}),
+        h("span",{style:`font-size:14.5px;font-weight:${rest?600:700};color:${ink};`+
+          "letter-spacing:-.01em",text:name}),
         h("span",{style:"font-size:13px;color:var(--body)",text:backer}),
-        h("span",{style:"font-family:var(--mono);font-size:14px;font-weight:600;"+
-          "color:var(--ink);text-align:right;font-variant-numeric:tabular-nums",text:raised})]));
+        h("span",{style:`font-family:var(--mono);font-size:14px;font-weight:600;`+
+          `color:${ink};text-align:right;font-variant-numeric:tabular-nums`,text:raised})]));
     });
     card.appendChild(list);
     card.appendChild(h("div",{style:"flex:none;padding-top:12px;font-size:14px;"+
       "font-weight:700;color:var(--neg)",
-      text:"$3 billion — all bankrupt, shut down, or fighting to survive"}));
-    card.appendChild(h("div",{style:"flex:none;padding-top:4px;font-size:12px;"+
-      "color:var(--muted)",text:"And 14 more indoor-farm bankruptcies in 2025"}));
+      text:"$3 billion — all bankrupt and Revol on the verge"}));
     L.appendChild(card);
   },
   R=>{
