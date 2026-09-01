@@ -1483,7 +1483,7 @@ const buildG7OrgChart=()=>{
     ["Cuke","Pete",["William","Daniel","Keiko"]],
     ["Lettuce","Matt",["Maju"]],
     ["Sales","Maria",["Austin"]],
-    ["Post-harvest / Admin","Steven",["Vicky","Avon"]],
+    ["Post-harvest / Admin","Steven",[["Vicky",["Avon"]]]],
     ["Finance","Minor",[]],
     ["Technology","Michael",[]]
   ];
@@ -1493,23 +1493,34 @@ const buildG7OrgChart=()=>{
     at(box(n,p,(.34+i*.05).toFixed(2)),kidL(i),KIDW,KIDH)));
   oc.appendChild(kids);
 
-  /* the named team members hang off a spine under their own manager */
+  /* The named team members hang off a spine under their own manager. A report
+     who has reports of their own gets a spine of their own, indented one step
+     and dropped from the underside of their chip: Avon answers to Vicky, not
+     to Steven. Rows are handed out in reading order, so a nested report sits
+     on the line directly under the person they answer to. */
   const subs=h("div",{class:"ocrow",style:`height:${SUBH}px`});
+  const spineX=(i,depth)=>kidL(i)+SPINE+depth*(TICK+SPINE);
   teams.forEach(([, ,reports],i)=>{
     if(!reports.length) return;
-    const sx=kidL(i)+SPINE, foot=chipTop(reports.length-1)+CHIPH/2;
-    subs.append(
-      vline(kidC(i),0,SPINE),
-      zline(sx,kidC(i),SPINE),
-      vline(sx,SPINE,foot-SPINE));
-    reports.forEach((name,j)=>{
-      const cy=chipTop(j)+CHIPH/2;
-      subs.append(
-        zline(sx,sx+TICK,cy),
-        at(h("div",{class:"occhip fi",
-          style:`--d:${(.72+i*.04+j*.05).toFixed(3)}s`,text:name}),
-          sx+TICK,KIDW-SPINE-TICK,CHIPH,chipTop(j)));
-    });
+    let row=0;
+    const draw=(list,depth,spineTop)=>{
+      const sx=spineX(i,depth), chipX=sx+TICK;
+      let last=null;
+      list.forEach(r=>{
+        const [name,own]=Array.isArray(r)?r:[r,null];
+        const j=row++; last=j;
+        subs.append(
+          zline(sx,chipX,chipTop(j)+CHIPH/2),
+          at(h("div",{class:"occhip fi",
+            style:`--d:${(.72+i*.04+j*.05).toFixed(3)}s`,text:name}),
+            chipX,kidL(i)+KIDW-chipX,CHIPH,chipTop(j)));
+        /* the child spine hangs off the bottom of its parent's chip */
+        if(own) draw(own,depth+1,chipTop(j)+CHIPH);
+      });
+      subs.appendChild(vline(sx,spineTop,chipTop(last)+CHIPH/2-spineTop));
+    };
+    subs.append(vline(kidC(i),0,SPINE), zline(spineX(i,0),kidC(i),SPINE));
+    draw(reports,0,SPINE);
   });
   oc.appendChild(subs);
 
