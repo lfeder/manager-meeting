@@ -2116,13 +2116,13 @@ const LOAD3D=[
       style:"width:100%;height:100%;object-fit:contain;display:block;border-radius:8px"})));
 }
 
-/* ----------------------------- 12b · The app, scoped to the person */
+/* --------------------------------- 12b · Aloha, scoped to the person */
 /* The slides before it argue the app draws the answer. This one says who
    the answer is drawn for: the app narrows to one person's work — his week
    and his job. No labels and no prose: two screens, as large as the stage
    allows, with only the accent rule to tell them apart. */
 {
-  const {body}=slide("v3 · Scoped to the person",{title:"The app is scoped to the team member"});
+  const {body}=slide("v3 · Aloha scoped to the person",{title:"Aloha scoped to the team member"});
 
   const panel=(acc,d,src,alt,flex)=>h("div",{class:"fi",
     style:`--d:${d};flex:${flex};min-width:0;min-height:0;display:flex;flex-direction:column;`+
@@ -2145,32 +2145,7 @@ const LOAD3D=[
   body.appendChild(cols);
 }
 
-/* ------------------------------------------------ 12c · The Farm Defined */
-{
-  const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
-  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
-    "grid-template-rows:repeat(3,140px);align-content:center;gap:18px"});
-  [["Ops Data",["readings","sessions","orders","lab results"]],
-   ["Nouns",["pond","board","greenhouse","cycle","station"]],
-   ["Work",["walkthrough","video","inputs","standard"]]
-  ].forEach(([name,items],i)=>{
-    const chips=h("div",{style:"display:flex;align-items:center;flex-wrap:nowrap;gap:10px"});
-    items.forEach(t=>chips.appendChild(h("span",{class:"pill",
-      style:"font-family:var(--mono);font-size:16px;font-weight:600;"+
-        "padding:9px 14px;background:var(--wash);border:1px solid var(--hair);"+
-        "color:var(--body);letter-spacing:.01em",text:t})));
-    grid.appendChild(h("div",{class:"card rail fi",
-      style:`--acc:var(--green);--d:${(.15+i*.12).toFixed(2)}s;`+
-          "display:grid;grid-template-columns:300px 650px;justify-content:start;"+
-        "align-items:center;gap:30px;padding:20px 30px"},[
-      h("div",{style:"font-size:34px;font-weight:700;line-height:1.1;"+
-        "letter-spacing:-.025em;color:var(--ink)",text:name}),
-      chips]));
-  });
-  body.appendChild(grid);
-}
-
-/* --------------------------------------------- 13 · A wet harvest day */
+/* ------------------------------------------- 12c · A wet harvest day */
 const WETDAY=[["When to start harvest",4],["All or some rows of wet lettuce",5],
   ["Cut height",3],["Packhouse fans on or off",2],
   ["Dryer heater off, or at what temperature",4],["Dryer fan speed",3],
@@ -2246,6 +2221,31 @@ function wetTree(host){
       "color:var(--ink);font-variant-numeric:tabular-nums",text:"2,880"}),
     h("span",{style:"font-size:22px;color:var(--body)",text:"ways to run the day"})]));
   body.appendChild(card);
+}
+
+/* ------------------------------------------------ 12d · The Farm Defined */
+{
+  const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
+  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
+    "grid-template-rows:repeat(3,140px);align-content:center;gap:18px"});
+  [["Nouns",["pond","board","greenhouse","cycle","station"]],
+   ["Work",["walkthrough","video","inputs","standard"]],
+   ["Ops Data",["readings","sessions","orders","lab results"]]
+  ].forEach(([name,items],i)=>{
+    const chips=h("div",{style:"display:flex;align-items:center;flex-wrap:nowrap;gap:10px"});
+    items.forEach(t=>chips.appendChild(h("span",{class:"pill",
+      style:"font-family:var(--mono);font-size:16px;font-weight:600;"+
+        "padding:9px 14px;background:var(--wash);border:1px solid var(--hair);"+
+        "color:var(--body);letter-spacing:.01em",text:t})));
+    grid.appendChild(h("div",{class:"card rail fi",
+      style:`--acc:var(--green);--d:${(.15+i*.12).toFixed(2)}s;`+
+          "display:grid;grid-template-columns:300px 650px;justify-content:start;"+
+        "align-items:center;gap:30px;padding:20px 30px"},[
+      h("div",{style:"font-size:34px;font-weight:700;line-height:1.1;"+
+        "letter-spacing:-.025em;color:var(--ink)",text:name}),
+      chips]));
+  });
+  body.appendChild(grid);
 }
 
 /* =====================================================================
@@ -2383,24 +2383,9 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
       text:"EXPANSION II"}),
     h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
       "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"GREENHOUSES"}),
-    h("div",{class:"fi",style:"--d:.4s;margin-top:20px;font-size:21px;color:var(--body)",
-      text:"We feed more of Hawaii"}),
     h("div",{class:"pnum"}));
   stage.appendChild(sec);
   SLIDES.push({el:sec,title:"Expansion II · Greenhouses"});
-}
-
-/* -------------------------------------------------- 16 · Why we must */
-{
-  const s=h("section",{class:"slide","aria-hidden":"true"});
-  s.style.cssText+="align-items:center;justify-content:center;text-align:center";
-  s.append(
-    h("h1",{class:"fi",style:"--d:.2s;margin:0;font-size:56px;font-weight:700;"+
-      "letter-spacing:-.034em;line-height:1.08;color:var(--ink);max-width:20ch",
-      text:"This isn’t an opportunity. It’s an obligation."}),
-    h("div",{class:"pnum"}));
-  stage.appendChild(s);
-  SLIDES.push({el:s,title:"Why we must"});
 }
 
 /* ------------------------------------------------ 17 · Shorting */
