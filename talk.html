@@ -80,6 +80,25 @@ h1.h1{margin:0;font-size:33px;font-weight:700;letter-spacing:-.026em;color:var(-
 .legend .dots{display:inline-flex;align-items:center;gap:3px}
 .legend i.dot{width:7px;height:7px;border-radius:50%;opacity:.5}
 
+/* ---------- the load planner's containers, turned by hand ---------- */
+/* Class names are namespaced away from the deck's own #stage. Each face hides
+   its own reverse: without that you see through the near wall into the inside
+   of the box and a solid pallet reads as an open shell. */
+.c3d{perspective-origin:50% 42%;cursor:grab;user-select:none;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--wash);border:1px solid var(--hair);border-radius:10px}
+.c3d.grabbing{cursor:grabbing}
+.c3drig{position:relative;width:0;height:0;transform-style:preserve-3d}
+.pw{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.pw .pf{position:absolute;left:0;top:0;transform-origin:50% 50%;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* The number a moving pallet carries. Flat on the lid and on the outward side,
+   so one of the two is always facing you however the box is turned. */
+.palnum{position:absolute;left:0;top:0;display:flex;align-items:center;
+  justify-content:center;font-weight:700;color:#fff;line-height:1;
+  text-shadow:0 1px 2px rgba(0,0,0,.55);pointer-events:none;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
 .pill{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.01em;
   padding:3px 8px;border-radius:999px;background:var(--wash);color:var(--body)}
 .pill.up{color:var(--pos);background:rgba(68,85,78,.09)}
@@ -1730,17 +1749,245 @@ function dowChart(host){
   body.appendChild(grid);
 }
 
+/* The five drawings, as the freight model laid them out for 07/17 Fri.
+   Generated, not written: each row is one block --
+     [0, x,y,z, w,h,d, colour, outlined]        a pallet or the deck slab
+     [1, x,y,z, dy, w,h, fontsize, label]       its number, lying on the lid
+     [2, x,y,z, ry, tz, w,h, fontsize, label]   the same number on the outward side
+   To redraw them, open ../freight-model/index.html, click the 07/17 Fri row
+   and read .stage .rig back out -- the extractor is in that repo's history. */
+const LOAD3D=[
+  /* 0 - the container as loaded */ [
+   [0,0,20.19,0,73.52,2.5,271.64,"#c9d2d7",0],
+   [0,-17.16,9.79,-118.56,27.2,16.31,22.52,"#b3341c",0],
+   [1,-17.16,9.79,-118.56,-8.75,25.2,20.52,11,"10"],
+   [2,-17.16,9.79,-118.56,-90,14.2,20.52,16.31,10,"10"],
+   [0,17.16,6.52,-118.56,27.2,22.83,22.52,"#d9a83c",0],
+   [0,-17.16,0,-88.92,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,15.79,-88.92,27.2,4.31,22.52,"#b3341c",0],
+   [1,17.16,15.79,-88.92,-2.75,25.2,20.52,11,"7"],
+   [2,17.16,15.79,-88.92,90,14.2,20.52,4.31,9,"7"],
+   [0,-17.16,6.52,-59.28,27.2,22.83,22.52,"#d9a83c",0],
+   [0,17.16,6.52,-59.28,27.2,22.83,22.52,"#d9a83c",0],
+   [0,-17.16,4.89,-29.64,27.2,26.09,22.52,"#d9a83c",0],
+   [0,17.16,0,-29.64,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,4.89,0,27.2,26.09,22.52,"#d9a83c",0],
+   [0,17.16,0,0,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,0,29.64,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,0,29.64,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,10.87,59.28,27.2,14.13,22.52,"#b3341c",0],
+   [1,-17.16,10.87,59.28,-7.67,25.2,20.52,11,"9"],
+   [2,-17.16,10.87,59.28,-90,14.2,20.52,14.13,9,"9"],
+   [0,17.16,9.24,59.28,27.2,17.4,22.52,"#d9a83c",0],
+   [1,17.16,9.24,59.28,-9.3,25.2,20.52,11,"8"],
+   [2,17.16,9.24,59.28,90,14.2,20.52,17.4,10,"8"],
+   [0,-17.16,5.44,88.92,27.2,25.01,22.52,"#d9a83c",0],
+   [0,17.16,4.35,88.92,27.2,27.18,22.52,"#d9a83c",0],
+   [1,17.16,4.35,88.92,-14.19,25.2,20.52,11,"6"],
+   [2,17.16,4.35,88.92,90,14.2,20.52,27.18,11,"6"],
+   [0,-17.16,0,118.56,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,6.52,118.56,27.2,22.83,22.52,"#d9a83c",0]
+  ],
+  /* 1 - first box truck, as loaded */ [
+   [0,0,20.19,0,73.52,2.5,123.44,"#c9d2d7",0],
+   [0,-17.16,9.79,-44.46,27.2,16.31,22.52,"#7b8288",0],
+   [0,17.16,6.52,-44.46,27.2,22.83,22.52,"#7b8288",0],
+   [0,-17.16,9.79,-14.82,27.2,16.31,22.52,"#7b8288",0],
+   [0,17.16,8.15,-14.82,27.2,19.57,22.52,"#7b8288",0],
+   [0,-17.16,13.59,14.82,27.2,8.7,22.52,"#7b8288",0],
+   [0,17.16,13.05,14.82,27.2,9.79,22.52,"#b3341c",0],
+   [1,17.16,13.05,14.82,-5.49,25.2,20.52,11,"4"],
+   [2,17.16,13.05,14.82,90,14.2,20.52,9.79,9,"4"],
+   [0,-17.16,1.63,44.46,27.2,32.62,22.52,"#d9a83c",0],
+   [1,-17.16,1.63,44.46,-16.91,25.2,20.52,11,"1"],
+   [2,-17.16,1.63,44.46,-90,14.2,20.52,32.62,11,"1"],
+   [0,17.16,15.79,44.46,27.2,4.31,22.52,"#b3341c",0],
+   [1,17.16,15.79,44.46,-2.75,25.2,20.52,11,"5"],
+   [2,17.16,15.79,44.46,90,14.2,20.52,4.31,9,"5"]
+  ],
+  /* 2 - second box truck, as loaded */ [
+   [0,0,20.19,0,73.52,2.5,123.44,"#c9d2d7",0],
+   [0,-17.16,8.15,-44.46,27.2,19.57,22.52,"#d9a83c",0],
+   [1,-17.16,8.15,-44.46,-10.39,25.2,20.52,11,"2"],
+   [2,-17.16,8.15,-44.46,-90,14.2,20.52,19.57,11,"2"],
+   [0,17.16,9.79,-44.46,27.2,16.31,22.52,"#b3341c",0],
+   [1,17.16,9.79,-44.46,-8.75,25.2,20.52,11,"3"],
+   [2,17.16,9.79,-44.46,90,14.2,20.52,16.31,10,"3"]
+  ],
+  /* 3 - the container optimized */ [
+   [0,0,20.19,0,73.52,2.5,271.64,"#c9d2d7",0],
+   [0,-17.16,0,-118.56,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,0,-118.56,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,0,-88.92,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,0,-88.92,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,0,-59.28,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,17.16,0,-59.28,27.2,35.88,22.52,"#3f8f4f",0],
+   [0,-17.16,4.35,-29.64,27.2,27.18,22.52,"#d9a83c",1],
+   [1,-17.16,4.35,-29.64,-14.19,25.2,20.52,11,"6"],
+   [2,-17.16,4.35,-29.64,-90,14.2,20.52,27.18,11,"6"],
+   [0,-17.16,-12.89,-29.64,27.2,4.31,22.52,"#b3341c",1],
+   [1,-17.16,-12.89,-29.64,-2.75,25.2,20.52,11,"7"],
+   [2,-17.16,-12.89,-29.64,-90,14.2,20.52,4.31,9,"7"],
+   [0,17.16,4.89,-29.64,27.2,26.09,22.52,"#d9a83c",0],
+   [0,-17.16,4.89,0,27.2,26.09,22.52,"#d9a83c",0],
+   [0,17.16,5.44,0,27.2,25.01,22.52,"#d9a83c",0],
+   [0,-17.16,6.52,29.64,27.2,22.83,22.52,"#d9a83c",0],
+   [0,17.16,6.52,29.64,27.2,22.83,22.52,"#d9a83c",0],
+   [0,-17.16,6.52,59.28,27.2,22.83,22.52,"#d9a83c",0],
+   [0,17.16,6.52,59.28,27.2,22.83,22.52,"#d9a83c",0],
+   [0,-17.16,9.24,88.92,27.2,17.4,22.52,"#d9a83c",1],
+   [1,-17.16,9.24,88.92,-9.3,25.2,20.52,11,"8"],
+   [2,-17.16,9.24,88.92,-90,14.2,20.52,17.4,10,"8"],
+   [0,-17.16,-8.02,88.92,27.2,14.13,22.52,"#b3341c",1],
+   [1,-17.16,-8.02,88.92,-7.67,25.2,20.52,11,"9"],
+   [2,-17.16,-8.02,88.92,-90,14.2,20.52,14.13,9,"9"],
+   [0,17.16,8.15,88.92,27.2,19.57,22.52,"#d9a83c",1],
+   [1,17.16,8.15,88.92,-10.39,25.2,20.52,11,"2"],
+   [2,17.16,8.15,88.92,90,14.2,20.52,19.57,11,"2"],
+   [0,17.16,-11.29,88.92,27.2,16.31,22.52,"#b3341c",1],
+   [1,17.16,-11.29,88.92,-8.75,25.2,20.52,11,"10"],
+   [2,17.16,-11.29,88.92,90,14.2,20.52,16.31,10,"10"],
+   [0,-17.16,1.63,118.56,27.2,32.62,22.52,"#d9a83c",1],
+   [1,-17.16,1.63,118.56,-16.91,25.2,20.52,11,"1"],
+   [2,-17.16,1.63,118.56,-90,14.2,20.52,32.62,11,"1"],
+   [0,-17.16,-18.33,118.56,27.2,4.31,22.52,"#b3341c",1],
+   [1,-17.16,-18.33,118.56,-2.75,25.2,20.52,11,"5"],
+   [2,-17.16,-18.33,118.56,-90,14.2,20.52,4.31,9,"5"],
+   [0,17.16,9.79,118.56,27.2,16.31,22.52,"#b3341c",1],
+   [1,17.16,9.79,118.56,-8.75,25.2,20.52,11,"3"],
+   [2,17.16,9.79,118.56,90,14.2,20.52,16.31,10,"3"],
+   [0,17.16,-4.76,118.56,27.2,9.79,22.52,"#b3341c",1],
+   [1,17.16,-4.76,118.56,-5.49,25.2,20.52,11,"4"],
+   [2,17.16,-4.76,118.56,90,14.2,20.52,9.79,9,"4"]
+  ],
+  /* 4 - the one box truck left */ [
+   [0,0,20.19,0,73.52,2.5,123.44,"#c9d2d7",0],
+   [0,-17.16,9.79,-44.46,27.2,16.31,22.52,"#7b8288",0],
+   [0,17.16,6.52,-44.46,27.2,22.83,22.52,"#7b8288",0],
+   [0,-17.16,9.79,-14.82,27.2,16.31,22.52,"#7b8288",0],
+   [0,17.16,8.15,-14.82,27.2,19.57,22.52,"#7b8288",0],
+   [0,-17.16,13.59,14.82,27.2,8.7,22.52,"#7b8288",0]
+  ]
+];
+
 /* ------------------------------ 12 · The app, today and tomorrow */
-/* The machine slides before this one are diagrams. This is the same
-   argument as two screens: the app you fill in, and the app that hands
-   back the answer with the money already counted. */
+/* The machine slides before this one are diagrams. This is the argument in one
+   picture: the load the planner was handed, and the load it hands back, with
+   every pallet it moved carrying a number so the same one can be found in both.
+   Drawn rather than screenshotted so it can be turned -- the first question a
+   room asks of a stack of boxes is what is behind the front row, and a picture
+   cannot answer it. */
 {
   const {body}=slide("v3 · The app",{title:"From tables to visuals"});
-  body.appendChild(h("div",{class:"fi",
-    style:"--d:.15s;flex:1;min-height:0;overflow:hidden;background:var(--wash)"},
-    h("img",{src:APP_FUTURE,
-      alt:"Aloha 3.0 load planner — as loaded against optimized, with savings",
-      style:"width:100%;height:100%;object-fit:cover;object-position:top left;display:block"})));
+
+  /* face, cuboid, shade and wire3dDrag are lifted from freight-model/index.html
+     so the two stay the same drawing. Each face is grown a pixel so neighbours
+     overlap: cut to exact size they meet on a shared line, and subpixel rounding
+     under rotation leaves a hairline of background along every corner. */
+  const shade=(hex,k)=>{
+    const m=/^#?([0-9a-f]{6})$/i.exec(hex); if(!m) return hex;
+    const n=parseInt(m[1],16);
+    const c=[n>>16,(n>>8)&255,n&255].map(v=>Math.max(0,Math.min(255,Math.round(v*k))));
+    return `rgb(${c.join(",")})`;
+  };
+  const face=(w,h,tf,fill,extra)=>
+    `<div class="pf" style="width:${w}px;height:${h}px;margin-left:${-w/2}px;`+
+    `margin-top:${-h/2}px;transform:${tf};background:${fill}${extra||""}"></div>`;
+  const cuboid=(w,h,d,colour,edge)=>{
+    const top=shade(colour,1.18), side=shade(colour,.82), front=colour;
+    const E=1, W=w+E, H=h+E, Dp=d+E;
+    const ln=edge?";box-shadow:inset 0 0 0 2px rgba(12,16,20,.85)":"";
+    return face(W,H,`translateZ(${d/2}px)`,front,ln)+
+           face(W,H,`rotateY(180deg) translateZ(${d/2}px)`,front,ln)+
+           face(Dp,H,`rotateY(90deg) translateZ(${w/2}px)`,side,ln)+
+           face(Dp,H,`rotateY(-90deg) translateZ(${w/2}px)`,side,ln)+
+           face(W,Dp,`rotateX(90deg) translateZ(${h/2}px)`,top,ln)+
+           face(W,Dp,`rotateX(-90deg) translateZ(${h/2}px)`,side,ln);
+  };
+  /* Drag to turn. rx is clamped so the deck can be looked down on but never
+     from underneath, which is where a container stops reading as a container. */
+  const wire3dDrag=(stage,rig,view)=>{
+    const apply=()=>{rig.style.transform=`rotateX(${view.rx}deg) rotateY(${view.ry}deg)`;};
+    const down=e=>{const p=e.touches?e.touches[0]:e;
+      view.drag={x:p.clientX,y:p.clientY,rx:view.rx,ry:view.ry};
+      stage.classList.add("grabbing");};
+    const move=e=>{if(!view.drag) return;
+      const p=e.touches?e.touches[0]:e;
+      view.ry=view.drag.ry+(p.clientX-view.drag.x)*.4;
+      view.rx=Math.max(-85,Math.min(10,view.drag.rx-(p.clientY-view.drag.y)*.3));
+      apply(); e.preventDefault();};
+    const up=()=>{view.drag=null; stage.classList.remove("grabbing");};
+    stage.addEventListener("mousedown",down);
+    stage.addEventListener("touchstart",down,{passive:true});
+    addEventListener("mousemove",move);
+    addEventListener("touchmove",move,{passive:false});
+    addEventListener("mouseup",up); addEventListener("touchend",up);
+    apply();
+  };
+
+  /* The model draws at laptop size; the back of the room needs more. The
+     geometry is scaled rather than the finished box -- a CSS scale on a
+     preserve-3d rig flattens it -- so the perspective stays honest. */
+  const rig3d=(blocks,k)=>{
+    const S=n=>n*k;
+    return blocks.map(b=>{
+      const t=`translate3d(${S(b[1])}px,${S(b[2])}px,${S(b[3])}px)`;
+      if(b[0]===0) return `<div class="pw" style="transform:${t}">`+
+        cuboid(S(b[4]),S(b[5]),S(b[6]),b[7],b[8])+"</div>";
+      const [tf,w,hh,fs,tx]=b[0]===1
+        ? [`${t} translateY(${S(b[4])}px) rotateX(90deg)`,S(b[5]),S(b[6]),S(b[7]),b[8]]
+        : [`${t} rotateY(${b[4]}deg) translateZ(${S(b[5])}px)`,S(b[6]),S(b[7]),S(b[8]),b[9]];
+      return `<div class="pw" style="transform:${tf}"><div class="palnum" style="`+
+        `width:${w}px;height:${hh}px;margin-left:${-w/2}px;margin-top:${-hh/2}px;`+
+        `font-size:${fs}px">${tx}</div></div>`;
+    }).join("");
+  };
+
+  const CONT=1.62, BAY=1.12;
+  const stage3d=(i,k,persp,style)=>{
+    const rig=h("div",{class:"c3drig"});
+    rig.innerHTML=rig3d(LOAD3D[i],k);
+    const st=h("div",{class:"c3d",style:`perspective:${Math.round(persp*k)}px;${style}`},rig);
+    wire3dDrag(st,rig,{rx:-22,ry:-32,drag:null});
+    return st;
+  };
+
+  /* A space is judged on whether it could have been fuller, not on what is in
+     it: green is doing its job, red could have taken another pallet on top,
+     amber is short with nothing to pair it with. Grey rides a truck at any fill
+     and is not scored. */
+  const VERDICT={Full:"#3f8f4f",Stackable:"#b3341c",Short:"#d9a83c",Loose:"#7b8288"};
+  const legend=items=>h("div",{style:"flex:none;display:flex;align-items:center;"+
+    "gap:20px;font-size:15px;font-weight:500;color:var(--body);white-space:nowrap"},
+    items.map(t=>h("span",{style:"display:inline-flex;align-items:center;gap:8px"},[
+      h("i",{style:"width:13px;height:13px;border-radius:3px;flex:none;background:"+
+        VERDICT[t.split(" ")[0]]}),
+      h("span",{text:t})])));
+
+  /* Container on the left of each half, the box trucks it could not hold
+     stacked beside it -- the point of the pair is that the right-hand side
+     needs one truck where the left needs two. */
+  const side=(tag,note,cont,bays,items,d)=>h("div",{class:"fi",
+    style:`--d:${d};flex:1;min-width:0;display:flex;flex-direction:column;gap:10px`},[
+    h("div",{style:"flex:none;display:flex;align-items:baseline;gap:12px"},[
+      h("span",{class:"ceyebrow",text:tag}),
+      h("span",{style:"font-size:15px;color:var(--body)",text:note})]),
+    h("div",{style:"flex:1;min-height:0;display:flex;gap:10px"},[
+      stage3d(cont,CONT,1100,"flex:1;min-width:0"),
+      h("div",{style:"flex:none;width:150px;display:flex;flex-direction:column;gap:10px"},
+        bays.map(i=>stage3d(i,BAY,820,"flex:1;min-height:0")))]),
+    legend(items)]);
+
+  const cols=h("div",{style:"flex:1;min-height:0;display:flex;gap:26px"});
+  cols.append(
+    side("As loaded","14,058 lb aboard, 10 on the trucks",0,[1,2],
+      ["Full — 6","Stackable — 3","Short — 9"],".15s"),
+    side("Optimized","16,544 lb aboard, 5 on the trucks",3,[4],
+      ["Full — 6","Stackable — 6","Short — 11"],".3s"));
+  body.appendChild(cols);
+  body.appendChild(h("div",{class:"fi",style:"--d:.45s;flex:none;margin-top:14px;"+
+    "font-size:15px;color:var(--muted);text-align:center",
+    text:"07/17 Fri · 18 pallets · 2,486 lb off the trucks · $338 · drag any container to turn it"}));
 }
 
 /* ---------------------------------------- 12a · Visual logistics map */
