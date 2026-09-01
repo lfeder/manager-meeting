@@ -1503,24 +1503,36 @@ const buildG7OrgChart=()=>{
   teams.forEach(([, ,reports],i)=>{
     if(!reports.length) return;
     let row=0;
-    const draw=(list,depth,spineTop)=>{
-      const sx=spineX(i,depth), chipX=sx+TICK;
+    const chip=(name,j,left,width)=>at(h("div",{class:"occhip fi",
+      style:`--d:${(.72+i*.04+j*.05).toFixed(3)}s`,text:name}),
+      left,width,CHIPH,chipTop(j));
+
+    /* One report hangs straight below whoever they answer to: a chain of one
+       wants a single vertical line, and two elbows to say the same thing read
+       as a detour. Several hang off a spine, because a straight line to each of
+       them is not a thing you can draw. Each level in is narrower than the one
+       above, which is what says "under" once the line no longer steps sideways.
+       `cx` is the centre to hang from, `fromY` the underside of the parent. */
+    const draw=(list,depth,cx,fromY,width)=>{
+      if(list.length===1){
+        const [name,own]=Array.isArray(list[0])?list[0]:[list[0],null];
+        const j=row++;
+        subs.append(vline(cx,fromY,chipTop(j)-fromY),chip(name,j,cx-width/2,width));
+        if(own) draw(own,depth+1,cx,chipTop(j)+CHIPH,Math.max(width-2*SPINE,70));
+        return;
+      }
+      const sx=spineX(i,depth), chipX=sx+TICK, w=kidL(i)+KIDW-chipX, ey=fromY+SPINE;
+      subs.append(vline(cx,fromY,SPINE),zline(sx,cx,ey));
       let last=null;
       list.forEach(r=>{
         const [name,own]=Array.isArray(r)?r:[r,null];
         const j=row++; last=j;
-        subs.append(
-          zline(sx,chipX,chipTop(j)+CHIPH/2),
-          at(h("div",{class:"occhip fi",
-            style:`--d:${(.72+i*.04+j*.05).toFixed(3)}s`,text:name}),
-            chipX,kidL(i)+KIDW-chipX,CHIPH,chipTop(j)));
-        /* the child spine hangs off the bottom of its parent's chip */
-        if(own) draw(own,depth+1,chipTop(j)+CHIPH);
+        subs.append(zline(sx,chipX,chipTop(j)+CHIPH/2),chip(name,j,chipX,w));
+        if(own) draw(own,depth+1,chipX+w/2,chipTop(j)+CHIPH,Math.max(w-2*SPINE,70));
       });
-      subs.appendChild(vline(sx,spineTop,chipTop(last)+CHIPH/2-spineTop));
+      subs.appendChild(vline(sx,ey,chipTop(last)+CHIPH/2-ey));
     };
-    subs.append(vline(kidC(i),0,SPINE), zline(spineX(i,0),kidC(i),SPINE));
-    draw(reports,0,SPINE);
+    draw(reports,0,kidC(i),0,KIDW-SPINE-TICK);
   });
   oc.appendChild(subs);
 
