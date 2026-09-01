@@ -58,3 +58,13 @@ weekly-mean line over a faint scatter of single days — and keep the mid-2026
 logging gaps as breaks in the line rather than drawing them as zero.
 
 `queries.sql` documents the SQL behind every series in `deck.html`.
+
+## Freight model
+
+`freight.html` is the air-freight / container model, copied whole from the
+`farm-freight-model` repo — self-contained, data inlined, no network calls. The
+"From tables to visuals" slide in `talk.html` draws its 07/17 containers from
+baked geometry and links here for the ship-day rows behind them, every other
+day in the season, and the cost model itself.
+
+To refresh it, copy `index.html` from that repo over this file.

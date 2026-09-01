@@ -1985,9 +1985,18 @@ const LOAD3D=[
     side("Optimized","16,544 lb aboard, 5 on the trucks",3,[4],
       ["Full — 6","Stackable — 6","Short — 11"],".3s"));
   body.appendChild(cols);
-  body.appendChild(h("div",{class:"fi",style:"--d:.45s;flex:none;margin-top:14px;"+
-    "font-size:15px;color:var(--muted);text-align:center",
-    text:"07/17 Fri · 18 pallets · 2,486 lb off the trucks · $338 · drag any container to turn it"}));
+  /* The rows that used to sit above and below the drawings -- the ship-day
+     table, the billable line, and every other day in the season -- are one
+     click away rather than reproduced here. freight.html is the model's own
+     page, copied in whole so the deck stays one folder. */
+  body.appendChild(h("div",{class:"fi",style:"--d:.45s;flex:none;margin-top:12px;"+
+    "font-size:15px;line-height:1.25;color:var(--muted);text-align:center"},[
+    h("span",{text:"07/17 Fri · 18 pallets · 2,486 lb off the trucks · $338 · "+
+      "drag any container to turn it · "}),
+    h("a",{href:"freight.html",target:"_blank",rel:"noopener",
+      style:"color:var(--green-d);font-weight:700;text-decoration:none;"+
+        "border-bottom:1px solid currentColor",
+      text:"every ship day →"})]));
 }
 
 /* ---------------------------------------- 12a · Visual logistics map */
@@ -2254,10 +2263,6 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
         "letter-spacing:-.016em;color:var(--ink)",text:t})]));
   });
   card.appendChild(list);
-  card.appendChild(h("div",{style:"flex:none;padding-top:14px;"+
-    "border-top:1px solid var(--line);font-size:22px;font-weight:700;"+
-    "letter-spacing:-.016em;color:var(--green-d)",
-    text:"Like being back in school — we are learning something new every day"}));
   body.appendChild(card);
 }
 
