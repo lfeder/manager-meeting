@@ -1943,7 +1943,7 @@ const LOAD3D=[
     }).join("");
   };
 
-  const CONT=1.62, BAY=1.12;
+  const CONT=1.62, BAY=1.05;
   const stage3d=(i,k,persp,style)=>{
     const rig=h("div",{class:"c3drig"});
     rig.innerHTML=rig3d(LOAD3D[i],k);
@@ -1978,13 +1978,97 @@ const LOAD3D=[
         bays.map(i=>stage3d(i,BAY,820,"flex:1;min-height:0")))]),
     legend(items)]);
 
-  const cols=h("div",{style:"flex:1;min-height:0;display:flex;gap:26px"});
+  /* The two rows the drawings sit between. Above, the ship day's own line out
+     of the cost table -- what went in the container, what was left for the box
+     trucks, and what the reload is worth. Below, what is standing in each of
+     the container's eighteen spaces. Both are the model's numbers, lifted
+     rather than re-derived; the link at the foot carries the rest. */
+  const NUM="font-family:var(--mono);font-variant-numeric:tabular-nums";
+  const cell=(t,extra)=>h("td",{style:"padding:3px 8px;white-space:nowrap;"+
+    "text-align:right;"+(extra||""),text:t});
+  const hcell=(t,extra)=>h("th",{style:"padding:0 8px 3px;white-space:nowrap;"+
+    "text-align:right;font-size:11px;font-weight:800;letter-spacing:.08em;"+
+    "text-transform:uppercase;color:var(--muted);"+(extra||""),text:t});
+
+  const DAY=[["Ship day","07/17 Fri"],["Pal","18"],["lb/pal","781"],
+    ["Weight","14,058"],["Spaces full","100%"],["Cuke wt used","67%"],
+    ["Pallets","10"],["Container-able","5"],["Could fit","5"],
+    ["lb saved","2,486"],["Container after","16,544"],["Savings","$338"]];
+  {
+    const t=h("table",{class:"fi",style:"--d:.1s;flex:none;width:100%;"+
+      "border-collapse:collapse;font-size:15px;color:var(--ink);"+NUM});
+    const grp=h("tr",{});
+    /* the first column belongs to neither group -- it names the day */
+    grp.append(h("th",{}),
+      h("th",{colspan:"5",style:"padding-bottom:2px;font-size:11px;font-weight:800;"+
+        "letter-spacing:.1em;text-transform:uppercase;color:var(--body);"+
+        "border-bottom:1px solid var(--hair)",text:"Cucumber container"}),
+      h("th",{colspan:"6",style:"padding-bottom:2px;font-size:11px;font-weight:800;"+
+        "letter-spacing:.1em;text-transform:uppercase;color:var(--body);"+
+        "border-bottom:1px solid var(--hair)",text:"Box trucks"}));
+    const hd=h("tr",{}), rw=h("tr",{});
+    DAY.forEach(([label,val],i)=>{
+      const first=i===0, money=label==="Savings";
+      hd.appendChild(hcell(label,first?"text-align:left":""));
+      rw.appendChild(cell(val,(first?"text-align:left;font-weight:700;":"")+
+        (money?"color:var(--green-d);font-weight:700":"")));
+    });
+    t.append(grp,hd,rw);
+    body.appendChild(t);
+  }
+
+  const cols=h("div",{style:"flex:1;min-height:0;display:flex;gap:26px;margin:10px 0"});
   cols.append(
     side("As loaded","14,058 lb aboard, 10 on the trucks",0,[1,2],
-      ["Full — 6","Stackable — 3","Short — 9"],".15s"),
+      ["Full \u2014 6","Stackable \u2014 3","Short \u2014 9"],".15s"),
     side("Optimized","16,544 lb aboard, 5 on the trucks",3,[4],
-      ["Full — 6","Stackable — 6","Short — 11"],".3s"));
+      ["Full \u2014 6","Stackable \u2014 6","Short \u2014 11"],".3s"));
   body.appendChild(cols);
+
+  /* Eighteen spaces in three blocks of six, so they read across rather than
+     running off the bottom of the slide. */
+  const SPACES=[
+   ["1", "1038 Kapolei", "JW", "30", "550/1,162", "47%"],
+   ["2", "1038 Kapolei", "KW", "42", "754/1,162", "65%"],
+   ["3", "120 Honolulu", "JW", "66", "1,162/1,162", "100%"],
+   ["4", "120 Honolulu", "JW", "6", "142/1,162", "12%"],
+   ["5", "120 Honolulu", "KW", "42", "754/1,162", "65%"],
+   ["6", "485 Waipahu", "JW", "42", "754/1,162", "65%"],
+   ["7", "485 Waipahu", "KW", "48", "856/1,162", "74%"],
+   ["8", "687 Iwilei", "JW", "66", "1,162/1,162", "100%"],
+   ["9", "687 Iwilei", "KW", "48", "856/1,162", "74%"],
+   ["10", "AP", "JR", "66", "1,162/1,162", "100%"],
+   ["11", "AP", "KR", "66", "898/898", "100%"],
+   ["12", "AP", "KR", "66", "898/898", "100%"],
+   ["13", "AP", "JR", "26", "482/1,162", "41%"],
+   ["14", "AP", "JW/KR", "32", "464/915", "51%"],
+   ["15", "Foodland", "JR", "46", "822/1,162", "71%"],
+   ["16", "Foodland", "KR", "50", "690/898", "77%"],
+   ["17", "Safeway Inc.", "KR", "66", "898/898", "100%"],
+   ["18", "Safeway Inc.", "JR", "42", "754/1,162", "65%"]
+  ];
+  {
+    const wrap=h("div",{class:"fi",style:"--d:.4s;flex:none;display:flex;gap:18px"});
+    for(let i=0;i<18;i+=6){
+      const t=h("table",{style:"flex:1;min-width:0;border-collapse:collapse;"+
+        "font-size:11px;color:var(--ink);"+NUM});
+      const hd=h("tr",{});
+      ["Sp","Customer","Prod","Cases","Billable / hold","Used"]
+        .forEach((l,c)=>hd.appendChild(hcell(l,
+          "padding-left:5px;padding-right:5px"+(c===1?";text-align:left":""))));
+      t.appendChild(hd);
+      SPACES.slice(i,i+6).forEach(r=>{
+        const tr=h("tr",{});
+        r.forEach((v,c)=>tr.appendChild(cell(v,
+          "padding-left:5px;padding-right:5px;"+(c===1?"text-align:left;":"")+
+          (v==="100%"?"color:var(--green-d);font-weight:700":""))));
+        t.appendChild(tr);
+      });
+      wrap.appendChild(t);
+    }
+    body.appendChild(wrap);
+  }
+
   /* The rows that used to sit above and below the drawings -- the ship-day
      table, the billable line, and every other day in the season -- are one
      click away rather than reproduced here. freight.html is the model's own
