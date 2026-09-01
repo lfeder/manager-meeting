@@ -1893,7 +1893,7 @@ const LOAD3D=[
   ]
 ];
 
-/* ------------------------------ 12 · The app, today and tomorrow */
+/* -------------------------------------- 12 · Visual containerizing */
 /* The machine slides before this one are diagrams. This is the argument in one
    picture: the load the planner was handed, and the load it hands back, with
    every pallet it moved carrying a number so the same one can be found in both.
@@ -1901,7 +1901,7 @@ const LOAD3D=[
    room asks of a stack of boxes is what is behind the front row, and a picture
    cannot answer it. */
 {
-  const {body}=slide("v3 · The app",{title:"From tables to visuals"});
+  const {body}=slide("v3 · Visual containerizing",{title:"Visual containerizing"});
 
   /* face, cuboid, shade and wire3dDrag are lifted from freight-model/index.html
      so the two stay the same drawing. Each face is grown a pixel so neighbours
@@ -2116,33 +2116,8 @@ const LOAD3D=[
       style:"width:100%;height:100%;object-fit:contain;display:block;border-radius:8px"})));
 }
 
-/* ------------------------------------------------ 12b · The Farm Defined */
-{
-  const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
-  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
-    "grid-template-rows:repeat(3,140px);align-content:center;gap:18px"});
-  [["Ops Data",["readings","sessions","orders","lab results"]],
-   ["Nouns",["pond","board","greenhouse","cycle","station"]],
-   ["Work",["walkthrough","video","inputs","standard"]]
-  ].forEach(([name,items],i)=>{
-    const chips=h("div",{style:"display:flex;align-items:center;flex-wrap:nowrap;gap:10px"});
-    items.forEach(t=>chips.appendChild(h("span",{class:"pill",
-      style:"font-family:var(--mono);font-size:16px;font-weight:600;"+
-        "padding:9px 14px;background:var(--wash);border:1px solid var(--hair);"+
-        "color:var(--body);letter-spacing:.01em",text:t})));
-    grid.appendChild(h("div",{class:"card rail fi",
-      style:`--acc:var(--green);--d:${(.15+i*.12).toFixed(2)}s;`+
-          "display:grid;grid-template-columns:300px 650px;justify-content:start;"+
-        "align-items:center;gap:30px;padding:20px 30px"},[
-      h("div",{style:"font-size:34px;font-weight:700;line-height:1.1;"+
-        "letter-spacing:-.025em;color:var(--ink)",text:name}),
-      chips]));
-  });
-  body.appendChild(grid);
-}
-
-/* ----------------------------- 12c · The app, scoped to the person */
-/* The slide before it argues the app draws the answer. This one says who
+/* ----------------------------- 12b · The app, scoped to the person */
+/* The slides before it argue the app draws the answer. This one says who
    the answer is drawn for: the app narrows to one person's work — his week
    and his job. No labels and no prose: two screens, as large as the stage
    allows, with only the accent rule to tell them apart. */
@@ -2168,6 +2143,31 @@ const LOAD3D=[
       "Aloha 3.0 harvest job on a phone — location, rows, totes and five steps",
       "none;width:286px"));
   body.appendChild(cols);
+}
+
+/* ------------------------------------------------ 12c · The Farm Defined */
+{
+  const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
+  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
+    "grid-template-rows:repeat(3,140px);align-content:center;gap:18px"});
+  [["Ops Data",["readings","sessions","orders","lab results"]],
+   ["Nouns",["pond","board","greenhouse","cycle","station"]],
+   ["Work",["walkthrough","video","inputs","standard"]]
+  ].forEach(([name,items],i)=>{
+    const chips=h("div",{style:"display:flex;align-items:center;flex-wrap:nowrap;gap:10px"});
+    items.forEach(t=>chips.appendChild(h("span",{class:"pill",
+      style:"font-family:var(--mono);font-size:16px;font-weight:600;"+
+        "padding:9px 14px;background:var(--wash);border:1px solid var(--hair);"+
+        "color:var(--body);letter-spacing:.01em",text:t})));
+    grid.appendChild(h("div",{class:"card rail fi",
+      style:`--acc:var(--green);--d:${(.15+i*.12).toFixed(2)}s;`+
+          "display:grid;grid-template-columns:300px 650px;justify-content:start;"+
+        "align-items:center;gap:30px;padding:20px 30px"},[
+      h("div",{style:"font-size:34px;font-weight:700;line-height:1.1;"+
+        "letter-spacing:-.025em;color:var(--ink)",text:name}),
+      chips]));
+  });
+  body.appendChild(grid);
 }
 
 /* --------------------------------------------- 13 · A wet harvest day */
