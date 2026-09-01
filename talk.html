@@ -163,15 +163,21 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
   box-shadow:0 16px 34px -24px rgba(14,31,25,.75)}
 .ocn{font-size:18.5px;font-weight:700;letter-spacing:-.014em;line-height:1.18;color:#FFF}
 .ocp{font-size:15px;font-weight:600;letter-spacing:.005em;color:#9EB4AA}
-.octop .ocn{font-size:26px;letter-spacing:-.022em}
+.octop .ocn{font-size:28px;letter-spacing:-.022em}
 /* the name block is two lines tall whether or not the name needs two, so
-   “Pack / Logistics” wrapping does not drop its person off the line the
+   “Post-harvest / Admin” wrapping does not drop its person off the line the
    other seven sit on */
-.ockids .ocn{display:flex;align-items:center;justify-content:center;height:44px}
+.ockids .ocn{display:flex;align-items:center;justify-content:center;height:46px}
 .oclink{position:relative;flex:none}
-.oclink i{position:absolute;background:var(--faint)}
-.oclink i.v{width:1.5px;margin-left:-.75px}
-.oclink i.z{height:1.5px}
+.oclink i,.ocrow i{position:absolute;background:var(--faint)}
+.oclink i.v,.ocrow i.v{width:1.5px;margin-left:-.75px}
+.oclink i.z,.ocrow i.z{height:1.5px}
+/* reports stack in a column under their manager and hang off a spine, so a
+   team of one and a team of three read as the same shape at the same size */
+.occhip{position:absolute;display:flex;align-items:center;
+  padding:0 13px;border:1px solid #C7DED0;border-radius:9px;background:#EDF6F0;
+  color:var(--dark);font-size:13.5px;font-weight:650;line-height:1;white-space:nowrap;
+  box-shadow:0 10px 22px -17px rgba(14,31,25,.7)}
 
 /* ─────────────────────────────────────────────── capital board */
 .board{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);
@@ -1329,17 +1335,10 @@ splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market
   arrow.appendChild(el("path",{d:"M40,11 L52,20 L40,29",fill:"none",stroke:C("--faint"),
     "stroke-width":2.5,"stroke-linecap":"round","stroke-linejoin":"round"}));
 
-  /* the arrow rides in a column of its own — the same header block as the two
-     drawings, hidden and zero-width so it costs no space. Same header means the
-     same art band, which puts all three drawings on one centre line */
-  const arrowCol=column("Petri Film","48 hours turnaround",null,arrow,"none");
-  [0,1,2].forEach(i=>{arrowCol.children[i].style.cssText+=
-    ";visibility:hidden;width:0;overflow:hidden;white-space:nowrap";});
-  arrowCol.children[3].style.cssText+=";display:flex;align-items:center";
-
   row.append(
     column("Petri Film","48 hours turnaround",null,petri,"1"),
-    arrowCol,
+    h("div",{style:"flex:none;display:flex;align-items:center;box-sizing:border-box;"+
+      "padding:128px 0 4px"},arrow),
     column("PCR","6 hour turnaround",
       "First farm globally Costco approved to use PCR",helix,"1.5"));
   card.appendChild(row);
@@ -1408,13 +1407,14 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
 }
 
 /* ------------------------------------------------------- The G7 chart */
-/* Eric and Lenny sit centred
-   over the row and every one of the seven reports to the pair, so there is a
-   single bus hanging off the bar that joins them. The stage is a fixed
-   1280x720, so these are plain pixels inside the 1176px body. */
+/* Eric and Lenny sit centred over the row and every one of the seven reports
+   to the pair, so there is a single bus hanging off the bar that joins them.
+   Each manager's own reports stack in a column beneath them, hung off a spine,
+   so every column is the same shape whatever its headcount. The stage is a
+   fixed 1280x720, so these are plain pixels inside the 1176px body. */
 const buildG7OrgChart=()=>{
   const W=1176, GAP=14, N=7, KIDW=(W-GAP*(N-1))/N, KIDH=112;
-  const TOPW=196, TOPGAP=20, TOPH=112;
+  const TOPW=230, TOPGAP=22, TOPH=100;
   const kidL=i=>i*(KIDW+GAP), kidC=i=>kidL(i)+KIDW/2;
 
   /* the pair is centred over the row it shares */
@@ -1422,13 +1422,20 @@ const buildG7OrgChart=()=>{
   const ericC=MID-(TOPW+TOPGAP)/2, lennyC=MID+(TOPW+TOPGAP)/2;
 
   /* band: 0 is the underside of the top boxes, BAND the top of the kid row */
-  const JOIN=35, BUS=111, BAND=190;
+  const JOIN=34, BUS=76, BAND=110;
+
+  /* sub-report column: SPINE is its x offset inside the column, TICK the stub
+     that runs from the spine into each chip */
+  const SPINE=11, TICK=11, CHIPH=38, CGAP=9, SUBTOP=18, MAXREP=3;
+  const chipTop=j=>SUBTOP+j*(CHIPH+CGAP);
+  const SUBH=chipTop(MAXREP-1)+CHIPH;
 
   const box=(name,person,d)=>h("div",{class:"ocbox fi",style:`--d:${d}s`},[
     h("div",{class:"ocn",text:name}),
     person?h("div",{class:"ocp",text:person}):null]);
-  const at=(node,left,width,height)=>{
+  const at=(node,left,width,height,top)=>{
     node.style.left=left+"px"; node.style.width=width+"px"; node.style.height=height+"px";
+    if(top!==undefined) node.style.top=top+"px";
     return node;
   };
   const vline=(x,top,len)=>h("i",{class:"v",style:`left:${x}px;top:${top}px;height:${len}px`});
@@ -1452,13 +1459,40 @@ const buildG7OrgChart=()=>{
   for(let i=0;i<N;i++) link.appendChild(vline(kidC(i),BUS,BAND-BUS));
   oc.appendChild(link);
 
+  const teams=[
+    ["Maintenance","JV",["Max","Fritz"]],
+    ["Cuke","Pete",["William","Daniel","Keiko"]],
+    ["Lettuce","Matt",["Maju"]],
+    ["Post-harvest / Admin","Steven",["Vicky","Avon"]],
+    ["Finance","Minor",[]],
+    ["Sales","Maria",["Austin"]],
+    ["Technology","Michael",[]]
+  ];
+
   const kids=h("div",{class:"ocrow ockids",style:`height:${KIDH}px`});
-  [["Cuke","Pete"],["Lettuce","Matt"],["Maintenance","JV"],
-   ["Pack","Pack"],["Sales","Maria"],["Technology","Michael"],
-   ["Finance","Minor"]
-  ].forEach(([n,p],i)=>kids.appendChild(
+  teams.forEach(([n,p],i)=>kids.appendChild(
     at(box(n,p,(.34+i*.05).toFixed(2)),kidL(i),KIDW,KIDH)));
   oc.appendChild(kids);
+
+  /* the named team members hang off a spine under their own manager */
+  const subs=h("div",{class:"ocrow",style:`height:${SUBH}px`});
+  teams.forEach(([, ,reports],i)=>{
+    if(!reports.length) return;
+    const sx=kidL(i)+SPINE, foot=chipTop(reports.length-1)+CHIPH/2;
+    subs.append(
+      vline(kidC(i),0,SPINE),
+      zline(sx,kidC(i),SPINE),
+      vline(sx,SPINE,foot-SPINE));
+    reports.forEach((name,j)=>{
+      const cy=chipTop(j)+CHIPH/2;
+      subs.append(
+        zline(sx,sx+TICK,cy),
+        at(h("div",{class:"occhip fi",
+          style:`--d:${(.72+i*.04+j*.05).toFixed(3)}s`,text:name}),
+          sx+TICK,KIDW-SPINE-TICK,CHIPH,chipTop(j)));
+    });
+  });
+  oc.appendChild(subs);
 
   return oc;
 };
@@ -1682,7 +1716,7 @@ function dowChart(host){
    "Building lettuce schedules being a pain",
    "Gmail is unsearchable",
    "Making your own cool spreadsheet, but not everyone can access it",
-   "Still back of the envelope determining when to transition Js and Days on Pond",
+   "Manually pulling data to decide when to up J seeds",
    "There is a gap between the business and the tech team",
    "Everyone is Busy. This is a four letter word."
   ].forEach((t,i)=>{
@@ -1702,31 +1736,11 @@ function dowChart(host){
    back the answer with the money already counted. */
 {
   const {body}=slide("v3 · The app",{title:"From tables to visuals"});
-  const panel=(tag,acc,d,src,alt,cap,fit="cover")=>h("div",{class:"fi",
-    style:`--d:${d};flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;`+
-      "background:var(--card);border:1px solid var(--line);border-radius:12px;"+
-      "box-shadow:var(--shadow);overflow:hidden"},[
-    h("div",{style:`flex:none;height:4px;background:${acc}`}),
-    h("div",{style:"flex:none;display:flex;align-items:baseline;gap:12px;"+
-      "padding:12px 16px 11px"},[
-      h("span",{style:"font-family:var(--mono);font-size:13px;font-weight:800;"+
-        `letter-spacing:.16em;color:${acc}`,text:tag})]),
-    /* the screenshots are cropped from the top left, not fitted — a shrunk
-       screen reads as a picture of an app, a cropped one reads as the app */
-    h("div",{style:"flex:1;min-height:0;overflow:hidden;background:var(--wash);"+
-      "border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)"},
-      h("img",{src,alt,style:"width:100%;height:100%;object-fit:"+fit+";"+
-        "object-position:top left;display:block"})),
-    cap&&h("div",{style:"flex:none;padding:12px 16px 14px;font-size:18px;line-height:1.34;"+
-      "letter-spacing:-.012em;color:var(--body)",text:cap})]);
-
-  const cols=h("div",{class:"cols"});
-  cols.append(
-    panel("2.0","#98A8A0",".15s",APP_TODAY,
-      "Aloha 2.0 lettuce screen — a grid of pond rows filled in by hand"),
-    panel("3.0",C("--green"),".3s",APP_FUTURE,
-      "Aloha 3.0 load planner — as loaded against optimized, with savings"));
-  body.appendChild(cols);
+  body.appendChild(h("div",{class:"fi",
+    style:"--d:.15s;flex:1;min-height:0;overflow:hidden;background:var(--wash)"},
+    h("img",{src:APP_FUTURE,
+      alt:"Aloha 3.0 load planner — as loaded against optimized, with savings",
+      style:"width:100%;height:100%;object-fit:cover;object-position:top left;display:block"})));
 }
 
 /* ---------------------------------------- 12a · Visual logistics map */
@@ -1739,7 +1753,32 @@ function dowChart(host){
       style:"width:100%;height:100%;object-fit:contain;display:block;border-radius:8px"})));
 }
 
-/* ----------------------------- 12b · The app, scoped to the person */
+/* ------------------------------------------------ 12b · The Farm Defined */
+{
+  const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
+  const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
+    "grid-template-rows:repeat(3,140px);align-content:center;gap:18px"});
+  [["Ops Data",["readings","sessions","orders","lab results"]],
+   ["Nouns",["pond","board","greenhouse","cycle","station"]],
+   ["Work",["walkthrough","video","inputs","standard"]]
+  ].forEach(([name,items],i)=>{
+    const chips=h("div",{style:"display:flex;align-items:center;flex-wrap:nowrap;gap:10px"});
+    items.forEach(t=>chips.appendChild(h("span",{class:"pill",
+      style:"font-family:var(--mono);font-size:16px;font-weight:600;"+
+        "padding:9px 14px;background:var(--wash);border:1px solid var(--hair);"+
+        "color:var(--body);letter-spacing:.01em",text:t})));
+    grid.appendChild(h("div",{class:"card rail fi",
+      style:`--acc:var(--green);--d:${(.15+i*.12).toFixed(2)}s;`+
+          "display:grid;grid-template-columns:300px 650px;justify-content:start;"+
+        "align-items:center;gap:30px;padding:20px 30px"},[
+      h("div",{style:"font-size:34px;font-weight:700;line-height:1.1;"+
+        "letter-spacing:-.025em;color:var(--ink)",text:name}),
+      chips]));
+  });
+  body.appendChild(grid);
+}
+
+/* ----------------------------- 12c · The app, scoped to the person */
 /* The slide before it argues the app draws the answer. This one says who
    the answer is drawn for: the app narrows to one person's work — his week
    and his job. No labels and no prose: two screens, as large as the stage
@@ -1938,98 +1977,6 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
   const a={x,y,width:w,height:ht,rx:r,fill,stroke,"stroke-width":1};
   if(dash) a["stroke-dasharray"]=dash;
   return el("rect",a);
-}
-
-/* --------------------------------------------------- 14 · Orchestrator */
-{
-  const {body}=slide("v3 · Orchestrator",{title:"Orchestrator"});
-  const {svg}=v3stage(body);
-
-  const NW=160, NH=104, NCX=V3W/2, NCY=305, NX=NCX-NW/2, NY=NCY-NH/2;
-  const LW=444, RX=732, LBLW=140;
-
-  svg.appendChild(tx(0,26,"THE FOUR LAYERS",
-    {size:14,w:700,mono:true,col:C("--green"),ls:".14em"}));
-  svg.appendChild(tx(RX,26,"WHAT EACH PERSON GETS",
-    {size:14,w:700,mono:true,col:C("--green"),ls:".14em"}));
-
-  const chipRow=(g,x,y,items)=>{
-    let cx=x;
-    items.forEach(t=>{
-      const w=t.length*7.2+18;
-      g.appendChild(el("rect",{x:cx,y,width:w,height:26,rx:7,
-        fill:C("--wash"),stroke:C("--hair"),"stroke-width":1}));
-      g.appendChild(tx(cx+w/2,y+17.5,t,
-        {size:12.5,w:600,mono:true,col:C("--body"),anchor:"middle"}));
-      cx+=w+7;
-    });
-  };
-  const LY=[56,184,312,440], LH=114;
-  const LAYERS=[
-    ["Ops Data",["readings","sessions","orders","lab results"]],
-    ["Nouns",  ["pond","board","greenhouse","cycle","station"]],
-    ["Work",   ["walkthrough","video","inputs","standard"]],
-    ["People", ["team","team lead","manager","admin"]]];
-  LAYERS.forEach(([name,items],i)=>{
-    const y=LY[i];
-    const g=el("g",{class:"fi",style:`--d:${(.15+i*.11).toFixed(2)}s`});
-    g.appendChild(cardRect(0,y,LW,LH,{}));
-    g.appendChild(el("rect",{x:1,y:y+1,width:LW-2,height:4,rx:2,fill:C("--green")}));
-    g.appendChild(tx(24,y+46,name,{size:27,w:700,ls:"-.022em"}));
-    chipRow(g,24,y+64,items);
-    svg.appendChild(g);
-  });
-
-  const CELL=40, ROWY=LY.map(y=>y+LH/2-CELL/2);
-  const wires=el("g",{class:"fi",style:"--d:.5s"}); svg.appendChild(wires);
-  LY.forEach(y=>wires.appendChild(el("path",{
-    d:`M${LW},${y+LH/2} C${LW+30},${y+LH/2} ${NX-30},${NCY} ${NX},${NCY}`,
-    fill:"none",stroke:C("--grn-lt"),"stroke-width":1.6})));
-  ROWY.forEach(y=>wires.appendChild(el("path",{
-    d:`M${NX+NW},${NCY} C${NX+NW+30},${NCY} ${RX-30},${y+CELL/2} ${RX},${y+CELL/2}`,
-    fill:"none",stroke:C("--grn-lt"),"stroke-width":1.6})));
-
-  const node=el("g",{class:"fi",style:"--d:.65s"}); svg.appendChild(node);
-  node.appendChild(el("rect",{x:NX,y:NY,width:NW,height:NH,rx:14,fill:C("--dark")}));
-  const fk=mark("fork",C("--grn-lt"));
-  fk.setAttribute("transform",`translate(${NCX-18},${NY+18}) scale(1.5)`);
-  node.appendChild(fk);
-  node.appendChild(tx(NCX,NY+86,"ORCHESTRATOR",
-    {size:13,w:700,mono:true,col:C("--card"),anchor:"middle",ls:".1em"}));
-
-  const GX=RX+LBLW, CW=(V3W-GX-12)/5;
-  const ccx=i=>GX+CW*i+CW/2;
-  const COLS=[["TASK",""],["INPUT","FIELDS"],["TABLES",""],
-              ["DASH","BOARDS"],["THE","SYSTEM"]];
-  COLS.forEach(([a,b],i)=>{
-    const g=el("g",{class:"fi",style:`--d:${(.6+i*.05).toFixed(2)}s`});
-    g.appendChild(tx(ccx(i),b?58:68,a,
-      {size:11,w:700,mono:true,col:C("--muted"),anchor:"middle",ls:".06em"}));
-    if(b) g.appendChild(tx(ccx(i),72,b,
-      {size:11,w:700,mono:true,col:C("--muted"),anchor:"middle",ls:".06em"}));
-    svg.appendChild(g);
-  });
-
-  const ROWS=[
-    ["Team",     "thinks in days",  [1,1,0,0,0]],
-    ["Team lead","thinks in weeks", [1,1,1,1,0]],
-    ["Manager",  "thinks in months",[0,0,1,1,0]],
-    ["Admin",    "thinks in years", [0,0,0,1,1]]];
-  const fills=el("g",{class:"fi",style:"--d:1.3s"});
-  ROWS.forEach(([name,horizon,got],r)=>{
-    const y=ROWY[r];
-    const g=el("g",{class:"fi",style:`--d:${(.8+r*.11).toFixed(2)}s`});
-    g.appendChild(tx(RX,y+20,name,{size:24,w:700,ls:"-.022em"}));
-    g.appendChild(tx(RX,y+42,horizon,{size:14,w:400,col:C("--muted")}));
-    got.forEach((on,i)=>{
-      g.appendChild(el("rect",{x:ccx(i)-CELL/2,y,width:CELL,height:CELL,rx:9,
-        fill:C("--card"),stroke:C("--line"),"stroke-width":1}));
-      if(on) fills.appendChild(el("rect",{x:ccx(i)-CELL/2,y,width:CELL,height:CELL,
-        rx:9,fill:C("--green"),stroke:C("--green-d"),"stroke-width":1,opacity:.85}));
-    });
-    svg.appendChild(g);
-  });
-  svg.appendChild(fills);
 }
 
 /* --------------------------------------------- 15 · Friction removed */
