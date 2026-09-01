@@ -1329,9 +1329,17 @@ splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market
   arrow.appendChild(el("path",{d:"M40,11 L52,20 L40,29",fill:"none",stroke:C("--faint"),
     "stroke-width":2.5,"stroke-linecap":"round","stroke-linejoin":"round"}));
 
+  /* the arrow rides in a column of its own — the same header block as the two
+     drawings, hidden and zero-width so it costs no space. Same header means the
+     same art band, which puts all three drawings on one centre line */
+  const arrowCol=column("Petri Film","48 hours turnaround",null,arrow,"none");
+  [0,1,2].forEach(i=>{arrowCol.children[i].style.cssText+=
+    ";visibility:hidden;width:0;overflow:hidden;white-space:nowrap";});
+  arrowCol.children[3].style.cssText+=";display:flex;align-items:center";
+
   row.append(
     column("Petri Film","48 hours turnaround",null,petri,"1"),
-    h("div",{style:"flex:none;display:flex;align-items:center;transform:translateY(97px)"},arrow),
+    arrowCol,
     column("PCR","6 hour turnaround",
       "First farm globally Costco approved to use PCR",helix,"1.5"));
   card.appendChild(row);
