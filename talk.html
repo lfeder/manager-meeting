@@ -2381,7 +2381,10 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
 
 /* ---------------------------------- 23 · Back to the quote we opened on */
 {
-  const {body}=slide("Close · People love our cucumbers",{title:"One more time"});
+  /* no header — the two quotes carry the slide, the same way the cukes slide
+     we opened on does */
+  const {s,body}=slide("Close · People love our cucumbers");
+  s.querySelector(".shead").remove();
   const card=h("div",{class:"card",
     style:"flex:1;display:flex;flex-direction:column;justify-content:center;"+
       "align-items:center;text-align:center;padding:40px 90px;gap:0"});
