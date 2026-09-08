@@ -1166,7 +1166,7 @@ function splitSlide(navName,title,leftBuild,rightBuild){
   return {s,body,L,R};
 }
 
-/* -------------------------------------------------------- 0 · Cover */
+/* ------------------------------------------------------------ 1 · Cover */
 {
   const s=h("section",{class:"slide cover","aria-hidden":"true"});
   s.append(
@@ -1176,7 +1176,7 @@ function splitSlide(navName,title,leftBuild,rightBuild){
   stage.appendChild(s); SLIDES.push({el:s,title:"Opportunities Discussion"});
 }
 
-/* ------------------------------------------- 1 · The quote / cucumbers */
+/* -------------------------------------------- 2 · The quote / cucumbers */
 splitSlide("Impossible · Cukes",null,
   L=>{
     /* set as a newspaper page: masthead, rule, a small headline, then the
@@ -1225,7 +1225,7 @@ splitSlide("Impossible · Cukes",null,
     R.appendChild(card);
   });
 
-/* ------------------------------------------ 2 · Who we compete against */
+/* ------------------------------------------- 3 · Who we compete against */
 /* Total funding raised, not outcome — the money is the point, and the fate
    of all seven goes in one line underneath. Local Bounti is Cargill's
    committed facilities ($200M + $110M). The 2025 bankruptcies are a row of the
@@ -1285,7 +1285,7 @@ splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market
              "and most affordable lettuce on the shelves."})));
   });
 
-/* --------------------------------------------------- 3 · Food safety */
+/* ------------------------------------------------------ 4 · Food safety */
 /* two named methods side by side — the plate you wait two days for, and the
    helix you read in six hours. Titles carry it; the drawings are evidence */
 {
@@ -1364,7 +1364,7 @@ splitSlide("Impossible · Who we compete against","The Greenhouse Lettuce market
   body.appendChild(card);
 }
 
-/* ------------------------------------------------------- 4 · People */
+/* ----------------------------------------------------------- 5 · People */
 const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
   ["Cambodia","\u{1F1F0}\u{1F1ED}"],["Colombia","\u{1F1E8}\u{1F1F4}"],
   ["El Salvador","\u{1F1F8}\u{1F1FB}"],
@@ -1412,7 +1412,7 @@ const FLAGS=[["Australia","\u{1F1E6}\u{1F1FA}"],["Brazil","\u{1F1E7}\u{1F1F7}"],
   cols.append(left,right); body.appendChild(cols);
 }
 
-/* -------------------------------------------- 5 · Common denominator */
+/* ----------------------------------------------- 6 · Common denominator */
 {
   const s=h("section",{class:"slide","aria-hidden":"true"});
   s.style.cssText+="align-items:center;justify-content:center;text-align:center";
@@ -1539,7 +1539,7 @@ const buildG7OrgChart=()=>{
   return oc;
 };
 
-/* --------------------------------------- 6 · Financial update, YTD */
+/* -------------------------------------------- 7 · Financial update, YTD */
 /* three cards across, as before. Cases are straight out of
    pack_session_cases for 1 Jan - 19 Aug, both years */
 {
@@ -1582,101 +1582,84 @@ const buildG7OrgChart=()=>{
   body.appendChild(row);
 }
 
-/* ----------------------------------------- 7 · Grow · longer cycles */
+/* ------------------------------------- 8 · Section break · Expansion II */
 {
-  const {body}=slide("Review · Longer cycles",{title:"Keep Experimenting"});
-  /* two tiles, each one line: the movement, then what it was measured
-     against, on the same baseline */
-  const row=h("div",{class:"tilerow",
-    style:"height:96px;grid-template-columns:repeat(2,minmax(0,1fr))"});
-  [["POUNDS HARVESTED","+1.5","%","1.95M lb vs 1.92M"],
-   ["WEEKS GROWN","+1.4","wks (15%)",""]
-  ].forEach(([l,v,u,tail])=>{
-    row.appendChild(h("div",{class:"card",
-      style:"padding:14px 18px;gap:7px;justify-content:center"},[
-      h("span",{class:"kl",text:l}),
-      h("span",{class:"kv",style:"font-size:34px"},[
-        document.createTextNode(v),
-        h("span",{class:"ku",text:u}),
-        tail?h("span",{class:"ku",style:"margin-left:14px",text:tail}):null])]));
-  });
-  body.appendChild(row);
-  chartCard(body,{title:"Weeks Harvested",flex:"1",fn:cyclesChart});
+  const sec=h("section",{class:"slide","aria-hidden":"true"});
+  sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
+  sec.append(
+    h("div",{class:"fi",style:"--d:.15s;font-family:var(--mono);font-size:15px;"+
+      "font-weight:700;letter-spacing:.28em;color:var(--green);margin-bottom:22px",
+      text:"EXPANSION II"}),
+    h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
+      "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"GREENHOUSES"}),
+    h("div",{class:"pnum"}));
+  stage.appendChild(sec);
+  SLIDES.push({el:sec,title:"Expansion II · Greenhouses"});
 }
 
-/* -------------------------------- 8 · Pack · Tuesday and Friday */
-/* Cases from pack_session_cases; crews from ops_task_schedule, split by who
-   normally works where — "lettuce crew" is anyone with five or more Lettuce
-   PH shifts this year. 1 Jan - 11 Aug 2026.
-   [day, cuke cases, cuke crew in Cuke PH, lettuce crew in Cuke PH] */
-const DOWPACK=[["Mon",540,9.4,2.3],["Tue",476,7.3,5.6],["Wed",700,9.2,3.0],
-               ["Thu",639,8.1,3.3],["Fri",502,8.0,6.6],["Sat",592,5.5,5.1],
-               ["Sun",610,9.3,2.8]];
-const dTot=r=>r[2]+r[3], perPerson=r=>r[1]/dTot(r);
-function dowChart(host){
-  const f=frame(host,{l:16,r:50,t:16,b:32}), {svg,X0,X1,Y0,Y1}=f;
-  const N=DOWPACK.length, step=(X1-X0)/N, bw=Math.min(56,step*0.5);
-  const yMax=760, y=v=>Y1-(v/yMax)*(Y1-Y0);
-  const pMax=16, yP=v=>Y1-(v/pMax)*(Y1-Y0);
-  /* no left axis: every bar carries its own number */
-  [0,4,8,12,16].forEach(v=>{
-    const t=el("text",{x:X1+9,y:yP(v)+3.6,"text-anchor":"start",class:"ax",
-      "font-size":12.5,fill:C("--muted")});
-    t.textContent=String(v); svg.appendChild(t);
-  });
-  DOWPACK.forEach((r,i)=>{
-    const cx=X0+step*(i+.5), light=(r[0]==="Tue"||r[0]==="Fri");
-    const v=r[1];
-    svg.appendChild(el("rect",{x:cx-bw/2,y:y(v),width:bw,height:Y1-y(v),
-      fill:light?C("--amber"):C("--grn-lt"),opacity:light?.5:.55,rx:2.5,
-      class:"gy",style:`--d:${i*50}ms;--oy:${Y1}px`}));
-    const lab=el("text",{x:cx,y:y(v)+22,"text-anchor":"middle",class:"vlab fi",
-      "font-size":15,fill:light?C("--amber"):C("--green-d"),
-      style:`--d:${(.5+i*.05).toFixed(2)}s`});
-    lab.textContent=nf(v); svg.appendChild(lab);
-    const t=el("text",{x:cx,y:Y1+18,"text-anchor":"middle",class:"axb","font-size":13.5,
-      fill:light?C("--amber"):C("--ink")});
-    t.textContent=r[0]; svg.appendChild(t);
-  });
-  /* total people scheduled into the cuke packhouse, on its own scale */
-  let d="";
-  DOWPACK.forEach((r,i)=>{
-    const cx=X0+step*(i+.5);
-    d+=(i?"L":"M")+cx.toFixed(1)+","+yP(dTot(r)).toFixed(1);
-  });
-  drawPath(svg,d,C("--vK"),2.8,.35);
-  DOWPACK.forEach((r,i)=>{
-    const cx=X0+step*(i+.5);
-    svg.appendChild(el("circle",{cx,cy:yP(dTot(r)),r:3.8,fill:C("--vK"),
-      class:"fi",style:`--d:${(.7+i*.04).toFixed(2)}s`}));
-  });
-  DOWPACK.forEach((r,i)=>{
-    const hit=el("rect",{x:X0+step*i,y:Y0,width:step,height:Y1-Y0,class:"hit"});
-    hoverable(hit,r[0],()=>[
-      {c:C("--green-d"),k:"Cases packed",v:nf(r[1])},
-      {c:C("--vK"),k:"People scheduled",v:dTot(r).toFixed(1)},
-      {c:C("--muted"),k:"Cases per person",v:perPerson(r).toFixed(1)}]);
-    svg.appendChild(hit);
-  });
-  return {table:dataTable(["Day","Cases packed","People scheduled","Cases per person"],
-    DOWPACK.map(r=>[r[0],nf(r[1]),dTot(r).toFixed(1),perPerson(r).toFixed(1)]))};
-}
+/* --------------------------------------------------------- 9 · Shorting */
 {
-  const {body}=slide("Review · Tuesday and Friday",
-    {title:"Hard Challenge — the awkward lettuce work week",
-     right:[legend([["Cases packed",C("--grn-lt"),"bar"],
-                    ["People scheduled",C("--vK")]])]});
-  chartCard(body,{title:"Average cucumber cases packed per day · 1 Jan – 11 Aug 2026",
-    flex:"1",fn:dowChart});
+  const {body}=slide("Expansion · Demand",
+    {title:"Do the customers want it?"});
+  const grid=h("div",{class:"g2x2"});
+  body.appendChild(grid);
+  ["KR","KW","JR","JW"].forEach(k=>{
+    const [code]=CUKE[k].name.split(" · ");
+    const p26=shortTotal(k);
+    chartCard(grid,{
+      titleNode:h("span",{},[
+        h("span",{class:"ctitle",style:"font-size:15px;letter-spacing:.01em",text:code})]),
+      right:h("span",{class:"pill "+(p26>=0?"up":"down"),
+        text:"2026 Orders Shorted "+pct(p26)}),
+      fn:shortChart(k)});
+  });
 }
 
-/* ------------------------------- 9 · Pack · the productivity question */
+/* --------------------------------------------- 10 · Sales opportunities */
 {
-  const {body}=slide("Review · Pack productivity",{title:"Lettuce pack productivity"});
-  chartCard(body,{title:"Trays per packer-minute, 2026",flex:"1",fn:rateHoursChart});
+  const {body}=slide("Expansion · Opportunities",{title:"Endless Sales Opportunities"});
+  const grid=h("div",{class:"g4x3"});
+  [["Costco Japanese, orders up 30% and we sold them 10% less",""],
+   ["Lettuce flat, but we can grow sales",""],
+   ["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
+   ["POs are up 50% overall in two years","…"],
+   ["English in retail","Close to selling out, with numerous other outlet opportunities."],
+   ["CEOs","We should know the CEO of every major customer and vendor. "+
+    "Making progress on Safeway"],
+   ["Grow new customers","DOE and Commissary for lettuce, and plenty more out there."],
+   ["In-store display","KTA is first in the pipeline — JV is building store "+
+    "displays there for Keiki Greens."],
+   ["More direct sales","Maria and Austin work together to acquire more direct sales. "+
+    "ABC snack packs are a great opportunity"],
+   ["Processed product","Sell every last cucumber on the farm under our own branding."],
+   ["Marketing","We got 200,000 views on a post. There is more to do! "+
+    "Should we set a marketing budget?"],
+   ["Price increase","It has been 2 years since we did our last price increase. "]
+  ].forEach(([t,b])=>{
+    const thin=/^[….\s]*$/.test(b);
+    grid.appendChild(h("div",{class:"card rail",style:"--acc:var(--green)"},[
+      h("div",{class:"rt",text:t}),
+      h("div",{class:"rb"+(thin?" thin":""),text:b})]));
+  });
+  body.appendChild(grid);
 }
 
-/* ---------------------------------------------- 10a · Section break */
+/* ---------------------------------------------------------- 11 · The G7 */
+{
+  const {body}=slide("Expanding the team",{title:"Expanding the team"});
+  body.appendChild(buildG7OrgChart());
+}
+
+/* -------------------------------------------------------- 12 · The plan */
+{
+  const {body}=slide("Expanding the farm",{title:"Expanding the farm"});
+  body.appendChild(h("div",{class:"card imgcard",
+    style:"align-self:center;width:auto;max-width:100%"},
+    h("img",{src:SITE_PLAN,
+      alt:"Expansion site layout — four new grow houses, lettuce grow and support building, solar field, green waste area and runoff buffer"})));
+}
+
+/* ------------------------------------- 13 · Section break · Expansion I */
 {
   const sec=h("section",{class:"slide","aria-hidden":"true"});
   sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
@@ -1693,7 +1676,7 @@ function dowChart(host){
   SLIDES.push({el:sec,title:"Expansion I · Aloha 3.0"});
 }
 
-/* ------------------------------------------------- 11 · The ladder */
+/* ------------------------------------------------------ 14 · The ladder */
 {
   const {body}=slide("v3 · Paper to AI",{title:"Paper → AI"});
   const shot=(src,alt)=>h("img",{src,alt,
@@ -1743,7 +1726,7 @@ function dowChart(host){
   cols.append(grid,dest); body.appendChild(cols);
 }
 
-/* ------------------------------------------------ 12 · Today = friction */
+/* ------------------------------------------------ 15 · Today = friction */
 {
   const {body}=slide("v3 · Today's Friction",{title:"Today's Friction"});
   const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
@@ -1893,7 +1876,7 @@ const LOAD3D=[
   ]
 ];
 
-/* -------------------------------------- 12 · Visual containerizing */
+/* ------------------------------------------- 16 · Visual containerizing */
 /* The machine slides before this one are diagrams. This is the argument in one
    picture: the load the planner was handed, and the load it hands back, with
    every pallet it moved carrying a number so the same one can be found in both.
@@ -2106,7 +2089,7 @@ const LOAD3D=[
       text:"every ship day →"})]));
 }
 
-/* ---------------------------------------- 12a · Visual logistics map */
+/* -------------------------------------------- 17 · Visual logistics map */
 {
   const {body}=slide("v3 · Visual logistics map",{title:"Visual logistics map"});
   body.appendChild(h("div",{class:"card imgcard fi",
@@ -2116,7 +2099,7 @@ const LOAD3D=[
       style:"width:100%;height:100%;object-fit:contain;display:block;border-radius:8px"})));
 }
 
-/* --------------------------------- 12b · Aloha, scoped to the person */
+/* ------------------------------------- 18 · Aloha, scoped to the person */
 /* The slides before it argue the app draws the answer. This one says who
    the answer is drawn for: the app narrows to one person's work — his week
    and his job. No labels and no prose: two screens, as large as the stage
@@ -2145,7 +2128,7 @@ const LOAD3D=[
   body.appendChild(cols);
 }
 
-/* ------------------------------------------- 12c · A wet harvest day */
+/* -------------------- the wet harvest day, drawn for the slide below --- */
 const WETDAY=[["When to start harvest",4],["All or some rows of wet lettuce",5],
   ["Cut height",3],["Packhouse fans on or off",2],
   ["Dryer heater off, or at what temperature",4],["Dryer fan speed",3],
@@ -2207,6 +2190,8 @@ function wetTree(host){
   return {table:dataTable(["Decision","Options","Ways to run the day so far"],
     WETDAY.map(([name,opts],i)=>[name,String(opts),nf(cum[i])]))};
 }
+
+/* ------------------------------------------------- 19 · Judgment calls */
 {
   const {body}=slide("v3 · Judgment calls",{title:"Judgment calls"});
   const card=h("div",{class:"card",style:"flex:1;padding:16px 22px 18px;gap:8px"});
@@ -2223,7 +2208,7 @@ function wetTree(host){
   body.appendChild(card);
 }
 
-/* ------------------------------------------------ 12d · The Farm Defined */
+/* ------------------------------------------------ 20 · The Farm Defined */
 {
   const {body}=slide("v3 · The Farm Defined",{title:"The Farm Defined"});
   const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
@@ -2342,7 +2327,7 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
   return el("rect",a);
 }
 
-/* --------------------------------------------- 15 · Friction removed */
+/* ------------------------------------------------ 21 · Friction removed */
 {
   const {body}=slide("v3 · Tomorrow's Frictionless",{title:"Tomorrow's Frictionless"});
   const card=h("div",{class:"card rail",
@@ -2373,84 +2358,7 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
   body.appendChild(card);
 }
 
-/* ---------------------------------------------- 15a · Section break */
-{
-  const sec=h("section",{class:"slide","aria-hidden":"true"});
-  sec.style.cssText+="align-items:center;justify-content:center;text-align:center;gap:0";
-  sec.append(
-    h("div",{class:"fi",style:"--d:.15s;font-family:var(--mono);font-size:15px;"+
-      "font-weight:700;letter-spacing:.28em;color:var(--green);margin-bottom:22px",
-      text:"EXPANSION II"}),
-    h("h1",{class:"fi",style:"--d:.28s;margin:0;font-size:88px;font-weight:700;"+
-      "letter-spacing:-.038em;line-height:1;color:var(--ink)",text:"GREENHOUSES"}),
-    h("div",{class:"pnum"}));
-  stage.appendChild(sec);
-  SLIDES.push({el:sec,title:"Expansion II · Greenhouses"});
-}
-
-/* ------------------------------------------------ 17 · Shorting */
-{
-  const {body}=slide("Expansion · Demand",
-    {title:"Do the customers want it?"});
-  const grid=h("div",{class:"g2x2"});
-  body.appendChild(grid);
-  ["KR","KW","JR","JW"].forEach(k=>{
-    const [code]=CUKE[k].name.split(" · ");
-    const p26=shortTotal(k);
-    chartCard(grid,{
-      titleNode:h("span",{},[
-        h("span",{class:"ctitle",style:"font-size:15px;letter-spacing:.01em",text:code})]),
-      right:h("span",{class:"pill "+(p26>=0?"up":"down"),
-        text:"2026 Orders Shorted "+pct(p26)}),
-      fn:shortChart(k)});
-  });
-}
-
-/* --------------------------------------- 18 · Sales opportunities */
-{
-  const {body}=slide("Expansion · Opportunities",{title:"Endless Sales Opportunities"});
-  const grid=h("div",{class:"g4x3"});
-  [["Costco Japanese, orders up 30% and we sold them 10% less",""],
-   ["Lettuce flat, but we can grow sales",""],
-   ["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
-   ["POs are up 50% overall in two years","…"],
-   ["English in retail","Close to selling out, with numerous other outlet opportunities."],
-   ["CEOs","We should know the CEO of every major customer and vendor. "+
-    "Making progress on Safeway"],
-   ["Grow new customers","DOE and Commissary for lettuce, and plenty more out there."],
-   ["In-store display","KTA is first in the pipeline — JV is building store "+
-    "displays there for Keiki Greens."],
-   ["More direct sales","Maria and Austin work together to acquire more direct sales. "+
-    "ABC snack packs are a great opportunity"],
-   ["Processed product","Sell every last cucumber on the farm under our own branding."],
-   ["Marketing","We got 200,000 views on a post. There is more to do! "+
-    "Should we set a marketing budget?"],
-   ["Price increase","It has been 2 years since we did our last price increase. "]
-  ].forEach(([t,b])=>{
-    const thin=/^[….\s]*$/.test(b);
-    grid.appendChild(h("div",{class:"card rail",style:"--acc:var(--green)"},[
-      h("div",{class:"rt",text:t}),
-      h("div",{class:"rb"+(thin?" thin":""),text:b})]));
-  });
-  body.appendChild(grid);
-}
-
-/* ------------------------------------- 19 · The G7 */
-{
-  const {body}=slide("Expanding the team",{title:"Expanding the team"});
-  body.appendChild(buildG7OrgChart());
-}
-
-/* ----------------------------------------------- 20 · The plan */
-{
-  const {body}=slide("Expanding the farm",{title:"Expanding the farm"});
-  body.appendChild(h("div",{class:"card imgcard",
-    style:"align-self:center;width:auto;max-width:100%"},
-    h("img",{src:SITE_PLAN,
-      alt:"Expansion site layout — four new grow houses, lettuce grow and support building, solar field, green waste area and runoff buffer"})));
-}
-
-/* ------------------------------------------ 21 · What I'm asking */
+/* ------------------------------------------------- 22 · What I'm asking */
 {
   const {body}=slide("Takeaway",{title:"Takeaway"});
   const grid=h("div",{style:"flex:1;min-height:0;display:grid;"+
@@ -2471,7 +2379,7 @@ function cardRect(x,y,w,ht,{fill=C("--card"),stroke=C("--line"),r=12,dash=null}=
   body.appendChild(grid);
 }
 
-/* ------------------------------------- 24 · Back to the quote we opened on */
+/* ---------------------------------- 23 · Back to the quote we opened on */
 {
   const {body}=slide("Close · People love our cucumbers",{title:"One more time"});
   const card=h("div",{class:"card",

@@ -31,63 +31,55 @@ Every one in this room
 
 ## 7 — Financial update
 
-## 8 — Keep Experimenting
-We tried growing longer. 15% more greenhouse time for 1.5% more pounds.
-Did we need more time, or more labor? Keep trying
+## 8 — Expansion II — Greenhouses
+Our mission is to provide as much fresh, healthy food as possible to Hawaii. So, if we can expand, we must expand.
 
-## 9 — Hard Challenge, the awkward lettuce work week
-Tuesday and Friday the lettuce house is dark. What do we do with all this labor? 
-Most go to Cuke packing, but for the same reason Lettuce is dark, Cukes has its slowest two days
-Let get better schedule tracking tech. Let's get more creative with using the available crew: service, maint, etc. 
+## 9 — Do the customers want it?
+Winter shorting is now year-round shorting. 30% shorting in the summer!
 
-## 10 — Lettuce pack productivity
-Prod dropped recently - it's a micro version of the above - fill all 10 hours. 
+## 10 — There is more where that came from
+We have more opportunity than ever!
 
-## 11 — Expansion I
+## 11 — Expanding the team
+We've learned from the past. We need proper management bandwidth when expanding.
+
+## 12 — Expanding the farm
+
+## 13 — Expansion I — Aloha 3.0
 Just like FS is no longer stressful - the point of 3.0 is to remove friction, allow everyone to elevate
 
-## 12 — Paper → AI
+## 14 — Paper → AI
 2.0 is critical - we now have infinite flexibility - please dream up the craiziest thing you can think of
 
-## 13 — Today = Friction
+## 15 — Today = Friction
 Read a few. Pause to let all read 
 Busy is the four-letter word.
 
-## 14 — Judgment calls
-Build the table one row at a time and let the room do the multiplication.
-The work moves upstream: battle-test the reasoning, define what good means. 
+## 16 — Visual containerizing
 
-## 15 — What we will do
+## 17 — Visual logistics map
+
+## 18 — Aloha, scoped to the team member
+
+## 19 — Judgment calls
+Build the table one row at a time and let the room do the multiplication.
+The work moves upstream: battle-test the reasoning, define what good means.
+
+## 20 — The Farm Defined
 The glossary first — we did it with the Site Map
 Give Claude everything, Julian will help to translation you -> Claude.
 The intent behind standalone xls is great -> but going forward build it in Claude. 
 This is an entry ticket to future elevation
 Training materials come free.
 
-## 16 — Future = Frictionless
+## 21 — Tomorrow's Frictionless
 Every hour we take out goes back to invention, relationships, and problems nobody has solved.
 Like being back in school — learning something new every day.
 
-## 17 — Expansion II
-
-## 18 — Why we must
-Our mission is to provide as much fresh, healthy food as possible to Hawaii. So, if we can expand, we must expand.
-
-## 19 — Do the customers want it?
-Winter shorting is now year-round shorting. 30% shorting in the summer!
-
-## 20 — There is more where that came from
-We have more opportunity than ever!
-
-## 21 — What needs to change to make this happen
-We've learned from the past. We need proper management bandwidth when expanding.
-
-## 22 — Here is the plan
-
-## 23 — Takeaway
+## 22 — Takeaway
 Remember busy is a 4 letter word. Turn judgement calls into pre-planning. Put everythign inside Aloha (you can be a technologist), Think Small / Think Big / What's the next impossible we're going to do
 What's the goal again - reflect on food safety audits - let's massively embrace AI to elevate the joy of working at the farm for everyone
 
-## 24 — One more time
+## 23 — One more time
 Close where we opened. Half a billion dollars said people don't love cucumbers.
 We sell them by the container. Never let anyone tell you what is impossible here.
