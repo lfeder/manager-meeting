@@ -147,12 +147,12 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
   grid-template-rows:1fr 1fr;gap:14px}
 .g4x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);
   grid-template-rows:repeat(3,1fr);gap:15px}
-/* 18 opportunities on one page: five across, four down, type stepped down to fit */
-.g5x4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);
-  grid-template-rows:repeat(4,1fr);gap:11px}
-.g5x4 .rail{padding:13px 13px 11px 12px;gap:6px}
-.g5x4 .rail .rt{font-size:13.5px;line-height:1.22}
-.g5x4 .rail .rb{font-size:11.5px;line-height:1.45}
+/* 15 opportunities on one page: five across, three down, type stepped down to fit */
+.g5x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);
+  grid-template-rows:repeat(3,1fr);gap:12px}
+.g5x3 .rail{padding:15px 14px 13px 13px;gap:7px}
+.g5x3 .rail .rt{font-size:14px;line-height:1.24}
+.g5x3 .rail .rb{font-size:12px;line-height:1.5}
 .tilerow{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;height:104px}
 .tilerow.four{grid-template-columns:repeat(4,1fr)}
 .cols{flex:1;min-height:0;display:flex;gap:14px}
@@ -1624,11 +1624,8 @@ const buildG7OrgChart=()=>{
 /* --------------------------------------------- 10 · Sales opportunities */
 {
   const {body}=slide("Expansion · Opportunities",{title:"Endless Sales Opportunities"});
-  const grid=h("div",{class:"g5x4"});
-  [["Costco Japanese, orders up 30% and we sold them 10% less",""],
-   ["Lettuce flat, but we can grow sales",""],
-   ["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
-   ["POs are up 50% overall in two years","…"],
+  const grid=h("div",{class:"g5x3"});
+  [["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
    ["English in retail","Close to selling out, with numerous other outlet opportunities. Explore it."],
    ["CEOs","We should know the CEO of every major customer and vendor. "+
     "Making progress on Safeway"],
