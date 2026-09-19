@@ -147,12 +147,6 @@ button.rail{text-align:left;font:inherit;cursor:pointer}
   grid-template-rows:1fr 1fr;gap:14px}
 .g4x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);
   grid-template-rows:repeat(3,1fr);gap:15px}
-/* 15 opportunities on one page: five across, three down, type stepped down to fit */
-.g5x3{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);
-  grid-template-rows:repeat(3,1fr);gap:12px}
-.g5x3 .rail{padding:15px 14px 13px 13px;gap:7px}
-.g5x3 .rail .rt{font-size:14px;line-height:1.24}
-.g5x3 .rail .rb{font-size:12px;line-height:1.5}
 .tilerow{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;height:104px}
 .tilerow.four{grid-template-columns:repeat(4,1fr)}
 .cols{flex:1;min-height:0;display:flex;gap:14px}
@@ -1624,9 +1618,12 @@ const buildG7OrgChart=()=>{
 /* --------------------------------------------- 10 · Sales opportunities */
 {
   const {body}=slide("Expansion · Opportunities",{title:"Endless Sales Opportunities"});
-  const grid=h("div",{class:"g5x3"});
-  [["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
-   ["English in retail","Close to selling out, with numerous other outlet opportunities. Explore it."],
+  const grid=h("div",{class:"g4x3"});
+  [["Costco Japanese, orders up 30% and we sold them 10% less",""],
+   ["Lettuce flat, but we can grow sales",""],
+   ["Arugula","If we can grow it, we will be the only local source and could plant all 7 lanes with it!"],
+   ["POs are up 50% overall in two years","…"],
+   ["English in retail","Close to selling out, with numerous other outlet opportunities."],
    ["CEOs","We should know the CEO of every major customer and vendor. "+
     "Making progress on Safeway"],
    ["Grow new customers","DOE and Commissary for lettuce, and plenty more out there."],
@@ -1637,13 +1634,7 @@ const buildG7OrgChart=()=>{
    ["Processed product","Sell every last cucumber on the farm under our own branding."],
    ["Marketing","We got 200,000 views on a post. There is more to do! "+
     "Should we set a marketing budget?"],
-   ["Price increase","It has been 2 years since we did our last price increase. "],
-   ["Maui","Visit the existing customers and try to meet new ones."],
-   ["Kauai","Visit the existing customers and try to meet new ones."],
-   ["Austin leaving",""],
-   ["Produce Marketing Co","With Parker."],
-   ["Can we pivot our lettuce away from Costco to retail and Arugula?",""],
-   ["Pickles","With Scott."]
+   ["Price increase","It has been 2 years since we did our last price increase. "]
   ].forEach(([t,b])=>{
     const thin=/^[….\s]*$/.test(b);
     grid.appendChild(h("div",{class:"card rail",style:"--acc:var(--green)"},[
